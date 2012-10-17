@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+	<!-- This is the custom Spring bean configuration file for Alfresco Share. 
+		Here you can add your spring beans, override the Web Script search path, 
+		override template and script search path, add message property files etc -->
+
+	<!-- Add application extension messages -->
+	<bean id="cggh.resources"
+		class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+		<property name="resourceBundles">
+			<list>
+				<value>alfresco.messages.cggh</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="evaluator.doclib.metadata.hasCollaborationStatus"
+		parent="evaluator.doclib.action.propertyNotNull">
+		<property name="property" value="cggh:collaborationStatus" />
+	</bean>
+	<bean id="evaluator.doclib.metadata.hasCollaborationAspect"
+		parent="evaluator.doclib.action.hasAspect">
+		<property name="aspects">
+			<list>
+				<value>cggh:collaboration</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
+

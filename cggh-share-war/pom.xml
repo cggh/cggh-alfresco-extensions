@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>cggh-share-war</artifactId>
+	<packaging>war</packaging>
+	<name>Test share WAR</name>
+    <description>Test Alfresco Share WAR Project for building share.war with one or more JARs applied</description>	
+	
+	<parent>
+		<groupId>org.cggh</groupId>
+		<artifactId>cggh-alfresco-extensions</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	
+	<properties>
+        <webapp.name>share</webapp.name>
+		<!-- The rest of the properties are inherited from the parent POM -->
+    </properties>
+		
+	<!-- Defined in the parent POM 
+	<repositories>
+	<pluginRepositories>
+	-->
+
+    <dependencies>
+		<!-- We are building an extended/customized Alfresco Share WAR so include the original one -->
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId> 
+			<artifactId>share</artifactId>
+			<version>${alfresco.version}</version>
+			<type>war</type>
+		</dependency>
+		
+		<!-- Include the JAR extension that we have been building -->
+		<dependency>
+			<groupId>org.cggh</groupId>
+			<artifactId>cggh-share-jar</artifactId>
+			<version>${project.version}</version> <!-- Inherited from Parent POM -->
+		</dependency>
+
+		<!-- Include more JARs as necessary -->
+		
+		<!-- You can also include amps as necessary. This can be either an AMP built
+			 with maven-amp-plugin and deployed on an accessible maven repo or a
+			 generally available AMP previously deployed to a repo using mvn deploy:deploy-file 
+		-->		
+		
+    </dependencies>
+
+    <build>
+        <!-- Make sure web application get the name share.war -->
+        <finalName>${webapp.name}</finalName>
+
+        <plugins>
+			<!-- 
+				Plug-in for unpackaging dependencies such as AMPs to include in the exploded Share WAR
+				
+				Uncomment this if you include AMPs in the dependencies section above
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+				<executions>
+					<execution>
+						<id>unpack-amps</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeTypes>amp</includeTypes>
+							<outputDirectory>${build.directory}/${webapp.name}</outputDirectory>
+							<excludes>META*</excludes>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>			-->
+					<!--
+						Maven does not know about AMP files so it will complain about this as follows:
+						
+							"
+							...
+							[ERROR] BUILD ERROR
+							[INFO] Unknown archiver type
+							Embedded error: No such archiver: 'amp'.
+							"
+						
+						So we need to tell maven-dependency-plugin about a plug-in that knows about AMP files and can extract files from them.
+						Note. version 3.0.3 and 3.0.4 does not work, you will get:
+						
+							A required class is missing: org/apache/maven/repository/legacy/metadata/ArtifactMetadataRetrievalException 
+						-->
+						<!-- 
+					<dependency>
+						<groupId>org.alfresco.maven.plugin</groupId>
+						<artifactId>maven-amp-plugin</artifactId>
+						<version>3.0.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			-->
+        </plugins>
+    </build>	
+</project>

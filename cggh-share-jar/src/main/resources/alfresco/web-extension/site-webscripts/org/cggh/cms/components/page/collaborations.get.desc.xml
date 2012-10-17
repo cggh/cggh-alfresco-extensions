@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Collaborations</shortname>
+  <description>Lists collaborations</description>
+  <url>/org/cggh/cms/components/page/collaborations</url>
+</webscript>

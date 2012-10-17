@@ -1,0 +1,98 @@
+<alfresco-config>
+<!-- In zip from ecmstuff 
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <indicators>
+            <indicator id="cggh.indicator.doclib.action.isEmailed"
+                       icon="email-16.png"
+                       index="100"
+                       label="indicators.cggh.emailed">
+                <evaluator>cggh.evaluator.doclib.action.isEmailed</evaluator>
+            </indicator>
+        </indicators>
+    </config>
+
+    <config evaluator="string-compare" condition="DocLibActions">
+        <actions>
+            <action id="cggh.doclib.action.sendAsEmail"
+                    icon="email"
+                    type="javascript"
+                    label="actions.cggh.sendAsEmail">
+                <param name="function">onActionSendAsEmail</param>
+                <param name="successMessage">message.sendAsEmail.success</param>
+                <param name="failureMessage">message.sendAsEmail.failure</param>
+                <evaluator negate="true">cggh.evaluator.doclib.action.isEmailed</evaluator>
+            </action>
+
+            <action id="cggh.doclib.action.sendAsEmailWithForm"
+                    icon="email"
+                    type="javascript"
+                    label="actions.cggh.sendAsEmailWithForm">
+                <param name="function">onActionFormDialog</param>
+                <param name="itemKind">action</param>
+                <param name="itemId">send-as-email</param>
+                <param name="mode">create</param>
+                <param name="destination">{node.nodeRef}</param>
+                <param name="successMessage">message.send-as-email.success</param>
+                <param name="failureMessage">message.send-as-email.failure</param>
+                <evaluator negate="true">cggh.evaluator.doclib.action.isEmailed</evaluator>
+            </action>
+
+            <action id="cggh.doclib.action.goToGoogle"
+                    icon="google"
+                    type="link"
+                    label="actions.cggh.goToGoogle">
+                <param name="href">http://www.google.com</param>
+                <param name="target">_blank</param>
+            </action>
+        </actions>
+        <actionGroups>
+            <actionGroup id="document-browse">
+                <action index="400" id="cggh.doclib.action.sendAsEmail"/>
+                <action index="401" id="cggh.doclib.action.sendAsEmailWithForm"/>
+            </actionGroup>
+            <actionGroup id="document-details">
+                <action index="400" id="cggh.doclib.action.sendAsEmail"/>
+                <action index="401" id="cggh.doclib.action.sendAsEmailWithForm"/>
+            </actionGroup>
+            <actionGroup id="folder-browse">
+                <action index="400" id="cggh.doclib.action.goToGoogle"/>
+            </actionGroup>
+        </actionGroups>
+    </config>
+
+    <config evaluator="string-compare" condition="DocLibCustom">
+        <!-
+      Custom Code dependencies.
+
+      Note: files specified in the "src" attribute resolve relative to the /share/res/ servlet context.
+        ->
+
+        <dependencies>
+            <!-     <css src="my-custom-action.css" /> ->
+            <js src="components/documentlibrary/email-actions.js"/>
+        </dependencies>
+
+        <dependencies/>
+    </config>
+
+    <!- Send As Email Action Form ->
+    <config evaluator="string-compare" condition="send-as-email">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="to"/>
+                    <show id="subject"/>
+                    <show id="body_text"/>
+                </field-visibility>
+                <appearance>
+                    <field id="to" label-id="send-as-email.field.to"/>
+                    <field id="subject" label-id="send-as-email.field.subject"/>
+                    <field id="body_text" label-id="send-as-email.field.body_text">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl" />
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+ -->
+</alfresco-config>

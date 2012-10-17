@@ -1,0 +1,4 @@
+<page>
+	<template-instance>collaborations</template-instance>
+	<authentication>user</authentication>
+</page>

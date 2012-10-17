@@ -1,0 +1,9 @@
+<webscript>
+  <shortname>Expired Content</shortname>
+  <description>Report on expired content within a site</description>
+  <url>/extras/slingshot/site/{siteId}/expired-content</url>
+  <url>/extras/slingshot/user/{userId}/expired-content</url>
+  <format default="json">extension</format>
+  <authentication>user</authentication>
+</webscript>
+

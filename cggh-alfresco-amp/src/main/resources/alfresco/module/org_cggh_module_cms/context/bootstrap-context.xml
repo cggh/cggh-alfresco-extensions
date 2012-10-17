@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
+		 message loaders, loading custom web client configuration, 
+		 and loading custom content models.  -->
+
+
+    <!-- Registration of new models -->
+    <bean id="org.cggh.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/org_cggh_module_cms/model/content-model.xml</value>
+                <!-- 
+                <value>alfresco/module/org_cggh_module_cms/model/workflow-model.xml</value>
+                 -->
+            </list>
+        </property>
+    </bean>
+	
+<!--
+        Bootstrap property sheets, custom dashlets etc for the custom UI pieces of the Alfresco Explorer
+        -->
+    <bean id="org.cggh.cms.webclient.configBootstrap"
+          class="org.alfresco.web.config.WebClientConfigBootstrap" init-method="init">
+        <property name="configs">
+            <list>
+                <value>classpath:alfresco/module/org_cggh_module_cms/ui/web-client-config-custom.xml</value>
+            </list>
+        </property>
+    </bean>
+	
+    <!--
+       Bootstrap label properties for the Alfresco Explorer UI customizations
+	-->       
+	<bean id="org.cggh.cms.resourceBundle" class="org.alfresco.web.app.ResourceBundleBootstrap">
+      <property name="resourceBundles">
+         <list>
+            <value>alfresco.module.org_cggh_module_cms.ui.webclient</value>
+         </list>
+      </property>
+    </bean>    
+
+	  <!--
+         Bootstrap workflow definition and workflow properties for the Review & Approve Workflow
+    <bean id="org.cggh.cms.workflowBootstrap" parent="workflowDeployer">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">jbpm</prop>
+					<prop key="location">alfresco/module/org_cggh_module_cms/workflows/reviewandapprove/processdefinition.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">true</prop>
+				</props>
+			</list>
+		</property>
+        <property name="labels">
+            <list>
+				<value>alfresco.module.org_cggh_module_cms.ui.review-and-approve-workflow</value>
+            </list>
+        </property>
+    </bean>
+        -->
+
+</beans>

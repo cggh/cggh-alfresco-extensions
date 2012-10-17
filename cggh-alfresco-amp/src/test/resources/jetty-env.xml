@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+
+    <!--
+        We configure a datasource and bind it in jndi.
+        This datasource is referenced in alfresco.war's web.xml and would cause an error if it is missing.
+		
+		Note. Recent alfresco versions might not actually use it anymore.
+
+    -->
+	
+	<New id="myDataSource" class="org.mortbay.jetty.plus.naming.Resource">
+		<Arg>jdbc/dataSource</Arg>
+		<Arg>
+            <New class="org.apache.commons.dbcp.BasicDataSource"> <!-- Cannot use org.h2.jdbcx.JdbcDataSource as it is missing the setDriverClassName method -->			
+                <Set name="driverClassName">${db.driver}</Set>
+                <Set name="url">${db.url}</Set>
+                <Set name="username">${db.username}</Set>
+                <Set name="Password">${db.password}</Set>
+			</New>
+		</Arg>
+	</New>
+
+</Configure>

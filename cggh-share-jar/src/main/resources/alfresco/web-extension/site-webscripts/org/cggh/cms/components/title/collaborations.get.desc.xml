@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Collaborations Title</shortname>
+  <description>Title component used in the collaborations page</description>
+  <url>/org/cggh/cms/components/title/collaborations</url>
+</webscript>
