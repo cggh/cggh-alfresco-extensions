@@ -160,7 +160,10 @@
             { key: "projStatus", label: "Project Status", sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
             { key: "mainContact", label: "Primary Contact", sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: "Species", sortable: true, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) }
+            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) },
+            { key: "sTitle", label: "Solaris Title", sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
+            { key: "sPi", label: "Solaris PI", sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
+            { key: "sOther", label: "Solaris Other People", sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
          ];
 
          // DataTable definition
@@ -274,6 +277,19 @@
          });
       },
 
+      createStudy: function Collaborations_createStudy()
+      {
+    	  var newStudy =
+    	 {
+            properties: {},
+            siteManagers: {},
+            countries: [],
+            species: [],
+            solaris_people: [],
+			solaris_title: ""
+         };
+    	  return newStudy;
+      },
       getJson: function Collaborations_getJson(p_response)
       {
     	  
@@ -291,12 +307,7 @@
       for (var ei = 0; ei < entriesLength; ei++)
       {
          entryEl = entries[ei];
-         article = {
-            properties: {},
-            siteManagers: {},
-            countries: [],
-            species: []
-         };
+         article = this.createStudy();
          var objEl;
          var propsNS;
          if (entryEl.getElementsByTagNameNS === undefined) {
@@ -381,6 +392,89 @@
       }
       return articles;  
       },
+      loadSolaris: function Collaborations_loadSolaris(p_items)
+      {
+         // Load collaborations
+         Alfresco.util.Ajax.request(
+         {
+            //url: Alfresco.constants.PROXY_URI + "api/people/" + encodeURIComponent(Alfresco.constants.USERNAME) + "/sites?roles=user&size=" + this.options.listSize,
+        	 //Requires a proxy to https://lookseq.sanger.ac.uk/cgi-bin/pipeline_status/mystudies.pl?query=get_details
+        	 //Due to cross site scripting security
+        	 url: '/pipeline_status/mystudies.pl',
+        	 requestContentType: Alfresco.util.Ajax.JSON, // Set to JSON if json should be used
+        	 responseContentType: Alfresco.util.Ajax.JSON, // Set to JSON if json should be used
+        	 dataObj: { query: 'get_details'},
+        	 method: Alfresco.util.Ajax.GET,
+        	 successCallback:
+            {
+               fn: this.onSolarisLoaded,
+               obj: p_items,
+               scope: this
+            },
+            failureCallback: {
+            	fn: this.onSolarisLoaded,
+                obj: p_items,
+            	scope: this
+            }
+         });
+      },
+      /**
+       * Retrieve user preferences after collaborations data has loaded
+       *
+       * @method onCollaborationsLoaded
+       * @param p_response {object} Response from "api/people/{userId}/collaborations" query
+       */
+      onSolarisLoaded: function Collaborations_onSolarisLoaded(p_response, p_items)
+      {
+    	  //Alfresco studies
+    	  var items = p_items;
+
+    	  var newItems = [];
+    	  //Solaris projects - ignore if connection failed
+    	if (p_response.json) {
+    	  var projects = p_response.json.data.projects;
+    	  for (var key in projects)
+    	  {
+    		  var project = projects[key];
+    		  var found = false;
+
+        	  for (i = 0, numItems = items.length; i < numItems; i++)
+    		  {
+    			var item = items[i];
+    			var words = item.shortName.split(" ");
+    			if (words.length > 1)
+    			{
+    			var item_code = words[1];
+    				if (item_code == project.project_code) 
+    				{
+    				  found = true;
+    				  item.solaris_people = project.people;
+    				  item.solaris_title = project.title;
+    				  break;
+    				}
+    			}
+    		  }
+    		  if (!found) {
+    			  var newItem = this.createStudy();
+    			  newItem.solaris_people = project.people;
+				  newItem.solaris_title = project.title;
+    			  newItems.push(newItem);
+    		  }
+    	  }
+    	}
+    	  //Could merge items and newItems if you want to see projects in Solaris
+    	  //but not in Alfresco
+         // Load preferences (after which the appropriate collaborations will be displayed)
+         this.services.preferences.request(PREFERENCES_COLLABORATIONS,
+         {
+            successCallback:
+            {
+               fn: this.onPreferencesLoaded,
+               scope: this,
+               obj: items
+            }
+         });
+      },
       /**
        * Retrieve user preferences after collaborations data has loaded
        *
@@ -392,16 +486,7 @@
     	  //Convert CMIS response to json
     	  var items = this.getJson(p_response.serverResponse.responseXML);
 
-         // Load preferences (after which the appropriate collaborations will be displayed)
-         this.services.preferences.request(PREFERENCES_COLLABORATIONS,
-         {
-            successCallback:
-            {
-               fn: this.onPreferencesLoaded,
-               scope: this,
-               obj: items
-            }
-         });
+          this.loadSolaris(items);
       },
 
       /**
@@ -722,6 +807,50 @@
 
         
          elCell.innerHTML = collaboration.countries;
+      },
+      renderCellSolarisTitle: function Collaborations_renderCellSolarisTitle(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+        
+         elCell.innerHTML = collaboration.solaris_title;
+      },
+      renderCellSolarisPI: function Collaborations_renderCellSolarisPI(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var output = [];
+         
+         for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
+        	 var person = collaboration.solaris_people[i];
+        	 if (person.is_pi == 1) {
+        		 output.push(person.fullname);
+        	 }
+         }
+        
+         elCell.innerHTML = output;
+      },
+      renderCellSolarisOtherPeople: function Collaborations_renderCellSolarisOtherPeople(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var output = [];
+         
+         for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
+        	 var person = collaboration.solaris_people[i];
+        	 if (person.is_pi == 0) {
+        		 output.push(person.fullname);
+        	 }
+         }
+        
+         elCell.innerHTML = output;
       },
       /**
        * Adds an event handler that adds or removes the collaboration as favourite collaboration
