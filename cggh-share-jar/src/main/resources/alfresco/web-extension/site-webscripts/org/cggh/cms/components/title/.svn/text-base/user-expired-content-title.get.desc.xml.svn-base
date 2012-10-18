@@ -1,5 +1,0 @@
-<webscript>
-  <shortname>User Expired Content Title</shortname>
-  <description>Title component used in the user expired content page</description>
-  <url>/extras/components/title/user-expired-content-title</url>
-</webscript>
