@@ -1,5 +1,4 @@
 <#assign id = args.htmlid>
-<#assign dashboardconfig=config.scoped['Dashboard']['dashboard']>
 <#assign jsid = args.htmlid?js_string>
 <script type="text/javascript">//<![CDATA[
 (function()
@@ -7,23 +6,9 @@
    new Alfresco.dashlet.Collaborations("${jsid}").setOptions(
    {
       imapEnabled: ${imapServerEnabled?string},
-      listSize: ${dashboardconfig.getChildValue('summary-list-size')!100}
+      listSize: 150
    }).setMessages(${messages});
    new Alfresco.widget.DashletResizer("${jsid}", "${instance.object.id}");
-   new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions(
-   {
-      actions:
-      [
-         {
-            cssClass: "help",
-            bubbleOnClick:
-            {
-               message: "${msg("dashlet.help")?js_string}"
-            },
-            tooltip: "${msg("dashlet.help.tooltip")?js_string}"
-         }
-      ]
-   });
 })();
 //]]></script>
 
@@ -67,5 +52,5 @@
          <div class="clear"></div>
       </div>
    </div>
-   <div id="${id}-collaborations" class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>></div>
+   <div id="${id}-collaborations" class="body" <#if args.height??>style="height: ${args.height}px;"</#if>></div>
 </div>

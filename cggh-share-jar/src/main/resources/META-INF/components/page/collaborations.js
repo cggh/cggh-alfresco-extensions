@@ -169,7 +169,9 @@
          // DataTable definition
          this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-collaborations", columnDefinitions, this.widgets.dataSource,
          {
-            MSG_EMPTY: this.msg("message.datatable.loading")
+            MSG_EMPTY: this.msg("message.datatable.loading"),
+            draggableColumns: true,
+            paginator: YAHOO.widget.Paginator
          });
 
          // Override abstract function within DataTable to set custom empty message
