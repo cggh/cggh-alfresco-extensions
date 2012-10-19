@@ -11,51 +11,55 @@
 				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
 			<client-debug-autologging>false</client-debug-autologging>
 		</flags>
-		     <header>
-         <app-items>
-            <!-- defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description" -->
-            <item type="link" id="my-dashboard">{userdashboardpage}</item>
-            <item type="js" id="sites">Alfresco.module.Sites</item>
-            <item type="link" id="people">/people-finder</item>
-            <item type="link" id="repository" condition="conditionRepositoryRootNode">/repository</item>
-            <item type="container" id="more">
-               <container-group id="my">
-                  <item type="link" id="my-tasks">/my-tasks</item>
-                  <item type="link" id="my-workflows">/my-workflows</item>
-                  <item type="link" id="my-content">/user/user-content</item>
-                  <item type="link" id="my-sites">/user/user-sites</item>
-                  <item type="link" id="my-profile">{userprofilepage}</item>
-                  <item type="link" id="collaborations" label="Collaborations" description="View collaborations">/collaborations</item>
-               </container-group>
-               <container-group id="tools" permission="admin">
-                  <item type="link" id="application">/console/admin-console/application</item>
-                  <item type="link" id="groups">/console/admin-console/groups</item>
-                  <item type="link" id="replication-jobs" condition="!conditionEditionTeam">/console/admin-console/replication-jobs</item>
-                  <item type="link" id="repository">/console/admin-console/repository</item>
-                  <item type="link" id="trashcan">/console/admin-console/trashcan</item>
-                  <item type="link" id="users">/console/admin-console/users</item>
-                  <item type="link" id="more">/console/admin-console/</item>
-               </container-group>
-            </item>
-         </app-items>
-         <user-items>
-            <item type="container" id="user" icon="" description="">
-               <container-group id="usermenu" label="">
-                  <item type="user" id="status">{userprofilepage}</item>
-                  <item type="link" id="my-profile">{userprofilepage}</item>
-                  <item type="link" id="change-password" condition="user.capabilities.isMutable">/user/change-password</item>
-                  <item type="external-link" id="help">{share-help}</item>
-                  <item type="link" id="logout" condition="!context.externalAuthentication">/dologout</item>
-               </container-group>
-            </item>
-         </user-items>
-         <dependencies>
-            <css src="/modules/create-site.css" />
-            <css src="/modules/header/sites.css" />
-            <js src="/modules/create-site.js" />
-            <js src="/modules/header/sites.js" />
-         </dependencies>
-      </header>
+		<header>
+			<app-items>
+				<!-- defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description" -->
+				<item type="link" id="my-dashboard">{userdashboardpage}</item>
+				<item type="js" id="sites">Alfresco.module.Sites</item>
+				<item type="link" id="people">/people-finder</item>
+				<item type="link" id="repository" condition="conditionRepositoryRootNode">/repository</item>
+				<item type="container" id="more">
+					<container-group id="my">
+						<item type="link" id="my-tasks">/my-tasks</item>
+						<item type="link" id="my-workflows">/my-workflows</item>
+						<item type="link" id="my-content">/user/user-content</item>
+						<item type="link" id="my-sites">/user/user-sites</item>
+						<item type="link" id="my-profile">{userprofilepage}</item>
+						<item type="link" id="collaborations" label="Collaborations"
+							description="View collaborations">/collaborations</item>
+					</container-group>
+					<container-group id="tools" permission="admin">
+						<item type="link" id="application">/console/admin-console/application
+						</item>
+						<item type="link" id="groups">/console/admin-console/groups</item>
+						<item type="link" id="replication-jobs" condition="!conditionEditionTeam">/console/admin-console/replication-jobs
+						</item>
+						<item type="link" id="repository">/console/admin-console/repository</item>
+						<item type="link" id="trashcan">/console/admin-console/trashcan</item>
+						<item type="link" id="users">/console/admin-console/users</item>
+						<item type="link" id="more">/console/admin-console/</item>
+					</container-group>
+				</item>
+			</app-items>
+			<user-items>
+				<item type="container" id="user" icon="" description="">
+					<container-group id="usermenu" label="">
+						<item type="user" id="status">{userprofilepage}</item>
+						<item type="link" id="my-profile">{userprofilepage}</item>
+						<item type="link" id="change-password" condition="user.capabilities.isMutable">/user/change-password
+						</item>
+						<item type="external-link" id="help">{share-help}</item>
+						<item type="link" id="logout" condition="!context.externalAuthentication">/dologout</item>
+					</container-group>
+				</item>
+			</user-items>
+			<dependencies>
+				<css src="/modules/create-site.css" />
+				<css src="/modules/header/sites.css" />
+				<js src="/modules/create-site.js" />
+				<js src="/modules/header/sites.js" />
+			</dependencies>
+		</header>
 	</config>
 	<config evaluator="string-compare" condition="DocLibCustom">
 		<dependencies>
@@ -132,7 +136,8 @@
 					cggh.metadata.otherContactType}
 				</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
-					{cggh_sampleCountry}</line>
+					{cggh_sites}
+				</line>
 			</template>
 
 		</metadata-templates>
@@ -254,9 +259,8 @@
 					<show id="cggh:mainContact" />
 					<show id="cggh:otherContacts" />
 					<show id="cggh:species" />
-					<show id="cggh:sampleCountry" />
-					<show id="cm:latitude" />
-					<show id="cm:longitude" />
+					<show id="cggh:studySites" />
+					<show id="cggh:collaborationNotes" />
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
@@ -294,24 +298,29 @@
 					<field id="cggh:mainContact" label-id="cggh.metadata.mainContact"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">//cm:External_Contacts</control-param>
+							<control-param name="startLocation">//cm:External_Contacts
+							</control-param>
 						</control>
 					</field>
 					<field id="cggh:otherContacts" label-id="cggh.metadata.otherContact"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">//cm:External_Contacts</control-param>
+							<control-param name="startLocation">//cm:External_Contacts
+							</control-param>
 						</control>
 					</field>
-
+					<field id="cggh:studySites" label-id="cggh.metadata.studySites"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/association.ftl">
+							<control-param name="startLocation">//cm:Study_Sites
+							</control-param>
+						</control>
+					</field>
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
-					<field id="cggh:sampleCountry" label-id="cggh.metadata.sampleCountry"
-						set="cgghMetadata" />
-					<field id="cm:latitude" label-id="cm.metadata.latitude" set="cgghMetadata" />
-					<field id="cm:longitude" label-id="cm.metadata.longitude"
-						set="cgghMetadata" />
-
+					<field id="cggh:collaborationNotes" set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -331,7 +340,7 @@
 					<show id="cggh:primaryContact" force="true" />
 					<show id="cggh:otherContact" force="true" />
 					<show id="cggh:species" />
-					<show id="cggh:sampleCountry" />
+					<show id="cggh:sites" />
 				</field-visibility>
 				<appearance>
 					<set id="cgghMetadata" appearance="bordered-panel"
@@ -345,12 +354,55 @@
 					</field>
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
-					<field id="cggh:sampleCountry" label-id="cggh.metadata.sampleCountry"
+					<field id="cggh:sites" label-id="cggh.metadata.sampleCountry"
 						set="cgghMetadata" />
+					
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<!-- cggh:site type create form config -->
+	<config evaluator="model-type" condition="cggh:site">
+		<forms>
+			<!-- Create item form -->
+			<form>
+				<field-visibility>
+					<!-- cggh:site type -->
+					<show id="cggh:siteName" />
+					<show id="cggh:siteCountry" />
+					<show id="cm:latitude" />
+					<show id="cm:longitude" />
+				</field-visibility>
+				<create-form template="../data-lists/forms/dataitem.ftl" />
+				<appearance>
+
+					<field id="cm:latitude" label-id="cm.metadata.latitude"  />
+					<field id="cm:longitude" label-id="cm.metadata.longitude" />
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
+	<!-- cggh:site type edit form config -->
+	<config evaluator="node-type" condition="cggh:site">
+		<forms>
+			<!-- Data List pop-up edit form -->
+			<form>
+				<field-visibility>
+					<!-- cggh:site type -->
+					<show id="cggh:siteName" />
+					<show id="cggh:siteCountry" />
+					<show id="cm:latitude" />
+					<show id="cm:longitude" />
+				</field-visibility>
+				<edit-form template="../data-lists/forms/dataitem.ftl" />
+				<appearance>
+					
+					<field id="cm:latitude" label-id="cm.metadata.latitude"  />
+					<field id="cm:longitude" label-id="cm.metadata.longitude" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
 
 </alfresco-config>

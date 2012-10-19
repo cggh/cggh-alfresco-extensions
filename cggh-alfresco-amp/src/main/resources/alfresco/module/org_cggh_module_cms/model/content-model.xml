@@ -324,6 +324,30 @@
 			</mandatory-aspects>
 
 		</type>
+		<type name="cggh:site">
+			<title>Sites List</title>
+			<parent>dl:dataListItem</parent>
+			<properties>
+				<property name="cggh:siteName">
+					<title>Name of the site</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="cggh:siteCountry">
+					<title>Country of Sample Collection</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cggh:countryList" />
+					</constraints>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>cm:geographic</aspect>
+			</mandatory-aspects>
+		</type>
 	</types>
 	<aspects>
 
@@ -353,6 +377,12 @@
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>
+				<property name="cggh:sites">
+					<title>Sample Sites</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
 				<property name="cggh:species">
 					<title>Species</title>
 					<type>d:text</type>
@@ -362,14 +392,10 @@
 						<constraint ref="cggh:speciesList" />
 					</constraints>
 				</property>
-				<property name="cggh:sampleCountry">
-					<title>Country of Sample Collection</title>
+				<property name="cggh:collaborationNotes">
+					<title>Notes</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
-					<multiple>true</multiple>
-					<constraints>
-						<constraint ref="cggh:countryList" />
-					</constraints>
 				</property>
 			</properties>
 			<associations>
@@ -391,6 +417,17 @@
 					</source>
 					<target>
 						<class>dl:contact</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="cggh:studySites">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cggh:site</class>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>
