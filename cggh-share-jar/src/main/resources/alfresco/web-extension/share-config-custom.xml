@@ -130,13 +130,12 @@
 				<line index="10" id="date" view="detailed">{date}{size}</line>
 				<line index="20" id="tags" view="detailed">{tags}</line>
 				<line index="30" id="description" view="detailed">{description}</line>
-				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus}
-					{cggh_mainContact
-					cggh.metadata.mainContactType} {cggh_otherContacts
-					cggh.metadata.otherContactType}
+				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus cggh.metadata.statusType}
+					{cggh_contacts
+					cggh.metadata.contactsType} 
 				</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
-					{cggh_sites}
+					{cggh_sampleCountry}
 				</line>
 			</template>
 
@@ -256,10 +255,9 @@
 
 					<!-- cggh:collaborationFolder -->
 					<show id="cggh:collaborationStatus" />
-					<show id="cggh:mainContact" />
-					<show id="cggh:otherContacts" />
+					<show id="cggh:contactList" />
 					<show id="cggh:species" />
-					<show id="cggh:studySites" />
+					<show id="cggh:sampleCountry" />
 					<show id="cggh:collaborationNotes" />
 				</field-visibility>
 				<appearance>
@@ -295,27 +293,17 @@
 					<!-- Field set "cgghMetadata" -->
 					<field id="cggh:collaborationStatus" label-id="cggh.metadata.collaborationStatus"
 						set="cgghMetadata" />
-					<field id="cggh:mainContact" label-id="cggh.metadata.mainContact"
+					<field id="cggh:contactList" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
 							<control-param name="startLocation">//cm:External_Contacts
 							</control-param>
 						</control>
 					</field>
-					<field id="cggh:otherContacts" label-id="cggh.metadata.otherContact"
-						set="cgghMetadata">
-						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">//cm:External_Contacts
-							</control-param>
-						</control>
-					</field>
-					<field id="cggh:studySites" label-id="cggh.metadata.studySites"
-						set="cgghMetadata">
-						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">//cm:Study_Sites
-							</control-param>
-						</control>
-					</field>
+					
+					<field id="cggh:sampleCountry" label-id="cggh.metadata.studySites"
+						set="cgghMetadata" />
+						
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:collaborationNotes" set="cgghMetadata">
@@ -337,24 +325,21 @@
 
 					<!-- cggh:collaborationFolder -->
 
-					<show id="cggh:primaryContact" force="true" />
-					<show id="cggh:otherContact" force="true" />
+					<show id="cggh:contacts" force="true" />
 					<show id="cggh:species" />
-					<show id="cggh:sites" />
+					<show id="cggh:sampleCountry" />
 				</field-visibility>
 				<appearance>
 					<set id="cgghMetadata" appearance="bordered-panel"
 						label-id="cggh.metadata.collaborationFolder" />
 
-					<field id="cggh:primaryContact" label-id="cggh.metadata.mainContact"
+					<field id="cggh:contacts" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 					</field>
-					<field id="cggh:otherContact" label-id="cggh.metadata.otherContact"
-						set="cgghMetadata">
-					</field>
+					
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
-					<field id="cggh:sites" label-id="cggh.metadata.sampleCountry"
+					<field id="cggh:sampleCountry" label-id="cggh.metadata.sampleCountry"
 						set="cgghMetadata" />
 					
 				</appearance>

@@ -41,11 +41,13 @@
 					<value>renegotiation</value>
 					<value>completed</value>
 					<value>aborted</value>
+					<!--
 					<value>LoS enquiry</value>
 					<value>LoS exploration</value>
 					<value>LoS negotiation</value>
 					<value>LoS agreed</value>
 					<value>LoS aborted</value>
+					 -->
 				</list>
 			</parameter>
 		</constraint>
@@ -365,23 +367,20 @@
 						<constraint ref="cggh:collaborationStatusList" />
 					</constraints>
 				</property>
-				<property name="cggh:primaryContact">
-					<title>Primary Contact</title>
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-					<multiple>false</multiple>
-				</property>
-				<property name="cggh:otherContact">
-					<title>Other Contact</title>
+				<property name="cggh:contacts">
+					<title>Contacts</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>
-				<property name="cggh:sites">
-					<title>Sample Sites</title>
+				<property name="cggh:sampleCountry">
+					<title>Country of Sample Collection</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cggh:countryList" />
+					</constraints>
 				</property>
 				<property name="cggh:species">
 					<title>Species</title>
@@ -399,35 +398,13 @@
 				</property>
 			</properties>
 			<associations>
-				<association name="cggh:mainContact">
+				<association name="cggh:contactList">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
 						<class>dl:contact</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-				<association name="cggh:otherContacts">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>dl:contact</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</association>
-				<association name="cggh:studySites">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>cggh:site</class>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</target>

@@ -145,6 +145,12 @@
             lazyloadmenu: false
          });
          
+         this.widgets.lookseq = Alfresco.util.createYUIButton(this, "lookseq", this.onLookSeqFilterChanged,
+         {
+             type: "checkbox"
+         });
+         this.widgets.lookseq.value = false;
+         
          // DataSource definition
          this.widgets.dataSource = new YAHOO.util.DataSource(this.collaborations,
          {
@@ -158,14 +164,21 @@
             { key: "title", label: "Title", sortable: true, formatter: this.bind(this.renderCellTitle) },
             { key: "detail", label: "Description", sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "projStatus", label: "Project Status", sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
-            { key: "mainContact", label: "Primary Contact", sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
+            { key: "mainContact", label: "Contacts", sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: "Species", sortable: true, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) },
-            { key: "sTitle", label: "Solaris Title", sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
-            { key: "sPi", label: "Solaris PI", sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
-            { key: "sOther", label: "Solaris Other People", sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
+            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) }
+            ];
+         var lsCols = 
+         [
+            { key: "sTitle", label: "Solaris Title", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
+            { key: "sPi", label: "Solaris PI", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
+            { key: "sOther", label: "Solaris Other People", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
          ];
 
+        
+        var cols = columnDefinitions.concat(lsCols);
+        columnDefinitions = cols;
+        
          // DataTable definition
          this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-collaborations", columnDefinitions, this.widgets.dataSource,
          {
@@ -259,6 +272,24 @@
           
          }
       },
+      
+      onLookSeqFilterChanged: function Collaborations_onLookSeqFilterChanged(p_sType, p_aArgs)
+      {
+         
+         this.widgets.lookseq.value = p_sType.newValue;
+                   
+         if (this.widgets.lookseq.value) {
+        	 this.widgets.dataTable.showColumn("sTitle");
+        	 this.widgets.dataTable.showColumn("sPi");
+        	 this.widgets.dataTable.showColumn("sOther");
+         } else {
+        	 this.widgets.dataTable.hideColumn("sTitle");
+        	 this.widgets.dataTable.hideColumn("sPi");
+        	 this.widgets.dataTable.hideColumn("sOther");
+         }
+         this.loadCollaborations();
+         
+      },
       /**
        * Load collaborations list
        *
@@ -287,6 +318,7 @@
             siteManagers: {},
             countries: [],
             species: [],
+            contacts: [],
             solaris_people: [],
 			solaris_title: ""
          };
@@ -369,8 +401,14 @@
         			 article.sitePreset = cmisValue;
         		 } else if (propertyDefinitionId == "cggh:collaborationStatus") {
         				 article.projectStatus = cmisValue;
-        		 } else if (propertyDefinitionId == "cggh:primaryContact") {
-    				 article.primaryContact = cmisValue;
+        		 } else if (propertyDefinitionId == "cggh:contacts") {
+        			 var contact = propertyEl.firstChild;
+        			 while (contact != null) {
+        				 if (contact.firstChild != null) {
+        					 article.contacts.push(contact.firstChild.nodeValue);
+        				 }
+        				 contact = contact.nextSibling;
+        			 }
         		 } else if (propertyDefinitionId == "cggh:sampleCountry") {
         			 var country = propertyEl.firstChild;
         			 while (country != null) {
@@ -396,6 +434,7 @@
       },
       loadSolaris: function Collaborations_loadSolaris(p_items)
       {
+    	  if (this.widgets.lookseq.value) {
          // Load collaborations
          Alfresco.util.Ajax.request(
          {
@@ -419,6 +458,9 @@
             	scope: this
             }
          });
+    	  } else {
+    		  this.onSolarisLoaded(null, p_items);
+    	  }
       },
       /**
        * Retrieve user preferences after collaborations data has loaded
@@ -433,7 +475,7 @@
 
     	  var newItems = [];
     	  //Solaris projects - ignore if connection failed
-    	if (p_response.json) {
+    	if (p_response && p_response.json) {
     	  var projects = p_response.json.data.projects;
     	  for (var key in projects)
     	  {
@@ -770,7 +812,7 @@
          var collaboration = oRecord.getData();
 
         
-         elCell.innerHTML = collaboration.primaryContact;
+         elCell.innerHTML = collaboration.contacts;
       },
       /**
        * Actions custom datacell formatter

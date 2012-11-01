@@ -27,7 +27,7 @@
          </select>
          <span class="align-left yui-button yui-menu-button" id="${id}-status">
             <span class="first-child">
-               <button type="button" tabindex="0">${msg("filter.all")}</button>
+               <button type="button" tabindex="1">${msg("filter.all")}</button>
             </span>
          </span>
          <select id="${id}-status-menu" multiple="multiple">
@@ -39,14 +39,10 @@
             <option value="renegotiation">${msg("filter.status.renegotiation")}</option>
             <option value="completed">${msg("filter.status.completed")}</option>
             <option value="aborted">${msg("filter.status.aborted")}</option>
-            <option value="LoS enquiry">${msg("filter.status.LoSenquiry")}</option>
-            <option value="LoS exploration">${msg("filter.status.LoSexploration")}</option>
-            <option value="LoS negotiation">${msg("filter.status.LoSnegotiation")}</option>
-            <option value="LoS agreed">${msg("filter.status.LoSagreed")}</option>
-            <option value="LoS aborted">${msg("filter.status.LoSaborted")}</option>
          </select>
-         <span class="align-right yui-button-align">
+         <span class="align-right yui-button-align" id="${id}-lookseq">
             <span class="first-child">
+            	<button type="checkbox" tabindex="2">${msg("include.lookseq")}</button>
             </span>
          </span>
          <div class="clear"></div>

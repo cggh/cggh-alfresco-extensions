@@ -19,7 +19,20 @@ var nodes = document.children;
         speciesArray.push(species);
       }
       if (elems[0] == 'contact') {
-        contacts.push(elems[1]);
+    	  var names = elems[1].split(' ');
+          if (names.length > 1) {
+            var firstName = names[0].substring(0,1).toUpperCase() + names[0].substring(1);
+            var lastName = names[1].substring(0,1).toUpperCase() + names[1].substring(1);
+            var searchQuery = '@dl\\:contactFirstName:\"' + firstName + '\" AND @dl\\:contactLastName:\"' + lastName + '\"';
+           logger.log(searchQuery);
+            var conts = search.luceneSearch(searchQuery);
+           // var conts = Array();
+            for each(var cont in conts) {
+    		  node.createAssociation(cont, "cggh:contactList");
+    		  contacts.push(cont.name);
+               logger.log("Contact for " + elems[1] + " found " + cont.name);
+            }
+        }
       }
       if (elems[0] == 'status') {
           node.properties["cggh:collaborationStatus"] = elems[1];
@@ -41,9 +54,8 @@ var nodes = document.children;
     
     node.properties["cggh:sampleCountry"] = countries;
     node.properties["cggh:species"] = speciesArray;
-    node.properties["cggh:primaryContact"] = contacts;
+    node.properties["cggh:contacts"] = contacts;
     node.save();
-    node.clearTags();
   }
 
 
