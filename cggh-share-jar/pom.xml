@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>cggh-share-jar</artifactId>
 	<packaging>jar</packaging>
 	<name>Test Share JAR</name>
-    <description>Test JAR Project for extending share.war</description>	
-	
+	<description>Test JAR Project for extending share.war</description>
+
 	<parent>
 		<groupId>org.cggh</groupId>
 		<artifactId>cggh-alfresco-extensions</artifactId>
@@ -13,132 +14,116 @@
 	</parent>
 
 	<properties>
-        <env>${user.name}</env>
-        <webapp.name>cggh-share</webapp.name>
+		<env>${user.name}</env>
+		<webapp.name>cggh-share</webapp.name>
 		<share.log.level>info</share.log.level>
-		<!-- 
-			The Alfresco Share webapp (share.war) will be listening on this port. 
-			The Alfresco Repository webapp (alfresco.war) will be listening on 8080 
-			(if it uses another port then 8080 configure this in /src/test/envconfig), 
-			Note. the Alfresco Repo webapp need to be started separately and is not part of this POM 
-			-->
-		<share.servlet.port>8081</share.servlet.port> 					
-        <surf.wiring.mode>development</surf.wiring.mode>				<!-- "production" is the other allowed value -->
-		
-		<!-- The rest of the properties are inherited from the parent POM -->
-    </properties>
+		<!-- The Alfresco Share webapp (share.war) will be listening on this port. 
+			The Alfresco Repository webapp (alfresco.war) will be listening on 8080 (if 
+			it uses another port then 8080 configure this in /src/test/envconfig), Note. 
+			the Alfresco Repo webapp need to be started separately and is not part of 
+			this POM -->
+		<share.servlet.port>8081</share.servlet.port>
+		<surf.wiring.mode>development</surf.wiring.mode>				<!-- "production" is the other allowed value -->
 
-	<!-- Defined in the parent POM 
-	<repositories>
-	<pluginRepositories>
-	-->
-	
-	<!--
-		Include libs that the Share JAR extension will use. 
-		They are mostly provided by Alfresco during runtime so scope should be set as provided 
-		(if in doubt then check for the lib in tomcat/webapps/share/WEB-INF/lib, if it's there then it's provided).
-	-->
+		<!-- The rest of the properties are inherited from the parent POM -->
+	</properties>
+
+	<!-- Defined in the parent POM <repositories> <pluginRepositories> -->
+
+	<!-- Include libs that the Share JAR extension will use. They are mostly 
+		provided by Alfresco during runtime so scope should be set as provided (if 
+		in doubt then check for the lib in tomcat/webapps/share/WEB-INF/lib, if it's 
+		there then it's provided). -->
 	<dependencies>
 		<!-- Include JAR that has classes such as BaseEvaluator -->
 		<dependency>
-            <groupId>${alfresco.groupId}</groupId> 
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco-share</artifactId>
-            <version>${alfresco.version}</version>
-            <scope>provided</scope>
-        </dependency>
+			<version>${alfresco.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Include JAR that has classes such as AlfrescoRuntimeException -->
-        <dependency>
-            <groupId>${alfresco.groupId}</groupId> 
-            <artifactId>alfresco-core</artifactId>
-            <version>${alfresco.version}</version>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco-core</artifactId>
+			<version>${alfresco.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Include JAR that has classes such as JSONObject -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
-            <scope>provided</scope>
-		</dependency>            		
-		
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
-	
-	<!-- To be defined later (in another blog)
-    <distributionManagement>
-    </distributionManagement>
-    <scm>
-    </scm> -->
+
+	<!-- To be defined later (in another blog) <distributionManagement> </distributionManagement> 
+		<scm> </scm> -->
 
 	<build>
 		<plugins>
-		
-			<!-- 
-				Merge default and user specific build properties into env.build.properties 
-				-->
-            <plugin>
-                <groupId>org.beardedgeeks</groupId>
-                <artifactId>maven-merge-properties-plugin</artifactId>
-                <version>0.2</version>
-                <configuration>
-                    <merges>
-                        <merge>
-                            <targetFile>${project.build.directory}/env.build.properties</targetFile>
-                            <propertiesFiles>
-                                <propertiesFile>src/test/envconfig/env.${env}.properties</propertiesFile>
-                                <propertiesFile>src/test/envconfig/env.default.properties</propertiesFile>
-                            </propertiesFiles>
-                        </merge>
-                    </merges>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>merge</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-		
+
+			<!-- Merge default and user specific build properties into env.build.properties -->
+			<plugin>
+				<groupId>org.beardedgeeks</groupId>
+				<artifactId>maven-merge-properties-plugin</artifactId>
+				<version>0.2</version>
+				<configuration>
+					<merges>
+						<merge>
+							<targetFile>${project.build.directory}/env.build.properties</targetFile>
+							<propertiesFiles>
+								<propertiesFile>src/test/envconfig/env.${env}.properties</propertiesFile>
+								<propertiesFile>src/test/envconfig/env.default.properties</propertiesFile>
+							</propertiesFiles>
+						</merge>
+					</merges>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>merge</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- Load build properties from merged env.build.properties file -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>${project.build.directory}/env.build.properties</file>
-                            </files>
-                            <quiet>false</quiet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>		
-		
-			<!-- 
-				Compile Java Source code with JDK 1.6 (config in parent POM)
-				-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${project.build.directory}/env.build.properties</file>
+							</files>
+							<quiet>false</quiet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Compile Java Source code with JDK 1.6 (config in parent POM) -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
-			
-			<!-- 
-				Run JUnit Tests (config in parent POM)
-				-->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>			
 
-			<!-- 
-				Package the Share JAR extension, exclude POM from JAR
-				-->
+			<!-- Run JUnit Tests (config in parent POM) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+
+			<!-- Package the Share JAR extension, exclude POM from JAR -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -149,23 +134,36 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>compress</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>compress</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
-		<!-- 
-			Copy and filter application resource files from default location. They go into /target/classes. 
-			-->	
+		<!-- Copy and filter application resource files from default location. 
+			They go into /target/classes. -->
 		<resources>
-			<!-- Copy over the FreeMarker templates without filtering so we do not start replacing variables (i.e. ${...}) 
-				 that should really be coming from the model setup in the Web Script controller -->	
+			<!-- Copy over the FreeMarker templates without filtering so we do not 
+				start replacing variables (i.e. ${...}) that should really be coming from 
+				the model setup in the Web Script controller -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>false</filtering>
 				<includes>
-					<include>**/*.ftl</include> 
+					<include>**/*.ftl</include>
 				</includes>
 			</resource>
-			<!-- Copy and filter all other resource files -->	
+			<!-- Copy and filter all other resource files -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
@@ -176,83 +174,75 @@
 		</resources>
 
 	</build>
-		
+
 	<profiles>
-		<!-- 
-			Profile used to trigger WAR creation and running the Share webapp in Jetty.
-			
-			Note. 	This runs only the extended share.war and the alfresco.war need 
-					to already be running listening on port 8080.
-			-->
-        <profile>
-            <id>webapp</id>
-            <build>
-				<!-- 
-					Include resource files that we need just for testing, and filter them at the same time 
-					-->
+		<!-- Profile used to trigger WAR creation and running the Share webapp 
+			in Jetty. Note. This runs only the extended share.war and the alfresco.war 
+			need to already be running listening on port 8080. -->
+		<profile>
+			<id>webapp</id>
+			<build>
+				<!-- Include resource files that we need just for testing, and filter 
+					them at the same time -->
 				<testResources>
-                    <testResource>
-                        <directory>src/test/resources</directory>
-                        <filtering>true</filtering>
-                    </testResource>
-                </testResources>
+					<testResource>
+						<directory>src/test/resources</directory>
+						<filtering>true</filtering>
+					</testResource>
+				</testResources>
 
-                <plugins>
+				<plugins>
 
-					<!-- 
-						Create WAR that includes Share Extension JAR 
-						-->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
+					<!-- Create WAR that includes Share Extension JAR -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
 						<version>2.2</version>
-                        <configuration>
-                            <primaryArtifact>false</primaryArtifact>
-                            <!--
-                                Assemble WAR in a different directory (/target/share) than the JAR (/target), so we do not get unexpected results
-                            -->
-                            <webappDirectory>${project.build.directory}/${webapp.name}</webappDirectory>
-                            <archive>
-                                <addMavenDescriptor>false</addMavenDescriptor>
-                            </archive>
-                            <webResources>
-                                <resource>
-                                    <directory>${project.build.testOutputDirectory}</directory>
-                                    <targetPath>WEB-INF/classes</targetPath>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                        <executions>
-                            <!-- Create an exploded WAR in specified webapp dir when the 'package' phase is called by maven 
-								 and the plug-in goal 'exploded' is run -->
-                            <execution>
-                                <id>createExplodedShareWebappWithJar</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exploded</goal>
-                                </goals>
-                                <configuration>
-								<!-- 	We want all the files for the JAR extension to be in one JAR file also during testing.
-										So there will be one lib (test-share-jar-1.0-SNAPSHOT.jar) copied to target/share/WEB-INF/lib 
-										(this is how Share JAR extensions are normally installed). 
-										The behaviour when it is false is for the JAR content to be copied into target/share/WEB-INF/classes -->
-									<archiveClasses>true</archiveClasses> 
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+						<configuration>
+							<primaryArtifact>false</primaryArtifact>
+							<!-- Assemble WAR in a different directory (/target/share) than the 
+								JAR (/target), so we do not get unexpected results -->
+							<webappDirectory>${project.build.directory}/${webapp.name}</webappDirectory>
+							<archive>
+								<addMavenDescriptor>false</addMavenDescriptor>
+							</archive>
+							<webResources>
+								<resource>
+									<directory>${project.build.testOutputDirectory}</directory>
+									<targetPath>WEB-INF/classes</targetPath>
+									<filtering>true</filtering>
+									<includes>
+										<include>**</include>
+									</includes>
+								</resource>
+							</webResources>
+						</configuration>
+						<executions>
+							<!-- Create an exploded WAR in specified webapp dir when the 'package' 
+								phase is called by maven and the plug-in goal 'exploded' is run -->
+							<execution>
+								<id>createExplodedShareWebappWithJar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>exploded</goal>
+								</goals>
+								<configuration>
+									<!-- We want all the files for the JAR extension to be in one JAR 
+										file also during testing. So there will be one lib (test-share-jar-1.0-SNAPSHOT.jar) 
+										copied to target/share/WEB-INF/lib (this is how Share JAR extensions are 
+										normally installed). The behaviour when it is false is for the JAR content 
+										to be copied into target/share/WEB-INF/classes -->
+									<archiveClasses>true</archiveClasses>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 
-					<!-- 
-						Run exploded WAR (in target/share) in Jetty Servlet engine 
-						-->
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <version>6.1.26</version> <!-- This is the latest 6 version before 7 starts -->
+					<!-- Run exploded WAR (in target/share) in Jetty Servlet engine -->
+					<plugin>
+						<groupId>org.mortbay.jetty</groupId>
+						<artifactId>maven-jetty-plugin</artifactId>
+						<version>6.1.26</version> <!-- This is the latest 6 version before 7 starts -->
 						<configuration>
 							<webApp>${project.build.directory}/${webapp.name}</webApp>
 							<webAppConfig>
@@ -266,36 +256,33 @@
 								</connector>
 							</connectors>
 						</configuration>
-                        <executions>
-                            <execution>
+						<executions>
+							<execution>
 								<id>jetty-run</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>run-exploded</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
+								<phase>test</phase>
+								<goals>
+									<goal>run-exploded</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 
-            <!--
-                Here you can add test dependencies you want to have included in the the WAR (not in the JAR, which is
-                built in the main profile). Typical use case: add here additional
-                Share Extension JARs that you want to test compatibility of with the current module.
-            -->
-            <dependencies>
-                <!--
-                    This is the Alfresco Share version you're testing the JAR against. Don't remove if you want jetty
-                    to be able to deploy a WAR
-                -->
-                <dependency>
-				    <groupId>${alfresco.groupId}</groupId> 
-                    <artifactId>share</artifactId>
-                    <version>${alfresco.version}</version>
-                    <type>war</type>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+			<!-- Here you can add test dependencies you want to have included in the 
+				the WAR (not in the JAR, which is built in the main profile). Typical use 
+				case: add here additional Share Extension JARs that you want to test compatibility 
+				of with the current module. -->
+			<dependencies>
+				<!-- This is the Alfresco Share version you're testing the JAR against. 
+					Don't remove if you want jetty to be able to deploy a WAR -->
+				<dependency>
+					<groupId>${alfresco.groupId}</groupId>
+					<artifactId>share</artifactId>
+					<version>${alfresco.version}</version>
+					<type>war</type>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cggh</groupId>
 	<artifactId>cggh-alfresco-extensions</artifactId>
 	<packaging>pom</packaging>
 	<name>Test Alfresco Extensions</name>
-    <description>Test parent project for building AMPs, JARs, and WAR</description>	
+	<description>Test parent project for building AMPs, JARs, and WAR</description>
 	<version>1.0-SNAPSHOT</version>
 
-	<!-- The AMPs, JARs, and WARs that should be managed by this parent project, add more AMPs and JARs here as needed -->
-    <modules>
-        <module>cggh-alfresco-amp</module>
-        <module>cggh-alfresco-war</module>
+	<!-- The AMPs, JARs, and WARs that should be managed by this parent project, 
+		add more AMPs and JARs here as needed -->
+	<modules>
+		<module>cggh-alfresco-amp</module>
+		<module>cggh-alfresco-war</module>
 		<module>cggh-share-jar</module>
-        <module>cggh-share-war</module>
-    </modules>
+		<module>cggh-share-war</module>
+	</modules>
 
-	<!-- Define the repositories that we need to connect to here and then have all sub-projects inherit them -->
+	<!-- Define the repositories that we need to connect to here and then have 
+		all sub-projects inherit them -->
 	<repositories>
 		<repository>
 			<id>alfresco-public-snapshots</id>
@@ -32,14 +33,11 @@
 			<id>alfresco-public</id>
 			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
 		</repository>
-		 <!-- Requires username and password to be setup in ~/.m/settings.xml -->
-		 <!-- 
-		<repository>
-			<id>alfresco-private-repository</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/private</url>
-		</repository>
-		 -->
-		<!-- Bring in the Maven Central repo too, so we can get access to libs such as commons-logging -->
+		<!-- Requires username and password to be setup in ~/.m/settings.xml -->
+		<!-- <repository> <id>alfresco-private-repository</id> <url>https://artifacts.alfresco.com/nexus/content/groups/private</url> 
+			</repository> -->
+		<!-- Bring in the Maven Central repo too, so we can get access to libs 
+			such as commons-logging -->
 		<repository>
 			<id>Maven Central</id>
 			<url>http://repo1.maven.org/maven2</url>
@@ -48,7 +46,7 @@
 	<pluginRepositories>
 		<pluginRepository>
 			<id>alfresco-public</id>
-            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>alfresco-public-snapshots</id>
@@ -62,49 +60,53 @@
 			<id>beardedgeeks-releases</id>
 			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
 		</pluginRepository>
+		<pluginRepository>
+			<name>oss.sonatype.org</name>
+			<id>oss.sonatype.org</id>
+			<url>http://oss.sonatype.org/content/groups/public</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<!-- Common properties for all sub-projects -->
 	<properties>
-        <env>${user.name}</env>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.version>3.0.5.RELEASE</spring.version>					<!-- For Alfresco 3.4.x use 3.0.0.RELEASE -->
-        <alfresco.version>4.0.e</alfresco.version>
-        <!-- Use:
-         "org.alfresco" for community artifacts
-        org.alfresco.enterprise for enterprise artifacts 
-        -->
-        <alfresco.groupId>org.alfresco</alfresco.groupId>  	
-        
-        <skip.functional.tests>true</skip.functional.tests>
-    </properties>
+		<env>${user.name}</env>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<spring.version>3.0.5.RELEASE</spring.version>					<!-- For Alfresco 3.4.x use 3.0.0.RELEASE -->
+		<alfresco.version>4.0.e</alfresco.version>
+		<!-- Use: "org.alfresco" for community artifacts org.alfresco.enterprise 
+			for enterprise artifacts -->
+		<alfresco.groupId>org.alfresco</alfresco.groupId>
 
-	<!-- To be defined later (in another blog)
-    <distributionManagement>
-    </distributionManagement>
-    <scm>
-    </scm> -->
+		<skip.functional.tests>true</skip.functional.tests>
+	</properties>
 
-	<!-- Include any libraries that are common to more than one extension (i.e. AMP or JAR), 
-		 so we do not have to define them in each POM -->
-    <dependencies>		
+	<!-- To be defined later (in another blog) <distributionManagement> </distributionManagement> 
+		<scm> </scm> -->
+
+	<!-- Include any libraries that are common to more than one extension (i.e. 
+		AMP or JAR), so we do not have to define them in each POM -->
+	<dependencies>
 		<!-- Include JUnit so we can write Java unit tests -->
 		<dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>		
-    </dependencies>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-		<!-- Define any common plug-in configuration so we get the same version and config in all sub-projects that uses them -->
-        <pluginManagement>
-            <plugins>
-				<!-- 
-					Compile Java Source code with JDK 1.6 
-					-->
+	<build>
+		<!-- Define any common plug-in configuration so we get the same version 
+			and config in all sub-projects that uses them -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0-beta-9</version>
+				</plugin>
+				<!-- Compile Java Source code with JDK 1.6 -->
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>2.3.2</version>
@@ -114,10 +116,8 @@
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
-				
-				<!-- 
-					Run JUnit Tests 
-					-->
+
+				<!-- Run JUnit Tests -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -135,8 +135,13 @@
 							</goals>
 						</execution>
 					</executions>
-				</plugin>			
-            </plugins>
-        </pluginManagement>
-    </build>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<scm>
+		<connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
+		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
+		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
+	</scm>
 </project>
