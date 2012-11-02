@@ -4,24 +4,23 @@
 {
 "nodeRef": "${collab.nodeRef}",
 "name": "${jsonUtils.encodeJSONString(collab.name)}",
-"title": "${jsonUtils.encodeJSONString(collab.properties["cm:title"])}",
-"description": "${jsonUtils.encodeJSONString(collab.properties["cm:description"])}",
+"title": "${jsonUtils.encodeJSONString(collab.properties["cm:title"])!''}",
+"description": "${jsonUtils.encodeJSONString(collab.properties["cm:description"])!''}",
 "type": "${collab.type}",
 "collaborationStatus": "${collab.properties["cggh:collaborationStatus"]!''}",
 "enquiryStatus": "${collab.properties["cggh:enquiryStatus"]!''}",
 "species": [
-<#list collab.properties["cggh:species"] as species>
+<#list collab.properties["cggh:species"]![] as species>
  "${species}"
 <#if species_has_next>,</#if>
 </#list>],
 "countries": [
-<#list collab.properties["cggh:sampleCountry"] as country>
+<#list collab.properties["cggh:sampleCountry"]![] as country>
  "${country}"
 <#if country_has_next>,</#if>
 </#list>],
-"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])}",
 "contacts": [
-<#list collab.assocs["cggh:contactList"] as contact>
+<#list collab.assocs["cggh:contactList"]![] as contact>
  {
  	"name": "${jsonUtils.encodeJSONString(contact.name)}",
 	"firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])}",
@@ -34,13 +33,16 @@
 }
 <#if contact_has_next>,</#if>
 </#list>],
-<#list collab.assocs["cggh:liaison"] as lia>
+<#if collab.assocs["cggh:liaison"]??>
+<#list collab.assocs["cggh:liaison"]![] as lia>
 "liaison": {
 	"firstName": "${jsonUtils.encodeJSONString(lia.properties["cm:firstName"])}",
 	"lastName": "${jsonUtils.encodeJSONString(lia.properties["cm:lastName"])}"
 }
 <#if lia_has_next>,</#if>
-</#list>
+</#list>,
+</#if>
+"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}"
 }<#if collab_has_next>,</#if>
 </#list>
 ]
