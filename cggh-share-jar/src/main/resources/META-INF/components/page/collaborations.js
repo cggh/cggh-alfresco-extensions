@@ -54,7 +54,7 @@
    /**
     * Preferences
     */
-   var PREFERENCES_COLLABORATIONS = "org.alfresco.share.collaborations",
+   var PREFERENCES_COLLABORATIONS = "org.cggh.share.collaborations",
       PREFERENCES_COLLABORATIONS_DASHLET_FILTER = PREFERENCES_COLLABORATIONS + ".dashlet.filter";
 
    var FAVOURITE_COLLABORATIONS = PREFERENCES_COLLABORATIONS + ".favourites";
@@ -448,12 +448,12 @@
          // Save preferences
          if (p_response.json.org)
          {
-            favs = p_response.json.org.alfresco.share.collaborations.favourites;
+            favs = p_response.json.org.cggh.share.collaborations.favourites;
             if (typeof(favs) === "undefined")
             {
                favs = {};
             } 
-            imapfavs = p_response.json.org.alfresco.share.collaborations.imapFavourites;
+            imapfavs = p_response.json.org.cggh.share.collaborations.imapFavourites;
          }
 
          // Select the preferred filter in the ui
@@ -471,10 +471,10 @@
 
          for (i = 0, j = p_items.length; i < j; i++)
          {
-            p_items[i].isFavourite = typeof(favs[p_items[i].shortName]) == "undefined" ? false : favs[p_items[i].shortName];
+            p_items[i].isFavourite = typeof(favs[p_items[i].nodeRef]) == "undefined" ? false : favs[p_items[i].nodeRef];
             if (imapfavs)
             {
-               p_items[i].isIMAPFavourite = typeof(imapfavs[p_items[i].shortName]) == "undefined" ? false : imapfavs[p_items[i].shortName];
+               p_items[i].isIMAPFavourite = typeof(imapfavs[p_items[i].nodeRef]) == "undefined" ? false : imapfavs[p_items[i].nodeRef];
             }
          }
 
@@ -492,8 +492,8 @@
 
          this.collaborations.sort(function(a, b)
          {
-            var name1 = a.title ? a.title.toLowerCase() : a.shortName.toLowerCase(),
-                name2 = b.title ? b.title.toLowerCase() : b.shortName.toLowerCase();
+            var name1 = a.title ? a.title.toLowerCase() : a.name.toLowerCase(),
+                name2 = b.title ? b.title.toLowerCase() : b.name.toLowerCase();
             return (name1 > name2) ? 1 : (name1 < name2) ? -1 : 0;
          });
 
@@ -732,10 +732,12 @@
 
          var output = [];
          
-         for(i = 0, j = collaboration.contacts.length;i < j; i++) {
-    		 var person = collaboration.contacts[i];
-    		 output.push(person.name);
-    	 }
+         if (collaboration.contacts) {
+        	for(i = 0, j = collaboration.contacts.length;i < j; i++) {
+    		 	var person = collaboration.contacts[i];
+    		 	output.push(person.name);
+    	 	}
+         }
         
          elCell.innerHTML = output;
       },
@@ -875,7 +877,7 @@
       {
          var record = this.widgets.dataTable.getRecord(row),
             collaboration = record.getData(),
-            collaborationId = collaboration.shortName;
+            collaborationId = collaboration.nodeRef;
 
          collaboration.isFavourite = !collaboration.isFavourite;
 
@@ -935,7 +937,7 @@
       {
          var record = this.widgets.dataTable.getRecord(row),
             collaboration = record.getData(),
-            collaborationId = collaboration.shortName;
+            collaborationId = collaboration.nodeRef;
 
          collaboration.isIMAPFavourite = !collaboration.isIMAPFavourite;
 
