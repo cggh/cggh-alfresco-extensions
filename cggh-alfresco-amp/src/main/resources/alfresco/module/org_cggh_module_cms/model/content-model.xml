@@ -35,19 +35,22 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>enquiry</value>
-					<value>exploration</value>
-					<value>negotiation</value>
 					<value>active</value>
-					<value>renegotiation</value>
-					<value>completed</value>
+					<value>declined</value>
 					<value>aborted</value>
-					<!--
-					<value>LoS enquiry</value>
-					<value>LoS exploration</value>
-					<value>LoS negotiation</value>
-					<value>LoS agreed</value>
-					<value>LoS aborted</value>
-					 -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cggh:enquiryStatusList" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>enquiry email received</value>
+					<value>dialogue open</value>
+					<value>awaiting funding</value>
+					<value>application form sent</value>
+					<value>application to be presented to SG</value>
+					<value>collaboration agreement being drawn</value>
+					<value>collaboration agreement sent</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -367,6 +370,15 @@
 						<constraint ref="cggh:collaborationStatusList" />
 					</constraints>
 				</property>
+				<property name="cggh:enquiryStatus">
+					<title>Collaboration Status</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cggh:enquiryStatusList" />
+					</constraints>
+				</property>
 				<property name="cggh:contacts">
 					<title>Contacts</title>
 					<type>d:text</type>
@@ -409,6 +421,18 @@
 						<many>true</many>
 					</target>
 				</association>
+				<association name="cggh:liaison">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:person</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+				
 			</associations>
 		</aspect>
 	</aspects>
