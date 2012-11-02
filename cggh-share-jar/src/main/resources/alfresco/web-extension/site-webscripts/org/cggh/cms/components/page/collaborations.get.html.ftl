@@ -3,7 +3,7 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-   new Alfresco.dashlet.Collaborations("${jsid}").setOptions(
+   new Cggh.dashlet.Collaborations("${jsid}").setOptions(
    {
       imapEnabled: ${imapServerEnabled?string},
       listSize: 150
@@ -33,11 +33,8 @@
          <select id="${id}-status-menu" multiple="multiple">
           	<option value="all" selected="selected">${msg("filter.all")}</option>
             <option value="enquiry">${msg("filter.status.enquiry")}</option>
-            <option value="exploration">${msg("filter.status.exploration")}</option>
-            <option value="negotiation">${msg("filter.status.negotiation")}</option>
             <option value="active">${msg("filter.status.active")}</option>
-            <option value="renegotiation">${msg("filter.status.renegotiation")}</option>
-            <option value="completed">${msg("filter.status.completed")}</option>
+            <option value="declined">${msg("filter.status.renegotiation")}</option>
             <option value="aborted">${msg("filter.status.aborted")}</option>
          </select>
          <span class="align-right yui-button-align" id="${id}-lookseq">

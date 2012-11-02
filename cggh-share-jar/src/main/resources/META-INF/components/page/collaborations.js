@@ -20,9 +20,15 @@
 /**
  * Dashboard Collaborations component.
  *
- * @namespace Alfresco.dashlet
- * @class Alfresco.dashlet.Collaborations
+ * @namespace Cggh.dashlet
+ * @class Cggh.dashlet.Collaborations
  */
+   if (typeof Cggh == "undefined" || !Cggh)
+   {
+     var Cggh = {};
+     Cggh.dashlet = {};
+   }
+
 (function()
 {
    /**
@@ -30,7 +36,8 @@
     */
    var Dom = YAHOO.util.Dom,
       Event = YAHOO.util.Event,
-      Selector = YAHOO.util.Selector;
+      Selector = YAHOO.util.Selector,
+      $msg = Alfresco.util.message;
 
    /**
     * Alfresco Slingshot aliases
@@ -52,17 +59,28 @@
 
    var FAVOURITE_COLLABORATIONS = PREFERENCES_COLLABORATIONS + ".favourites";
    var IMAP_FAVOURITE_COLLABORATIONS = PREFERENCES_COLLABORATIONS + ".imapFavourites";
-   
+  
    /**
     * Dashboard Collaborations constructor.
     *
     * @param {String} htmlId The HTML id of the parent element
-    * @return {Alfresco.dashlet.Collaborations} The new component instance
+    * @return {Cggh.dashlet.Collaborations} The new component instance
     * @constructor
     */
-   Alfresco.dashlet.Collaborations = function Collaborations_constructor(htmlId)
+   Cggh.dashlet.Collaborations = function Collaborations_constructor(htmlId)
    {
-      Alfresco.dashlet.Collaborations.superclass.constructor.call(this, "Alfresco.dashlet.Collaborations", htmlId, ["datasource", "datatable", "animation"]);
+      Cggh.dashlet.Collaborations.superclass.constructor.call(this, "Cggh.dashlet.Collaborations", htmlId, ["datasource", "datatable", "animation"]);
+
+      /**
+       * Register this component
+       */
+      Alfresco.util.ComponentManager.register(this);
+      /**
+       * Load YUI Components
+       */
+      Alfresco.util.YUILoaderHelper.require(["button", "container",
+        "datasource", "datatable", "paginator", "json", "history",
+        "tabview"], this.onComponentsLoaded, this);
 
       // Initialise prototype properties
       this.collaborations = [];
@@ -73,7 +91,7 @@
       return this;
    };
 
-   YAHOO.extend(Alfresco.dashlet.Collaborations, Alfresco.component.Base,
+   YAHOO.extend(Cggh.dashlet.Collaborations, Alfresco.component.Base,
    {
       /**
        * Collaboration data
@@ -164,9 +182,12 @@
             { key: "title", label: "Title", sortable: true, formatter: this.bind(this.renderCellTitle) },
             { key: "detail", label: "Description", sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "projStatus", label: "Project Status", sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
+            { key: "enqStatus", label: "Enquiry Status", sortable: true, formatter: this.bind(this.renderCellEnquiryStatus) },
+            { key: "liaision", label: "Liaison", sortable: true, formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: "Contacts", sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: "Species", sortable: true, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) }
+            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) },
+            { key: "notes", label: "Notes", sortable: true, formatter: this.bind(this.renderCellNotes) }
             ];
          var lsCols = 
          [
@@ -301,7 +322,7 @@
          Alfresco.util.Ajax.request(
          {
             //url: Alfresco.constants.PROXY_URI + "api/people/" + encodeURIComponent(Alfresco.constants.USERNAME) + "/sites?roles=user&size=" + this.options.listSize,
-        	 url: Alfresco.constants.PROXY_URI +  "cmis/p/Sites/sequencing/documentLibrary/Collaborations/children",
+        	 url: Alfresco.constants.PROXY_URI +  "cggh/collaborations",
             successCallback:
             {
                fn: this.onCollaborationsLoaded,
@@ -310,128 +331,7 @@
          });
       },
 
-      createStudy: function Collaborations_createStudy()
-      {
-    	  var newStudy =
-    	 {
-            properties: {},
-            siteManagers: {},
-            countries: [],
-            species: [],
-            contacts: [],
-            solaris_people: [],
-			solaris_title: ""
-         };
-    	  return newStudy;
-      },
-      getJson: function Collaborations_getJson(p_response)
-      {
-    	  
-          var entries = p_response.getElementsByTagName('entry'),
-          entriesLength = entries.length,
-          entryEl = null,
-          objEl,
-          propertiesEl,
-          propertiesList,
-          propertyEl,
-          articles = [],
-          article;
-
-      // Convert to object format similar to the json response
-      for (var ei = 0; ei < entriesLength; ei++)
-      {
-         entryEl = entries[ei];
-         article = this.createStudy();
-         var objEl;
-         var propsNS;
-         if (entryEl.getElementsByTagNameNS === undefined) {
-        	objEl = entryEl.getElementsByTagName('cmisra:object');
-        	propsNS = [ 'alf', 'cmis'];
-         } else {
-      	   	objEl = entryEl.getElementsByTagNameNS('http://docs.oasis-open.org/ns/cmis/restatom/200908/','object');
-      	  propsNS = [ 'http://www.alfresco.org', 'http://docs.oasis-open.org/ns/cmis/core/200908/'];
-         }
-         var i = 0;
-         while ((ns = propsNS[i++])) {
-        	 var properties;
-        	 if (entryEl.getElementsByTagNameNS === undefined) {
-        		 var name = ns + ':' + 'properties';
-        		 properties = entryEl.getElementsByTagName(name);
-        	 } else {
-        		 properties = entryEl.getElementsByTagNameNS(ns,'properties');
-        	 }
-        	 if (properties == null || properties.length == 0) {
-        		 continue;
-        	 }
-        	 var propertyEl;
-        	 
-        	 propertyEl = properties[0].firstChild;
-        	 
-        	 while(propertyEl != null) {
-        		 //Node.TEXT_NODE is not portable
-        		 if (propertyEl.nodeType == 3) {
-        			 propertyEl = propertyEl.nextSibling;
-        			 continue;
-        		 }
-        		 var propertyDefinitionId = propertyEl.getAttribute("propertyDefinitionId");
-        		 var cmisValue = "";
-        		 if (propertyEl.firstChild != null && propertyEl.firstChild.firstChild != null) {
-        			 cmisValue = propertyEl.firstChild.firstChild.nodeValue;
-        		 }
-        		 if (propertyDefinitionId == "cmis:name") {
-        			 article.shortName = cmisValue;
-        		 } else if (propertyDefinitionId == "cm:title") {
-        			 if (propertyEl.firstChild.firstChild) {
-        				 article.title = cmisValue;
-        			 }
-        		 } else if (propertyDefinitionId == "cm:description") {
-        				 article.description = cmisValue;
-        		 } else if (propertyDefinitionId == "cmis:lastModifiedBy") {
-        			 article.modifiedByUser = cmisValue;
-        			 article.modifiedBy = article.modifiedByUser;
-        		 } else if (propertyDefinitionId == "cmis:lastModificationDate") {
-        			 article.modifiedOn = cmisValue;
-        		 } else if (propertyDefinitionId == "cmis:objectId") {
-        			 article.objectId = cmisValue;
-        		 } else if (propertyDefinitionId == "cmis:path") {
-        			 article.path = cmisValue;
-        		 } else if (propertyDefinitionId == "cmis:creationDate") {
-        			 article.createdOn = cmisValue;
-        		 } else if (propertyDefinitionId == "cmis:objectId") {
-        			 article.sitePreset = cmisValue;
-        		 } else if (propertyDefinitionId == "cggh:collaborationStatus") {
-        				 article.projectStatus = cmisValue;
-        		 } else if (propertyDefinitionId == "cggh:contacts") {
-        			 var contact = propertyEl.firstChild;
-        			 while (contact != null) {
-        				 if (contact.firstChild != null) {
-        					 article.contacts.push(contact.firstChild.nodeValue);
-        				 }
-        				 contact = contact.nextSibling;
-        			 }
-        		 } else if (propertyDefinitionId == "cggh:sampleCountry") {
-        			 var country = propertyEl.firstChild;
-        			 while (country != null) {
-        				 if (country.firstChild != null) {
-        					 article.countries.push(country.firstChild.nodeValue);
-        				 }
-        				 country = country.nextSibling;
-        			 }
-        		 } else if (propertyDefinitionId == "cggh:species") {
-        			 var spec = propertyEl.firstChild;
-        			 while (spec != null) {
-        				 article.species.push(spec.firstChild.nodeValue);
-        				 spec = spec.nextSibling;
-        			 }
-        		 }
-        		 
-           		 propertyEl = propertyEl.nextSibling;
-        	 }
-         }
-         articles.push(article);
-      }
-      return articles;  
-      },
+     
       loadSolaris: function Collaborations_loadSolaris(p_items)
       {
     	  if (this.widgets.lookseq.value) {
@@ -471,7 +371,7 @@
       onSolarisLoaded: function Collaborations_onSolarisLoaded(p_response, p_items)
       {
     	  //Alfresco studies
-    	  var items = p_items;
+    	  var items = p_items.collaborationNodes;
 
     	  var newItems = [];
     	  //Solaris projects - ignore if connection failed
@@ -485,7 +385,7 @@
         	  for (i = 0, numItems = items.length; i < numItems; i++)
     		  {
     			var item = items[i];
-    			var words = item.shortName.split(" ");
+    			var words = item.name.split(" ");
     			if (words.length > 1)
     			{
     			var item_code = words[1];
@@ -499,9 +399,10 @@
     			}
     		  }
     		  if (!found) {
-    			  var newItem = this.createStudy();
-    			  newItem.solaris_people = project.people;
-				  newItem.solaris_title = project.title;
+    			  var newItem = {
+    					  "solaris_people": "project.people",
+    					  "solaris_title":  "project.title"
+    			  };
     			  newItems.push(newItem);
     		  }
     	  }
@@ -527,10 +428,7 @@
        */
       onCollaborationsLoaded: function Collaborations_onCollaborationsLoaded(p_response)
       {
-    	  //Convert CMIS response to json
-    	  var items = this.getJson(p_response.serverResponse.responseXML);
-
-          this.loadSolaris(items);
+          this.loadSolaris(p_response.json);
       },
 
       /**
@@ -708,10 +606,18 @@
          
          var collaboration = oRecord.getData();
          
-      	var objectId = collaboration.objectId,
-      	title = collaboration.shortName;
+      	var objectId = collaboration.nodeRef,
+      	title = collaboration.name;
          var desc = '<div class="study-title"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'folder-details?nodeRef=' + objectId + '" class="theme-color-1">' + $html(title) + '</a></div>';
+         /* Favourite / IMAP / (Likes) */
+         desc += '<div class="detail detail-social">';
+         desc +=    '<span class="item item-social">' + this.generateFavourite(oRecord) + '</span>';
+         if (this.options.imapEnabled)
+         {
+            desc +=    '<span class="item item-social item-separator">' + this.generateIMAPFavourite(oRecord) + '</span>';
+         }
          
+         desc += '</div>';
          
          elCell.innerHTML = desc;
       },
@@ -724,9 +630,9 @@
     	  var collaboration = oRecord.getData();
          var desc = "";
          
-         desc += '<h3 class="collaboration-title"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'site/sequencing/documentlibrary#filter=path|/Collaborations/' + collaboration.shortName + '" class="theme-color-1">' + $html(collaboration.title) + '</a></h3>';
+         desc += '<h3 class="collaboration-title"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'site/sequencing/documentlibrary#filter=path|/Collaborations/' + collaboration.name + '" class="theme-color-1">' + $html(collaboration.title) + '</a></h3>';
          
-
+        
          elCell.innerHTML = desc;
       },
       
@@ -761,15 +667,7 @@
             
             desc += '<div class="detail"><span>' + description + '</span></div>';
 
-            /* Favourite / IMAP / (Likes) */
-            desc += '<div class="detail detail-social">';
-            desc +=    '<span class="item item-social">' + this.generateFavourite(oRecord) + '</span>';
-            if (this.options.imapEnabled)
-            {
-               desc +=    '<span class="item item-social item-separator">' + this.generateIMAPFavourite(oRecord) + '</span>';
-            }
-            
-            desc += '</div>';
+          
          }
 
          elCell.innerHTML = desc;
@@ -793,8 +691,29 @@
          var collaboration = oRecord.getData();
 
         
-         elCell.innerHTML = collaboration.projectStatus;
+         elCell.innerHTML = collaboration.collaborationStatus;
       },
+
+      /**
+       * Actions custom datacell formatter
+       *
+       * @method renderCellEnquiryStatus
+       * @param elCell {object}
+       * @param oRecord {object}
+       * @param oColumn {object}
+       * @param oData {object|string}
+       */
+      renderCellEnquiryStatus: function Collaborations_renderCellEnquiryStatus(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+        
+         elCell.innerHTML = collaboration.enquiryStatus;
+      },
+
       /**
        * Actions custom datacell formatter
        *
@@ -811,8 +730,36 @@
 
          var collaboration = oRecord.getData();
 
+         var output = [];
+         
+         for(i = 0, j = collaboration.contacts.length;i < j; i++) {
+    		 var person = collaboration.contacts[i];
+    		 output.push(person.name);
+    	 }
         
-         elCell.innerHTML = collaboration.contacts;
+         elCell.innerHTML = output;
+      },
+      /**
+       * Actions custom datacell formatter
+       *
+       * @method renderCellLiaison
+       * @param elCell {object}
+       * @param oRecord {object}
+       * @param oColumn {object}
+       * @param oData {object|string}
+       */
+      renderCellLiaison: function Collaborations_renderCellLiaison(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         if (collaboration.liaison) {
+        	 var liaison = collaboration.liaison.firstName + " " + collaboration.liaison.lastName;
+        
+        	 elCell.innerHTML = liaison;
+         }
       },
       /**
        * Actions custom datacell formatter
@@ -852,7 +799,16 @@
         
          elCell.innerHTML = collaboration.countries;
       },
-      renderCellSolarisTitle: function Collaborations_renderCellSolarisTitle(elCell, oRecord, oColumn, oData)
+      /**
+       * Actions custom datacell formatter
+       *
+       * @method renderCellNotes
+       * @param elCell {object}
+       * @param oRecord {object}
+       * @param oColumn {object}
+       * @param oData {object|string}
+       */
+      renderCellNotes: function Collaborations_renderCellNotes(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
@@ -860,6 +816,16 @@
          var collaboration = oRecord.getData();
 
         
+         elCell.innerHTML = collaboration.notes;
+      },
+      renderCellSolarisTitle: function Collaborations_renderCellSolarisTitle(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         
          elCell.innerHTML = collaboration.solaris_title;
       },
       renderCellSolarisPI: function Collaborations_renderCellSolarisPI(elCell, oRecord, oColumn, oData)
@@ -870,10 +836,12 @@
          var collaboration = oRecord.getData();
          var output = [];
          
-         for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
-        	 var person = collaboration.solaris_people[i];
-        	 if (person.is_pi == 1) {
-        		 output.push(person.fullname);
+         if (collaboration.solaris_people) {
+        	 for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
+        		 var person = collaboration.solaris_people[i];
+        		 if (person.is_pi == 1) {
+        			 output.push(person.fullname);
+        		 }
         	 }
          }
         
@@ -887,13 +855,14 @@
          var collaboration = oRecord.getData();
          var output = [];
          
-         for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
-        	 var person = collaboration.solaris_people[i];
-        	 if (person.is_pi == 0) {
-        		 output.push(person.fullname);
+         if (collaboration.solaris_people) {
+        	 for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
+        		 var person = collaboration.solaris_people[i];
+        		 if (person.is_pi == 0) {
+        			 output.push(person.fullname);
+        		 }
         	 }
          }
-        
          elCell.innerHTML = output;
       },
       /**

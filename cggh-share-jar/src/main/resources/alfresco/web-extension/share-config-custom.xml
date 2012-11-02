@@ -130,9 +130,11 @@
 				<line index="10" id="date" view="detailed">{date}{size}</line>
 				<line index="20" id="tags" view="detailed">{tags}</line>
 				<line index="30" id="description" view="detailed">{description}</line>
-				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus cggh.metadata.statusType}
+				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus
+					cggh.metadata.statusType}
 					{cggh_contacts
-					cggh.metadata.contactsType} 
+					cggh.metadata.contactsType}
+					{cggh_liaison}
 				</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
 					{cggh_sampleCountry}
@@ -255,7 +257,9 @@
 
 					<!-- cggh:collaborationFolder -->
 					<show id="cggh:collaborationStatus" />
+					<show id="cggh:enquiryStatus" />
 					<show id="cggh:contactList" />
+					<show id="cggh:liaison" force="true" />
 					<show id="cggh:species" />
 					<show id="cggh:sampleCountry" />
 					<show id="cggh:collaborationNotes" />
@@ -293,6 +297,8 @@
 					<!-- Field set "cgghMetadata" -->
 					<field id="cggh:collaborationStatus" label-id="cggh.metadata.collaborationStatus"
 						set="cgghMetadata" />
+					<field id="cggh:enquiryStatus" label-id="cggh.metadata.enquiryStatus"
+						set="cgghMetadata" />
 					<field id="cggh:contactList" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
@@ -300,10 +306,16 @@
 							</control-param>
 						</control>
 					</field>
-					
+					<field id="cggh:liaison" label-id="cggh.metadata.liaison"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/authority.ftl">
+							<control-param name="compactMode">true</control-param>
+							<control-param name="forceEditable">true</control-param>
+						</control>
+					</field>
 					<field id="cggh:sampleCountry" label-id="cggh.metadata.studySites"
 						set="cgghMetadata" />
-						
+
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:collaborationNotes" set="cgghMetadata">
@@ -324,6 +336,8 @@
 					<show id="cm:description" force="true" />
 
 					<!-- cggh:collaborationFolder -->
+					<show id="cggh:collaborationStatus" />
+					<show id="cggh:enquiryStatus" />
 
 					<show id="cggh:contacts" force="true" />
 					<show id="cggh:species" />
@@ -333,15 +347,18 @@
 					<set id="cgghMetadata" appearance="bordered-panel"
 						label-id="cggh.metadata.collaborationFolder" />
 
+					<field id="cggh:collaborationStatus" label-id="cggh.metadata.collaborationStatus"
+						set="cgghMetadata" />
+					<field id="cggh:enquiryStatus" label-id="cggh.metadata.enquiryStatus"
+						set="cgghMetadata" />
 					<field id="cggh:contacts" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 					</field>
-					
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:sampleCountry" label-id="cggh.metadata.sampleCountry"
 						set="cgghMetadata" />
-					
+
 				</appearance>
 			</form>
 		</forms>
@@ -361,7 +378,7 @@
 				<create-form template="../data-lists/forms/dataitem.ftl" />
 				<appearance>
 
-					<field id="cm:latitude" label-id="cm.metadata.latitude"  />
+					<field id="cm:latitude" label-id="cm.metadata.latitude" />
 					<field id="cm:longitude" label-id="cm.metadata.longitude" />
 				</appearance>
 			</form>
@@ -382,8 +399,8 @@
 				</field-visibility>
 				<edit-form template="../data-lists/forms/dataitem.ftl" />
 				<appearance>
-					
-					<field id="cm:latitude" label-id="cm.metadata.latitude"  />
+
+					<field id="cm:latitude" label-id="cm.metadata.latitude" />
 					<field id="cm:longitude" label-id="cm.metadata.longitude" />
 				</appearance>
 			</form>

@@ -1,5 +1,6 @@
 <webscript>
   <shortname>Collaborations</shortname>
   <description>Lists collaborations</description>
+  <family>dashlet</family>
   <url>/org/cggh/cms/components/page/collaborations</url>
 </webscript>
