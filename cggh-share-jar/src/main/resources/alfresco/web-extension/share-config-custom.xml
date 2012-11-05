@@ -16,7 +16,6 @@
 				<!-- defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description" -->
 				<item type="link" id="my-dashboard">{userdashboardpage}</item>
 				<item type="js" id="sites">Alfresco.module.Sites</item>
-				<item type="link" id="people">/people-finder</item>
 				<item type="link" id="repository" condition="conditionRepositoryRootNode">/repository</item>
 				<item type="container" id="more">
 					<container-group id="my">
