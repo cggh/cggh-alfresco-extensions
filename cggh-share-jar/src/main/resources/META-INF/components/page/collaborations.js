@@ -178,22 +178,22 @@
          // DataTable column defintions
          var columnDefinitions =
          [
-            { key: "name", label: "Name", sortable: true, formatter: this.bind(this.renderCellName) },
-            { key: "title", label: "Title", sortable: true, formatter: this.bind(this.renderCellTitle) },
-            { key: "detail", label: "Description", sortable: false, formatter: this.bind(this.renderCellDetail) },
-            { key: "projStatus", label: "Project Status", sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
-            { key: "enqStatus", label: "Enquiry Status", sortable: true, formatter: this.bind(this.renderCellEnquiryStatus) },
-            { key: "liaision", label: "Liaison", sortable: true, formatter: this.bind(this.renderCellLiaison) },
-            { key: "mainContact", label: "Contacts", sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
-            { key: "species", label: "Species", sortable: true, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: "Country", sortable: true, formatter: this.bind(this.renderCellCountries) },
-            { key: "notes", label: "Notes", sortable: true, formatter: this.bind(this.renderCellNotes) }
+            { key: "name", label: this.msg("cggh.label.name"), sortable: true, formatter: this.bind(this.renderCellName) },
+            { key: "title", label: this.msg("cggh.label.title"), sortable: true, formatter: this.bind(this.renderCellTitle) },
+            { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
+            { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
+            { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, formatter: this.bind(this.renderCellEnquiryStatus) },
+            { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, formatter: this.bind(this.renderCellLiaison) },
+            { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
+            { key: "species", label: this.msg("cggh.metadata.species"), sortable: true, formatter: this.bind(this.renderCellSpecies) },
+            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: true, formatter: this.bind(this.renderCellCountries) },
+            { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: true, formatter: this.bind(this.renderCellNotes) }
             ];
          var lsCols = 
          [
-            { key: "sTitle", label: "Solaris Title", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
-            { key: "sPi", label: "Solaris PI", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
-            { key: "sOther", label: "Solaris Other People", hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
+            { key: "sTitle", label: this.msg("cggh.external.solaris.title"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
+            { key: "sPi", label: this.msg("cggh.external.solaris.pi"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
+            { key: "sOther", label: this.msg("cggh.external.solaris.otherPeople"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
          ];
 
         
@@ -536,7 +536,7 @@
               //leave unchanged
                break;
             default:
-               ret = ret && (collaboration.projectStatus == statusFilter);
+               ret = ret && (collaboration.collaborationStatus == statusFilter);
                break;
          }
          return ret;
@@ -827,8 +827,9 @@
 
          var collaboration = oRecord.getData();
 
-         
-         elCell.innerHTML = collaboration.solaris_title;
+         if (collaboration.solaris_title) {
+        	 elCell.innerHTML = collaboration.solaris_title;
+         }
       },
       renderCellSolarisPI: function Collaborations_renderCellSolarisPI(elCell, oRecord, oColumn, oData)
       {
