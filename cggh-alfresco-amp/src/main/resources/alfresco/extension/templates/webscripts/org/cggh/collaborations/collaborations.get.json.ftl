@@ -22,22 +22,22 @@
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {
- 	"name": "${jsonUtils.encodeJSONString(contact.name)}",
-	"firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])}",
-	"lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])}",
-	"company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])}",
-	"email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])}",
-	"phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])}",
-	"mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])}",
-	"notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])}"
+ 	"name": "${jsonUtils.encodeJSONString(contact.name)!''}",
+	"firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])!''}",
+	"lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])!''}",
+	"company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])!''}",
+	"email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])!''}",
+	"phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])!''}",
+	"mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])!''}",
+	"notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])!''}"
 }
 <#if contact_has_next>,</#if>
 </#list>],
 <#if collab.assocs["cggh:liaison"]??>
 <#list collab.assocs["cggh:liaison"]![] as lia>
 "liaison": {
-	"firstName": "${jsonUtils.encodeJSONString(lia.properties["cm:firstName"])}",
-	"lastName": "${jsonUtils.encodeJSONString(lia.properties["cm:lastName"])}"
+	"firstName": "${jsonUtils.encodeJSONString(lia.properties["cm:firstName"])!''}",
+	"lastName": "${jsonUtils.encodeJSONString(lia.properties["cm:lastName"])!''}"
 }
 <#if lia_has_next>,</#if>
 </#list>,

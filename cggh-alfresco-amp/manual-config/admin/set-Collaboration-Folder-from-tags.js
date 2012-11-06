@@ -3,8 +3,8 @@ var nodes = document.children;
 
   for each (var node in document.children) {
     node.specializeType('cggh:collaborationFolder');
-    logger.log(node.name + " (" + node.typeShort + "): " + node.nodeRef);
-    print (node.getTags());
+   // logger.log(node.name + " (" + node.typeShort + "): " + node.nodeRef);
+   // print (node.getTags());
     var tags = node.getTags();
     var countries = new Array();
     var speciesArray = new Array();
@@ -13,13 +13,18 @@ var nodes = document.children;
     for (var i =0 ; i<tags.length;i++) {
       logger.log(tags[i]);
       var elems = tags[i].split('=');
-      
-      if (elems[0] == 'species') {
-    	  var species = elems[1].substring(0,1).toUpperCase() + elems[1].substring(1);
+      if (elems.length != 2)
+        continue;
+      var name = elems[0].trim();
+      var value = elems[1].trim();
+      logger.log('#'+name+"#"+value);
+      if (name == 'species') {
+    	  var species = value.substring(0,1).toUpperCase() + value.substring(1);
+        logger.log("species:" + species);
         speciesArray.push(species);
       }
-      if (elems[0] == 'contact') {
-    	  var names = elems[1].split(' ');
+      if (name == 'contact') {
+    	  var names = value.split(' ');
           if (names.length > 1) {
             var firstName = names[0].substring(0,1).toUpperCase() + names[0].substring(1);
             var lastName = names[1].substring(0,1).toUpperCase() + names[1].substring(1);
@@ -30,24 +35,31 @@ var nodes = document.children;
             for each(var cont in conts) {
     		  node.createAssociation(cont, "cggh:contactList");
     		  contacts.push(cont.name);
-               logger.log("Contact for " + elems[1] + " found " + cont.name);
+               logger.log("Contact for " + value + " found " + cont.name);
             }
         }
       }
-      if (elems[0] == 'status') {
-          node.properties["cggh:collaborationStatus"] = elems[1];
+      if (name == 'status') {
+            logger.log("status:" + value);
+          if (value == 'exploration') {
+              node.properties["cggh:collaborationStatus"] = 'enquiry';
+              node.properties["cggh:enquiryStatus"] = 'dialogue open';
+          } else {
+            node.properties["cggh:collaborationStatus"] = value;
+          }
         }
-      if (elems[0] == 'country') {
-    	  var country = elems[1].toUpperCase();
+      if (name == 'country') {
+    	  var country = value.toUpperCase();
     	  if (country == "THE GAMBIA") {
     		country = "GAMBIA";  
     	  }
     	  if (country == "TANZANIA") {
-        	country = "TANZANIA, UNITED REPUBLIC OF";      		  
+        	country = "TANZANIA (UNITED REPUBLIC OF)";
       	  }
     	  if (country == "VIETNAM") {
       		country = "VIET NAM";
     	  }
+        logger.log("country:" + country);
     	  countries.push(country);
       }
     }
