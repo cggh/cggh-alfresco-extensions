@@ -179,21 +179,21 @@
          var columnDefinitions =
          [
             { key: "name", label: this.msg("cggh.label.name"), sortable: true, formatter: this.bind(this.renderCellName) },
-            { key: "title", label: this.msg("cggh.label.title"), sortable: true, formatter: this.bind(this.renderCellTitle) },
+            { key: "title", label: this.msg("cggh.label.title"), sortable: false, formatter: this.bind(this.renderCellTitle) },
             { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
-            { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, formatter: this.bind(this.renderCellProjectStatus) },
-            { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, formatter: this.bind(this.renderCellEnquiryStatus) },
-            { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, formatter: this.bind(this.renderCellLiaison) },
-            { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, formatter: this.bind(this.renderCellPrimaryContact) },
-            { key: "species", label: this.msg("cggh.metadata.species"), sortable: true, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: true, formatter: this.bind(this.renderCellCountries) },
-            { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: true, formatter: this.bind(this.renderCellNotes) }
+            { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
+            { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
+            { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
+            { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellPrimaryContact) },
+            { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
+            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries) },
+            { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) }
             ];
          var lsCols = 
          [
-            { key: "sTitle", label: this.msg("cggh.external.solaris.title"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisTitle) },
-            { key: "sPi", label: this.msg("cggh.external.solaris.pi"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisPI) },
-            { key: "sOther", label: this.msg("cggh.external.solaris.otherPeople"), hidden: true, sortable: true, formatter: this.bind(this.renderCellSolarisOtherPeople) }
+            { key: "sTitle", label: this.msg("cggh.external.solaris.title"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisTitle) },
+            { key: "sPi", label: this.msg("cggh.external.solaris.pi"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisPI) },
+            { key: "sOther", label: this.msg("cggh.external.solaris.otherPeople"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisOtherPeople) }
          ];
 
         
@@ -694,6 +694,17 @@
          elCell.innerHTML = collaboration.collaborationStatus;
       },
 
+      sortCollaborationStatus: function Collaborations_sortCollaborationStatus(rec1, rec2, desc) {
+    	  var a = rec1.getData();
+    	  var b = rec2.getData();
+    	  var name1 = a.collaborationStatus ? a.collaborationStatus : '',
+                  name2 = b.collaborationStatus ? b.collaborationStatus : '';
+    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
+    	  if (ret == 0) {
+    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
+    	  }
+    	  return (ret);
+      },
       /**
        * Actions custom datacell formatter
        *
@@ -714,6 +725,17 @@
          elCell.innerHTML = collaboration.enquiryStatus;
       },
 
+      sortEnquiryStatus: function Collaborations_sortEnquiryStatus(rec1, rec2, desc) {
+    	  var a = rec1.getData();
+    	  var b = rec2.getData();
+    	  var name1 = a.collaborationStatus + a.enquiryStatus ? a.enquiryStatus : '',
+                  name2 = b.collaborationStatus + b.enquiryStatus ? b.enquiryStatus : '';
+    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
+    	  if (ret == 0) {
+    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
+    	  }
+    	  return (ret);
+      },
       /**
        * Actions custom datacell formatter
        *
@@ -741,6 +763,25 @@
         
          elCell.innerHTML = output;
       },
+      
+      sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
+    	  var a = rec1.getData();
+    	  var b = rec2.getData();
+    	  var name1 = '', name2 = '';
+    	  if (a.contacts && a.contacts.length > 0) {
+    		  name1 = a.contacts[0].name;
+    	  }
+    	  if (b.contacts && b.contacts.length > 0) {
+    		  name2 = b.contacts[0].name;
+    	  }
+    	  
+    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
+    	  if (ret == 0) {
+    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
+    	  }
+    	  return (ret);
+      },
+      
       /**
        * Actions custom datacell formatter
        *
@@ -762,6 +803,23 @@
         
         	 elCell.innerHTML = liaison;
          }
+      },
+      sortLiaison: function Collaborations_sortLiaison(rec1, rec2, desc) {
+    	  var a = rec1.getData();
+    	  var b = rec2.getData();
+    	  var name1 = '', name2 = '';
+    	  if (a.liaison) {
+    		  name1 = a.liaison.lastName;
+    	  }
+    	  if (b.liaison) {
+    		  name2 = b.liaison.lastName;
+    	  }
+    	  
+    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
+    	  if (ret == 0) {
+    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
+    	  }
+    	  return (ret);
       },
       /**
        * Actions custom datacell formatter
