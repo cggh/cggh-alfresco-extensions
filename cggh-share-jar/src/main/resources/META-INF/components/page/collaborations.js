@@ -163,6 +163,13 @@
             lazyloadmenu: false
          });
          
+         this.widgets.enquiry = Alfresco.util.createYUIButton(this, "enquiry", this.onEnquiryFilterChanged,
+                 {
+                    type: "menu",
+                    menu: "enquiry-menu",
+                    lazyloadmenu: false
+                 });
+         
          this.widgets.lookseq = Alfresco.util.createYUIButton(this, "lookseq", this.onLookSeqFilterChanged,
          {
              type: "checkbox"
@@ -288,6 +295,20 @@
          {
             this.widgets.status.set("label", menuItem.cfg.getProperty("text"));
             this.widgets.status.value = menuItem.value;
+
+          
+            this.loadCollaborations();
+          
+         }
+      },
+      
+      onEnquiryFilterChanged: function Collaborations_onEnquiryFilterChanged(p_sType, p_aArgs)
+      {
+         var menuItem = p_aArgs[1];
+         if (menuItem)
+         {
+            this.widgets.enquiry.set("label", menuItem.cfg.getProperty("text"));
+            this.widgets.enquiry.value = menuItem.value;
 
           
             this.loadCollaborations();
@@ -467,6 +488,10 @@
         	 this.widgets.status.value = "all";
          }
          
+         if (!this.widgets.enquiry.value) {
+        	 this.widgets.enquiry.value = "all";
+         }
+         
          // Display the toolbar now that we have selected the filter
          Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
 
@@ -484,7 +509,7 @@
          {
             var collaboration = YAHOO.lang.merge({}, p_items[i]);
 
-            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, collaboration))
+            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, collaboration))
             {
                this.collaborations[ii] = collaboration;
                ii++;
@@ -519,7 +544,7 @@
        * @param collaboration {object} Collaboration object literal
        * @return {boolean}
        */
-      filterAccept: function Collaborations_filterAccept(filter, statusFilter, collaboration)
+      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, collaboration)
       {
     	  var ret = false;
          switch (filter)
@@ -538,6 +563,15 @@
                break;
             default:
                ret = ret && (collaboration.collaborationStatus == statusFilter);
+               break;
+         }
+         switch (enquiryFilter)
+         {
+            case "all":
+              //leave unchanged
+               break;
+            default:
+               ret = ret && (collaboration.enquiryStatus == enquiryFilter);
                break;
          }
          return ret;
@@ -758,7 +792,7 @@
          if (collaboration.contacts) {
         	for(i = 0, j = collaboration.contacts.length;i < j; i++) {
     		 	var person = collaboration.contacts[i];
-    		 	output.push(person.name);
+    		 	output.push(person.firstName + ' ' + person.lastName);
     	 	}
          }
         
@@ -768,17 +802,20 @@
       sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
     	  var a = rec1.getData();
     	  var b = rec2.getData();
-    	  var name1 = '', name2 = '';
+    	  var fname1 = '', fname2 = '';
+    	  var lname1 = '', lname2 = '';
     	  if (a.contacts && a.contacts.length > 0) {
-    		  name1 = a.contacts[0].name;
+    		  fname1 = a.contacts[0].firstName;
+    		  lname1 = a.contacts[0].lastName;
     	  }
     	  if (b.contacts && b.contacts.length > 0) {
-    		  name2 = b.contacts[0].name;
+    		  fname2 = b.contacts[0].firstName;
+    		  lname2 = b.contacts[0].lastName;
     	  }
     	  
-    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
+    	  var ret = YAHOO.util.Sort.compare(fname1, fname2, desc);
     	  if (ret == 0) {
-    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
+    		  ret = YAHOO.util.Sort.compare(lname1, lname2, desc);
     	  }
     	  return (ret);
       },
