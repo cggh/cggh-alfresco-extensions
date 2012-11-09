@@ -335,8 +335,6 @@
 					<show id="cm:description" force="true" />
 
 					<!-- cggh:collaborationFolder -->
-					<show id="cggh:collaborationStatus" />
-					<show id="cggh:enquiryStatus" />
 
 					<show id="cggh:contacts" force="true" />
 					<show id="cggh:species" />
@@ -346,10 +344,6 @@
 					<set id="cgghMetadata" appearance="bordered-panel"
 						label-id="cggh.metadata.collaborationFolder" />
 
-					<field id="cggh:collaborationStatus" label-id="cggh.metadata.collaborationStatus"
-						set="cgghMetadata" />
-					<field id="cggh:enquiryStatus" label-id="cggh.metadata.enquiryStatus"
-						set="cgghMetadata" />
 					<field id="cggh:contacts" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 					</field>
