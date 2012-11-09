@@ -1,62 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>cggh-alfresco-war</artifactId>
 	<packaging>war</packaging>
 	<name>Test Alfresco WAR</name>
-    <description>Test Alfresco WAR Project for building alfresco.war with one or more AMPs applied</description>	
-	
+	<description>Test Alfresco WAR Project for building alfresco.war with one or more AMPs applied</description>
+
 	<parent>
 		<groupId>org.cggh</groupId>
 		<artifactId>cggh-alfresco-extensions</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<properties>
-        <webapp.name>alfresco</webapp.name>
+		<webapp.name>alfresco</webapp.name>
 		<!-- The rest of the properties are inherited from the parent POM -->
-    </properties>
+	</properties>
 
-		<!-- Defined in the parent POM 
-	<repositories>
-	<pluginRepositories>
-	-->
+	<!-- Defined in the parent POM <repositories> <pluginRepositories> -->
 
-    <dependencies>
-		<!-- We are building an extended/customized Alfresco WAR so include the original one -->
+	<dependencies>
+		<!-- We are building an extended/customized Alfresco WAR so include the 
+			original one -->
 		<dependency>
-			<groupId>${alfresco.groupId}</groupId> 
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco</artifactId>
 			<version>${alfresco.version}</version>
 			<type>war</type>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco-wcm-quickstart-repo</artifactId>
+			<version>${alfresco.version}</version>
+			<type>amp</type>
+		</dependency>
+
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco-spp</artifactId>
+			<version>${alfresco.version}</version>
+			<type>amp</type>
+		</dependency>
+
 		<!-- Include the AMP that we have been building -->
 		<dependency>
 			<groupId>org.cggh</groupId>
 			<artifactId>cggh-alfresco-amp</artifactId>
 			<version>${project.version}</version> <!-- Inherited from Parent POM -->
-  			<type>amp</type>
+			<type>amp</type>
 		</dependency>
-		
-		<!-- Include more amps as necessary. This can be either an AMP built
-			 with maven-amp-plugin and deployed on an accessible maven repo or a
-			 generally available AMP previously deployed to a repo using mvn deploy:deploy-file 
-		-->		
-		
-		
+
+		<!-- Include more amps as necessary. This can be either an AMP built with 
+			maven-amp-plugin and deployed on an accessible maven repo or a generally 
+			available AMP previously deployed to a repo using mvn deploy:deploy-file -->
+
+
 		<!-- Include more JARs as necessary -->
-		
-    </dependencies>
 
-    <build>
-        <!-- Make sure web application get the name alfresco.war -->
-        <finalName>${webapp.name}</finalName>
+	</dependencies>
 
-        <plugins>
-			<!-- 
+	<build>
+		<!-- Make sure web application get the name alfresco.war -->
+		<finalName>${webapp.name}</finalName>
+
+		<plugins>
+<!-- 
 				Plug-in for unpackaging dependencies such as AMPs to include in the exploded WAR
 			-->
 			<plugin>
@@ -100,6 +110,42 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-        </plugins>
-    </build>	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<overlays>
+						<!-- The current project customizations -->
+						<overlay />
+						<!-- The Alfresco WAR -->
+						<overlay>
+							<groupId>${alfresco.groupId}</groupId>
+							<artifactId>alfresco</artifactId>
+							<type>war</type>
+							<!-- To allow inclusion of META-INF -->
+							<excludes />
+						</overlay>
+						<!-- Add / order your AMPs here -->
+						<overlay>
+							<groupId>org.cggh</groupId>
+							<artifactId>cggh-alfresco-amp</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>${alfresco.groupId}</groupId>
+							<artifactId>alfresco-wcm-quickstart-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>${alfresco.groupId}</groupId>
+							<artifactId>alfresco-spp</artifactId>
+							<type>amp</type>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>
