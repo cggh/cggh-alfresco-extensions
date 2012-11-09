@@ -28,13 +28,14 @@ var nodes = document.children;
           if (names.length > 1) {
             var firstName = names[0].substring(0,1).toUpperCase() + names[0].substring(1);
             var lastName = names[1].substring(0,1).toUpperCase() + names[1].substring(1);
-            var searchQuery = '@dl\\:contactFirstName:\"' + firstName + '\" AND @dl\\:contactLastName:\"' + lastName + '\"';
+            var searchQuery = '@dl\\:contactFirstName:\"' + firstName + '\" AND @dl\\:contactLastName:\"' + lastName + '\" AND PARENT:\"workspace://SpacesStore/39b4c6d6-aaf7-4fbb-967b-50bff84b871f\"';
            logger.log(searchQuery);
             var conts = search.luceneSearch(searchQuery);
            // var conts = Array();
             for each(var cont in conts) {
     		  node.createAssociation(cont, "cggh:contactList");
-    		  contacts.push(cont.name);
+    		  var fullName = cont.properties["dl:contactFirstName"] + ' ' + cont.properties["dl:contactLastName"]; 
+    		  contacts.push(fullName);
                logger.log("Contact for " + value + " found " + cont.name);
             }
         }
