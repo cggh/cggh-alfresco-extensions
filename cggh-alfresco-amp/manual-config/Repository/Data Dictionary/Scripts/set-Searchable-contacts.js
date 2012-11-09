@@ -2,7 +2,8 @@
 
 var contacts = new Array();
 for each (var assoc in document.assocs["cggh:contactList"]) {
-  contacts.push(assoc.properties["cm:name"]);
+	var name = assoc.properties["dl:contactFirstName"] + ' ' + assoc.properties["dl:contactLastName"]; 
+  contacts.push(name);
 }
 document.properties["cggh:contacts"] = contacts;
 
