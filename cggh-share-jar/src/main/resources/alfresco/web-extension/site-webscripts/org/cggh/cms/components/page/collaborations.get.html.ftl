@@ -37,6 +37,21 @@
             <option value="declined">${msg("filter.status.renegotiation")}</option>
             <option value="aborted">${msg("filter.status.aborted")}</option>
          </select>
+         <span class="align-left yui-button yui-menu-button" id="${id}-enquiry">
+            <span class="first-child">
+               <button type="button" tabindex="1">${msg("filter.all")}</button>
+            </span>
+         </span>
+         <select id="${id}-enquiry-menu" multiple="multiple">
+          	<option value="all" selected="selected">${msg("filter.all")}</option>
+            <option value="enquiry email received">${msg("filter.enquiry.enquiry")}</option>
+            <option value="dialogue open">${msg("filter.enquiry.dialogue")}</option>
+            <option value="awaiting funding">${msg("filter.enquiry.funding")}</option>
+            <option value="application form sent">${msg("filter.enquiry.form")}</option>
+            <option value="application to be presented to SG">${msg("filter.enquiry.sg")}</option>
+            <option value="collaboration agreement being drawn">${msg("filter.enquiry.drawn")}</option>
+            <option value="collaboration agreement sent">${msg("filter.enquiry.sent")}</option>
+         </select>
          <span class="align-right yui-button-align" id="${id}-lookseq">
             <span class="first-child">
             	<button type="checkbox" tabindex="2">${msg("include.lookseq")}</button>
