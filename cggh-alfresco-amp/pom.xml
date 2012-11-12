@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>cggh-alfresco-amp</artifactId>
 	<packaging>amp</packaging>
@@ -9,7 +11,7 @@
 	<parent>
 		<groupId>org.cggh</groupId>
 		<artifactId>cggh-alfresco-extensions</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 	
 	<properties>
@@ -146,15 +148,15 @@
                         <configuration>
                             <target>
                                 <path id="alfresco.data.location">
-                                    <pathelement location="${alfresco.data.location}" />
+                                    <pathelement location="${alfresco.data.location}"/>
                                 </path>
                                 <!--
                                     we need to generate a unix-style path for alfresco.data.location,
                                     this will be used by jdbc urls because H2 does not like windows backslashes in urls
                                  -->
-                                <pathconvert targetos="unix" property="alfresco.data.location.unix" refid="alfresco.data.location" />
+                                <pathconvert targetos="unix" property="alfresco.data.location.unix" refid="alfresco.data.location"/>
                                 <propertyfile file="${project.build.directory}/env.build.properties" comment="Computed build properties">
-                                    <entry key="alfresco.data.location.unix" value="${alfresco.data.location.unix}" />
+                                    <entry key="alfresco.data.location.unix" value="${alfresco.data.location.unix}"/>
                                 </propertyfile>
                             </target>
                         </configuration>
