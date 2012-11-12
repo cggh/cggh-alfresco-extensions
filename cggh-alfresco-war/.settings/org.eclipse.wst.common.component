@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="cggh-alfresco-amp-1.0.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-alfresco-amp/cggh-alfresco-amp">
+        <dependent-module archiveName="cggh-alfresco-amp-1.0.1-SNAPSHOT.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-alfresco-amp/cggh-alfresco-amp">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/alfresco-spp/4.0.e/alfresco-spp-4.0.e.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
