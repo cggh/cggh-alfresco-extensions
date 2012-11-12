@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cggh</groupId>
 	<artifactId>cggh-alfresco-extensions</artifactId>
@@ -7,6 +8,10 @@
 	<name>Test Alfresco Extensions</name>
 	<description>Test parent project for building AMPs, JARs, and WAR</description>
 	<version>1.0.2-SNAPSHOT</version>
+	<!--  for release plugin -->
+	<prerequisites>
+		<maven>3.0.4</maven>
+	</prerequisites>
 
 	<!-- The AMPs, JARs, and WARs that should be managed by this parent project, 
 		add more AMPs and JARs here as needed -->
@@ -108,7 +113,7 @@
 				<!-- Compile Java Source code with JDK 1.6 -->
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>2.5.1</version>
 					<configuration>
 						<source>1.6</source>
 						<target>1.6</target>
@@ -120,7 +125,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.9</version>
+					<version>2.12.4</version>
 					<configuration>
 						<includes>
 							<include>**/*Test.java</include>
@@ -142,6 +147,6 @@
 		<connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
 		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
 		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
-	  <tag>cggh-alfresco-extensions-1.0</tag>
-  </scm>
+		<tag>cggh-alfresco-extensions-1.0</tag>
+	</scm>
 </project>
