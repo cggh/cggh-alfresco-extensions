@@ -6,7 +6,7 @@
 	<packaging>pom</packaging>
 	<name>Test Alfresco Extensions</name>
 	<description>Test parent project for building AMPs, JARs, and WAR</description>
-	<version>1.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<!-- The AMPs, JARs, and WARs that should be managed by this parent project, 
 		add more AMPs and JARs here as needed -->
