@@ -42,7 +42,10 @@
 <#if lia_has_next>,</#if>
 </#list>,
 </#if>
-"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}"
+"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
+"samplesExpected": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesExpected"])!''}",
+"strategicNature": "${jsonUtils.encodeJSONString(collab.properties["cggh:strategicNature"])!''}",
+"intDescrip": "${jsonUtils.encodeJSONString(collab.properties["cggh:internalDescription"])!''}"
 }<#if collab_has_next>,</#if>
 </#list>
 ]

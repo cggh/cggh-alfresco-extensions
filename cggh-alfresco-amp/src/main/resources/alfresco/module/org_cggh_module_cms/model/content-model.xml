@@ -409,6 +409,21 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="cggh:samplesExpected">
+					<title>Samples Expected</title>
+					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:strategicNature">
+					<title>Strategic Nature</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:internalDescription">
+					<title>Internal Description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 				<association name="cggh:contactList">

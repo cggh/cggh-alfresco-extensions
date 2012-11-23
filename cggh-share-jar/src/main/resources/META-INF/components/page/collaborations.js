@@ -187,13 +187,16 @@
          [
             { key: "name", label: this.msg("cggh.label.name"), sortable: true, formatter: this.bind(this.renderCellName) },
             { key: "title", label: this.msg("cggh.label.title"), sortable: false, formatter: this.bind(this.renderCellTitle) },
-            { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
             { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
+            { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
             { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries) },
+            { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
+            { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
+            { key: "intDescrip", label: this.msg("cggh.metadata.intDescrip"), sortable: false, formatter: this.bind(this.renderCellIntDescrip) },
             { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) }
             ];
          var lsCols = 
@@ -649,7 +652,7 @@
          desc +=    '<span class="item item-social">' + this.generateFavourite(oRecord) + '</span>';
          if (this.options.imapEnabled)
          {
-            desc +=    '<span class="item item-social item-separator">' + this.generateIMAPFavourite(oRecord) + '</span>';
+            desc +=    '<br/><span class="item item-social item-separator">' + this.generateIMAPFavourite(oRecord) + '</span>';
          }
          
          desc += '</div>';
@@ -915,6 +918,43 @@
 
         
          elCell.innerHTML = collaboration.notes;
+      },
+      renderCellSamplesExpected: function Collaborations_renderCellSamplesExpected(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var render = '';
+         if (collaboration.samplesExpected) {
+        	 render = collaboration.samplesExpected;
+         }
+         elCell.innerHTML = render;
+      },
+      renderCellStrategicNature: function Collaborations_renderCellStrategicNature(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var render = '';
+         if (collaboration.strategicNature) {
+        	 render = collaboration.strategicNature;
+         }
+         elCell.innerHTML = render;
+      },
+      renderCellIntDescrip: function Collaborations_renderCellIntDescrip(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         var render = '';
+         if (collaboration.intDescrip) {
+        	 render = collaboration.intDescrip;
+         }
+         elCell.innerHTML = render;
       },
       renderCellSolarisTitle: function Collaborations_renderCellSolarisTitle(elCell, oRecord, oColumn, oData)
       {

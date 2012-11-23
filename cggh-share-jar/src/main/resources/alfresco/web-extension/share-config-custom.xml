@@ -128,17 +128,17 @@
 				<evaluator>evaluator.doclib.metadata.hasCollaborationAspect
 				</evaluator>
 				<line index="10" id="date" view="detailed">{date}{size}</line>
-				<line index="20" id="tags" view="detailed">{tags}</line>
-				<line index="30" id="description" view="detailed">{description}</line>
 				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus
-					cggh.metadata.statusType} {cggh_enquiryStatus}
-					{cggh_contacts
-					cggh.metadata.contactsType}
-					{cggh_liaison}
+					cggh.metadata.statusType} {cggh_enquiryStatus} {cggh_strategicNature}{cggh_samplesExpected cggh.metadata.samplesExpected}
+					
+					{cggh_liaison cggh.metadata.liaison}
 				</line>
+				<line index="60" id="exec" view="detailed">{cggh_contacts
+					cggh.metadata.contactsType}</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
 					{cggh_sampleCountry}
 				</line>
+				<line index="80" id="internal" view="detailed">{cggh_internalDescription}</line>
 			</template>
 
 		</metadata-templates>
@@ -262,6 +262,9 @@
 					<show id="cggh:liaison" force="true" />
 					<show id="cggh:species" />
 					<show id="cggh:sampleCountry" />
+					<show id="cggh:samplesExpected" />
+					<show id="cggh:strategicNature" />
+					<show id="cggh:internalDescription" />
 					<show id="cggh:collaborationNotes" />
 				</field-visibility>
 				<appearance>
@@ -318,7 +321,13 @@
 
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
-					<field id="cggh:collaborationNotes" set="cgghMetadata">
+					<field id="cggh:samplesExpected" label-id="cggh.metadata.samplesExpected"
+						set="cgghMetadata" />
+					<field id="cggh:strategicNature"  label-id="cggh.metadata.strategicNature" set="cgghMetadata" />
+					<field id="cggh:internalDescription"  label-id="cggh.metadata.intDescrip" set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
+					</field>
+					<field id="cggh:collaborationNotes"  label-id="cggh.metadata.notes" set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
 					</field>
 				</appearance>
