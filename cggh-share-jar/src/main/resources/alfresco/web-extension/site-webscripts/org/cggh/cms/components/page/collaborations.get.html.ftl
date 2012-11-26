@@ -39,7 +39,7 @@
          </select>
          <span class="align-left yui-button yui-menu-button" id="${id}-enquiry">
             <span class="first-child">
-               <button type="button" tabindex="1">${msg("filter.all")}</button>
+               <button type="button" tabindex="2">${msg("filter.all")}</button>
             </span>
          </span>
          <select id="${id}-enquiry-menu" multiple="multiple">
@@ -52,9 +52,23 @@
             <option value="collaboration agreement being drawn">${msg("filter.enquiry.drawn")}</option>
             <option value="collaboration agreement sent">${msg("filter.enquiry.sent")}</option>
          </select>
+         <span class="align-left yui-button yui-menu-button" id="${id}-species">
+            <span class="first-child">
+               <button type="button" tabindex="3">${msg("filter.all")}</button>
+            </span>
+         </span>       
+         <select id="${id}-species-menu" multiple="multiple">
+          	<option value="all" selected="selected">${msg("filter.all")}</option>
+            <option value="P. falciparum">${msg("filter.species.falciparum")}</option>
+            <option value="P. vivax">${msg("filter.species.vivax")}</option>
+            <option value="P. malariae">${msg("filter.species.malariae")}</option>
+            <option value="P. all">${msg("filter.species.allP")}</option>
+            <option value="A. gambiae">${msg("filter.species.gambiae")}</option>
+            <option value="Human">${msg("filter.species.human")}</option>
+         </select>
          <span class="align-right yui-button-align" id="${id}-lookseq">
             <span class="first-child">
-            	<button type="checkbox" tabindex="2">${msg("include.lookseq")}</button>
+            	<button type="checkbox" tabindex="4">${msg("include.lookseq")}</button>
             </span>
          </span>
          <div class="clear"></div>

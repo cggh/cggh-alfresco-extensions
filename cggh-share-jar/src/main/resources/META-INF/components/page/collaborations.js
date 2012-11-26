@@ -170,6 +170,13 @@
                     lazyloadmenu: false
                  });
          
+         this.widgets.species = Alfresco.util.createYUIButton(this, "species", this.onSpeciesFilterChanged,
+                 {
+                    type: "menu",
+                    menu: "species-menu",
+                    lazyloadmenu: false
+                 });
+         
          this.widgets.lookseq = Alfresco.util.createYUIButton(this, "lookseq", this.onLookSeqFilterChanged,
          {
              type: "checkbox"
@@ -193,7 +200,7 @@
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries) },
+            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
             { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "intDescrip", label: this.msg("cggh.metadata.intDescrip"), sortable: false, formatter: this.bind(this.renderCellIntDescrip) },
@@ -312,6 +319,20 @@
          {
             this.widgets.enquiry.set("label", menuItem.cfg.getProperty("text"));
             this.widgets.enquiry.value = menuItem.value;
+
+          
+            this.loadCollaborations();
+          
+         }
+      },
+      
+      onSpeciesFilterChanged: function Collaborations_onSpeciesFilterChanged(p_sType, p_aArgs)
+      {
+         var menuItem = p_aArgs[1];
+         if (menuItem)
+         {
+            this.widgets.species.set("label", menuItem.cfg.getProperty("text"));
+            this.widgets.species.value = menuItem.value;
 
           
             this.loadCollaborations();
@@ -495,6 +516,10 @@
         	 this.widgets.enquiry.value = "all";
          }
          
+         if (!this.widgets.species.value) {
+        	 this.widgets.species.value = "all";
+         }
+         
          // Display the toolbar now that we have selected the filter
          Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
 
@@ -512,7 +537,8 @@
          {
             var collaboration = YAHOO.lang.merge({}, p_items[i]);
 
-            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, collaboration))
+            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, this.widgets.species.value,
+            		collaboration))
             {
                this.collaborations[ii] = collaboration;
                ii++;
@@ -547,7 +573,7 @@
        * @param collaboration {object} Collaboration object literal
        * @return {boolean}
        */
-      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, collaboration)
+      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, speciesFilter, collaboration)
       {
     	  var ret = false;
          switch (filter)
@@ -565,7 +591,7 @@
               //leave unchanged
                break;
             default:
-               ret = ret && (collaboration.collaborationStatus == statusFilter);
+               ret = ret && (collaboration.collaborationStatus === statusFilter);
                break;
          }
          switch (enquiryFilter)
@@ -574,7 +600,28 @@
               //leave unchanged
                break;
             default:
-               ret = ret && (collaboration.enquiryStatus == enquiryFilter);
+               ret = ret && (collaboration.enquiryStatus === enquiryFilter);
+               break;
+         }
+         switch (speciesFilter)
+         {
+            case "all":
+              //leave unchanged
+               break;
+            default:
+            	var matched = false;
+            	var length = collaboration.species.length;
+           
+            	for (var i = 0; i < length; i++) {
+            		var speciesVal = collaboration.species[i];
+            		var matchThis = (speciesFilter === speciesVal);
+            		if (speciesFilter === 'P. all' && speciesVal.substring(0,3) ==='P. ') {
+            			matchThis = true;
+            		} 
+            		matched = matched || matchThis;
+            	}
+            	
+               ret = ret && matched;
                break;
          }
          return ret;
