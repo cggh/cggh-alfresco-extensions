@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="cggh-share-jar-1.0.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-jar/cggh-share-jar">
+        <dependent-module archiveName="cggh-share-jar-1.1.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-jar/cggh-share-jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/4.0.e/share-4.0.e.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
