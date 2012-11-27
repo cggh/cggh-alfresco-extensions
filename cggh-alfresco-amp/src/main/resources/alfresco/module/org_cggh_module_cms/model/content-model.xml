@@ -441,7 +441,7 @@
 				<association name="cggh:liaison">
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
                         <class>cm:person</class>
