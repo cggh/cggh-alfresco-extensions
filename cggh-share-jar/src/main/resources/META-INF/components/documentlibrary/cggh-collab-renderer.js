@@ -8,8 +8,9 @@
 
 (function()
 {
-   var $html = Alfresco.util.encodeHTML,
-      $isValueSet = Alfresco.util.isValueSet;
+	 if (Alfresco.DocumentList)
+	 {
+		 var $html = Alfresco.util.encodeHTML, $isValueSet = Alfresco.util.isValueSet;
 
    Cggh.documentLibrary.Collaborations = function Cggh_documentLibrary_Collaborations_constructor(htmlId)
    {
@@ -53,41 +54,112 @@
 		       {
 		    	   this.collaborations = p_response.json.collaborationNodes;  
 		       },
-		       renderLiaison: function liaison_renderer(record, label)
+		       getCollaboration: function Collaborations_getCollaboration (nodeName)
 		       {
-		           var jsNode = record.jsNode,
-		              properties = jsNode.properties,
-		              id = Alfresco.util.generateDomId(),
-		              content = "";
-		           
-		           var nodeName = properties['cm:name'];
-		           var collabs = Cggh.documentLibrary.Collaborations.prototype.collaborations;
+		    	   var collabs = this.collaborations;
+		    	   var collab;
 		           for (i = 0, numItems = collabs.length; i < numItems; i++)
 		    	   {
-		    			var collab = collabs[i];
+		    			collab = collabs[i];
 		    			if (collab.name === nodeName)
 		    			{
-		    				if (collab.liaison)
-		    				{
-			    			    content = collab.liaison.firstName + ' ' + collab.liaison.lastName;
-		    				}	
+		    				break;
 		    			}
 		    	   }
-		           return '<span id="' + id + '" class="item">' + label + content + '</span>';
-		        }
+		           return collab;
+		       }
+		       
 	});
 	   
-   if (Alfresco.DocumentList)
-   {
+  
 	   //Typically this would be done in the ftl for the page
 	  new Cggh.documentLibrary.Collaborations(Alfresco.util.generateDomId()).setMessages(Alfresco.messages);
 	  Cggh.documentLibrary.Collaborations.prototype.onReady();
 	  
+	  //This doesn't work as part of Cggh.documentLibrary.Collaborations
+	  var renderLiaison = function cggh_renderLiaison(record, label)
+      {
+          var jsNode = record.jsNode,
+             properties = jsNode.properties,
+             id = Alfresco.util.generateDomId(),
+             content = "";
+          
+          var nodeName = properties['cm:name'];
+          var collab = Cggh.documentLibrary.Collaborations.prototype.getCollaboration(nodeName);
+          if (collab.liaison)
+          {
+       	   content = collab.liaison.firstName + ' ' + collab.liaison.lastName;
+          }
+          return '<span id="' + id + '" class="item">' + label + content + '</span>';
+       }
       YAHOO.Bubbling.fire("registerRenderer",
       {
          propertyName: "cggh_liaison",
-         renderer: Cggh.documentLibrary.Collaborations.prototype.renderLiaison
+         renderer: renderLiaison
       });
      
+      var renderContacts = function cggh_renderContacts(record, label)
+      {
+          var jsNode = record.jsNode,
+             properties = jsNode.properties,
+             id = Alfresco.util.generateDomId(),
+             content = "";
+          
+          var nodeValues = properties['cggh_contacts'];
+          
+          if (nodeValues)
+          {
+       	   content = nodeValues.join(', ');
+          }
+          return '<span id="' + id + '" class="item">' + label + content + '</span>';
+       }
+      YAHOO.Bubbling.fire("registerRenderer",
+      {
+         propertyName: "cggh_contacts",
+         renderer: renderContacts
+      });
+      
+      var renderCountries = function cggh_renderCountries(record, label)
+      {
+          var jsNode = record.jsNode,
+             properties = jsNode.properties,
+             id = Alfresco.util.generateDomId(),
+             content = "";
+          
+          var nodeValues = properties['cggh_sampleCountry'];
+          
+          if (nodeValues)
+          {
+       	   content = nodeValues.join(', ');
+          }
+          return '<span id="' + id + '" class="item">' + label + content + '</span>';
+       }
+      YAHOO.Bubbling.fire("registerRenderer",
+      {
+         propertyName: "cggh_sampleCountry",
+         renderer: renderCountries
+      });
+      
+      
+      var renderSpecies = function cggh_renderSpecies(record, label)
+      {
+          var jsNode = record.jsNode,
+             properties = jsNode.properties,
+             id = Alfresco.util.generateDomId(),
+             content = "";
+          
+          var nodeValues = properties['cggh_species'];
+          
+          if (nodeValues)
+          {
+       	   content = nodeValues.join(', ');
+          }
+          return '<span id="' + id + '" class="item">' + label + content + '</span>';
+       }
+      YAHOO.Bubbling.fire("registerRenderer",
+      {
+         propertyName: "cggh_species",
+         renderer: renderSpecies
+      });
    }
 })();
