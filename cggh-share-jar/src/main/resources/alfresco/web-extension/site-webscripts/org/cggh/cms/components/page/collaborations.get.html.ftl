@@ -62,6 +62,7 @@
             <option value="P. falciparum">${msg("filter.species.falciparum")}</option>
             <option value="P. vivax">${msg("filter.species.vivax")}</option>
             <option value="P. malariae">${msg("filter.species.malariae")}</option>
+            <option value="P. berghei">${msg("filter.species.berghei")}</option>
             <option value="P. all">${msg("filter.species.allP")}</option>
             <option value="A. gambiae">${msg("filter.species.gambiae")}</option>
             <option value="Human">${msg("filter.species.human")}</option>
