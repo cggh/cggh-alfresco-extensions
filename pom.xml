@@ -6,7 +6,7 @@
 	<packaging>pom</packaging>
 	<name>Test Alfresco Extensions</name>
 	<description>Test parent project for building AMPs, JARs, and WAR</description>
-	<version>1.1.2</version>
+	<version>1.1.3-SNAPSHOT</version>
 	<!--  for release plugin -->
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -146,6 +146,6 @@
 		<connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
 		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
 		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
-		<tag>cggh-alfresco-extensions-1.1.2</tag>
+		<tag>cggh-alfresco-extensions-1.0</tag>
 	</scm>
 </project>
