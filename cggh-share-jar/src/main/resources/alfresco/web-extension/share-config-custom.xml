@@ -63,7 +63,7 @@
 	</config>
 	<config evaluator="string-compare" condition="DocLibCustom">
 		<dependencies>
-			<js src="components/documentlibrary/contact-renderer.js" />
+			<js src="components/documentlibrary/cggh-collab-renderer.js" />
 		</dependencies>
 	</config>
 	<!-- Document Library config section -->
