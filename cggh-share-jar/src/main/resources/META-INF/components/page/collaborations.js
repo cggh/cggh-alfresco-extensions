@@ -846,7 +846,7 @@
     	 	}
          }
         
-         elCell.innerHTML = output;
+         elCell.innerHTML = output.join(', ');
       },
       
       sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
@@ -945,7 +945,7 @@
          var collaboration = oRecord.getData();
 
         
-         elCell.innerHTML = collaboration.countries;
+         elCell.innerHTML = collaboration.countries.join(', ');
       },
       /**
        * Actions custom datacell formatter
