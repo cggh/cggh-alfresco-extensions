@@ -5,4 +5,6 @@
 
     <import resource="classpath:alfresco/module/org_cggh_module_cms/context/bootstrap-context.xml" />
     <import resource="classpath:alfresco/module/org_cggh_module_cms/context/services-context.xml" />
+    <import resource="classpath:alfresco/module/org_cggh_module_cms/context/actions-context.xml" />
+   <import resource="classpath:alfresco/module/org_cggh_module_cms/context/OutboundSMTP/outboundSMTP-context.xml" />
 </beans>

@@ -100,8 +100,15 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-
-		<!--
+	   
+	   <!-- Warning the alfresco.war uses a SNAPSHOT of this -->
+	    <dependency>
+	        <groupId>commons-validator</groupId>
+	        <artifactId>commons-validator</artifactId>
+	        <version>1.4.0</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    <!--
 			Example Jar dependency: will be properly packed into the AMP /lib directory 
 			
 			<dependency> 
