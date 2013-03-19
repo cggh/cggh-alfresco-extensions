@@ -197,11 +197,14 @@
             { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
             { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
             { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
+            { key: "reviewed", label: this.msg("cggh.metadata.reviewed"), sortable: true, sortOptions:{sortFunction:this.sortReviewed},formatter: this.bind(this.renderCellReviewed) },
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellPrimaryContact) },
             { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
             { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
+            { key: "firstSample", label: this.msg("cggh.metadata.firstSample"), sortable: true, sortOptions:{sortFunction:this.sortFirstSampleExpected},formatter: this.bind(this.renderCellFirstSampleExpected) },
+            { key: "lastSample", label: this.msg("cggh.metadata.lastSample"), sortable: true, sortOptions:{sortFunction:this.sortLastSampleExpected},formatter: this.bind(this.renderCellLastSampleExpected) },
             { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "intDescrip", label: this.msg("cggh.metadata.intDescrip"), sortable: false, formatter: this.bind(this.renderCellIntDescrip) },
             { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) }
@@ -1050,6 +1053,129 @@
         	 }
          }
          elCell.innerHTML = output;
+      },
+      
+      dateCompare: function Collaborations_dateCompare(date1s, date2s, desc) {
+          var ret = 0;
+          
+          if (!date1s) {
+              ret = 1;
+          }
+          
+          if (!date2s) {
+              ret = -1;
+          }
+          
+          if (!date1s && !date2s) {
+              return 0;
+          }
+          
+          if (ret != 0) {
+              if (!desc) {
+                  ret = ret * -1;
+              }
+              return (ret);
+              
+          }
+          var date1Parts = date2s.split("-");
+
+          if (date1Parts.length == 2) {
+              date1Parts.unshift("1");
+          }
+          var date1 = new Date(date1Parts[2], (date1Parts[1] - 1), date1Parts[0]);
+
+          var date2Parts = date1s.split("-");
+
+          if (date2Parts.length == 2) {
+              date2Parts.unshift("1");
+          }
+          
+          var date2 = new Date(date2Parts[2], (date2Parts[1] - 1), date2Parts[0]);
+          
+          var t1 = date1.getTime();
+          var t2 = date2.getTime();
+          
+          if (t1 < t2) {
+              ret = 1;
+          } else if (t1 > t2) {
+              ret = -1;
+          }
+
+          if (ret != 0) {
+              if (!desc) {
+                  ret = ret * -1;
+              }   
+          }
+          return (ret);
+      },
+      renderCellReviewed: function Collaborations_renderCellReviewed(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         if (collaboration.reviewed) {
+             elCell.innerHTML = collaboration.reviewed;
+         }
+         
+      },
+
+      sortReviewed: function Collaborations_sortReviewed(rec1, rec2, desc) {
+          var a = rec1.getData();
+          var b = rec2.getData();
+          var date1s = a.reviewed;
+          var date2s = b.reviewed;
+          
+          ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
+          
+          return (ret);
+      },
+      renderCellFirstSampleExpected: function Collaborations_renderCellFirstSampleExpected(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         if (collaboration.firstSampleDate) {
+             elCell.innerHTML = collaboration.firstSampleDate;
+         }
+      },
+
+      sortFirstSampleExpected: function Collaborations_sortFirstSampleExpected(rec1, rec2, desc) {
+          var a = rec1.getData();
+          var b = rec2.getData();
+          var date1s = a.firstSampleDate;
+          var date2s = b.firstSampleDate;
+ 
+          ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
+          
+          return (ret);
+      },
+      renderCellLastSampleExpected: function Collaborations_renderCellLastSampleExpected(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+        
+         if (collaboration.lastSampleDate) {
+             elCell.innerHTML = collaboration.lastSampleDate;
+         }
+      },
+
+      sortLastSampleExpected: function Collaborations_sortLastSampleExpected(rec1, rec2, desc) {
+          var a = rec1.getData();
+          var b = rec2.getData();
+        
+          var date1s = a.lastSampleDate;
+          var date2s = b.lastSampleDate;
+          
+          ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
+          
+          return (ret);
       },
       /**
        * Adds an event handler that adds or removes the collaboration as favourite collaboration

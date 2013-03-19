@@ -373,7 +373,7 @@
 					</constraints>
 				</property>
 				<property name="cggh:enquiryStatus">
-					<title>Collaboration Status</title>
+					<title>Enquiry Status</title>
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<multiple>false</multiple>
@@ -413,6 +413,21 @@
 				<property name="cggh:samplesExpected">
 					<title>Samples Expected</title>
 					<type>d:int</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:firstSample">
+					<title>Date of first sample expected</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:lastSample">
+					<title>Date date sample expected</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:reviewed">
+					<title>Date last reviewed by SG</title>
+					<type>d:date</type>
 					<mandatory>false</mandatory>
 				</property>
 				<property name="cggh:strategicNature">

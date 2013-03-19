@@ -6,11 +6,11 @@
 			<!-- Developer debugging setting to turn on DEBUG mode for client scripts 
 				in the browser -->
  
-			<client-debug>true</client-debug>
+			<client-debug>false</client-debug>
  
 			<!-- LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, 
 				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
-			<client-debug-autologging>true</client-debug-autologging>
+			<client-debug-autologging>false</client-debug-autologging>
 		</flags>
 		<header>
 			<app-items>
@@ -263,6 +263,9 @@
 					<show id="cggh:species" />
 					<show id="cggh:sampleCountry" />
 					<show id="cggh:samplesExpected" />
+					<show id="cggh:firstSample" />
+					<show id="cggh:lastSample" />
+					<show id="cggh:reviewed" />
 					<show id="cggh:strategicNature" />
 					<show id="cggh:internalDescription" />
 					<show id="cggh:collaborationNotes" />
@@ -322,6 +325,12 @@
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:samplesExpected" label-id="cggh.metadata.samplesExpected"
+						set="cgghMetadata" />
+					<field id="cggh:firstSample" label-id="cggh.metadata.firstSample"
+						set="cgghMetadata" />
+					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"
+						set="cgghMetadata" />
+					<field id="cggh:reviewed" label-id="cggh.metadata.reviewed"
 						set="cgghMetadata" />
 					<field id="cggh:strategicNature"  label-id="cggh.metadata.strategicNature" set="cgghMetadata" />
 					<field id="cggh:internalDescription"  label-id="cggh.metadata.intDescrip" set="cgghMetadata">

@@ -44,8 +44,18 @@
 </#if>
 "notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
 "samplesExpected": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesExpected"])!''}",
+<#if collab.properties["cggh:firstSample"]??>
+"firstSampleDate": "${jsonUtils.encodeJSONString(collab.properties["cggh:firstSample"]?string("MM-yyyy"))!''}",
+</#if>
+<#if collab.properties["cggh:lastSample"]??>
+"lastSampleDate": "${jsonUtils.encodeJSONString(collab.properties["cggh:lastSample"]?string("MM-yyyy"))!''}",
+</#if>
 "strategicNature": "${jsonUtils.encodeJSONString(collab.properties["cggh:strategicNature"])!''}",
-"intDescrip": "${jsonUtils.encodeJSONString(collab.properties["cggh:internalDescription"])!''}"
+"intDescrip": "${jsonUtils.encodeJSONString(collab.properties["cggh:internalDescription"])!''}",
+<#if collab.properties["cggh:reviewed"]??>
+"reviewed": "${jsonUtils.encodeJSONString(collab.properties["cggh:reviewed"]?string("dd-MM-yyyy"))!''}",
+</#if>
+"modified": "${jsonUtils.encodeJSONString(collab.properties["cm:modified"]?string("dd-MM-yyyy HH:mm:ss"))!''}"
 }<#if collab_has_next>,</#if>
 </#list>
 ]
