@@ -387,6 +387,12 @@
 					<mandatory>false</mandatory>
 					<multiple>true</multiple>
 				</property>
+				<property name="cggh:primaryContacts">
+					<title>Primary Contacts</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
 				<property name="cggh:sampleCountry">
 					<title>Country of Sample Collection</title>
 					<type>d:text</type>
@@ -442,6 +448,17 @@
 				</property>
 			</properties>
 			<associations>
+				<association name="cggh:primaryContactList">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>dl:contact</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
 				<association name="cggh:contactList">
 					<source>
 						<mandatory>false</mandatory>

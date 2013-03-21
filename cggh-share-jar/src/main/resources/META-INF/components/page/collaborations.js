@@ -199,7 +199,8 @@
             { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
             { key: "reviewed", label: this.msg("cggh.metadata.reviewed"), sortable: true, sortOptions:{sortFunction:this.sortReviewed},formatter: this.bind(this.renderCellReviewed) },
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
-            { key: "mainContact", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellPrimaryContact) },
+            { key: "mainContact", label: this.msg("cggh.metadata.primaryContacts"), sortable: true, sortOptions:{sortFunction:this.sortPrimaryContacts},formatter: this.bind(this.renderCellPrimaryContact) },
+            { key: "contacts", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellContact) },
             { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
             { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
@@ -842,9 +843,9 @@
 
          var output = [];
          
-         if (collaboration.contacts) {
-        	for(i = 0, j = collaboration.contacts.length;i < j; i++) {
-    		 	var person = collaboration.contacts[i];
+         if (collaboration.primaryContacts) {
+        	for(i = 0, j = collaboration.primaryContacts.length;i < j; i++) {
+    		 	var person = collaboration.primaryContacts[i];
     		 	output.push(person.firstName + ' ' + person.lastName);
     	 	}
          }
@@ -852,18 +853,18 @@
          elCell.innerHTML = output.join(', ');
       },
       
-      sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
+      sortPrimaryContacts: function Collaborations_sortPrimaryContacts(rec1, rec2, desc) {
     	  var a = rec1.getData();
     	  var b = rec2.getData();
     	  var fname1 = '', fname2 = '';
     	  var lname1 = '', lname2 = '';
-    	  if (a.contacts && a.contacts.length > 0) {
-    		  fname1 = a.contacts[0].firstName;
-    		  lname1 = a.contacts[0].lastName;
+    	  if (a.primaryContacts && a.primaryContacts.length > 0) {
+    		  fname1 = a.primaryContacts[0].firstName;
+    		  lname1 = a.primaryContacts[0].lastName;
     	  }
-    	  if (b.contacts && b.contacts.length > 0) {
-    		  fname2 = b.contacts[0].firstName;
-    		  lname2 = b.contacts[0].lastName;
+    	  if (b.primaryContacts && b.primaryContacts.length > 0) {
+    		  fname2 = b.primaryContacts[0].firstName;
+    		  lname2 = b.primaryContacts[0].lastName;
     	  }
     	  
     	  var ret = YAHOO.util.Sort.compare(fname1, fname2, desc);
@@ -872,7 +873,54 @@
     	  }
     	  return (ret);
       },
+      /**
+       * Actions custom datacell formatter
+       *
+       * @method renderCellContact
+       * @param elCell {object}
+       * @param oRecord {object}
+       * @param oColumn {object}
+       * @param oData {object|string}
+       */
+      renderCellContact: function Collaborations_renderCellContact(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+
+         var output = [];
+         
+         if (collaboration.contacts) {
+            for(i = 0, j = collaboration.contacts.length;i < j; i++) {
+                var person = collaboration.contacts[i];
+                output.push(person.firstName + ' ' + person.lastName);
+            }
+         }
+        
+         elCell.innerHTML = output.join(', ');
+      },
       
+      sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
+          var a = rec1.getData();
+          var b = rec2.getData();
+          var fname1 = '', fname2 = '';
+          var lname1 = '', lname2 = '';
+          if (a.contacts && a.contacts.length > 0) {
+              fname1 = a.contacts[0].firstName;
+              lname1 = a.contacts[0].lastName;
+          }
+          if (b.contacts && b.contacts.length > 0) {
+              fname2 = b.contacts[0].firstName;
+              lname2 = b.contacts[0].lastName;
+          }
+          
+          var ret = YAHOO.util.Sort.compare(fname1, fname2, desc);
+          if (ret == 0) {
+              ret = YAHOO.util.Sort.compare(lname1, lname2, desc);
+          }
+          return (ret);
+      },
       /**
        * Actions custom datacell formatter
        *

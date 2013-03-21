@@ -19,6 +19,20 @@
  "${country}"
 <#if country_has_next>,</#if>
 </#list>],
+"primaryContacts": [
+<#list collab.assocs["cggh:primaryContactList"]![] as contact>
+ {
+    "name": "${jsonUtils.encodeJSONString(contact.name)!''}",
+    "firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])!''}",
+    "email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])!''}",
+    "phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])!''}",
+    "mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])!''}",
+    "notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])!''}"
+}
+<#if contact_has_next>,</#if>
+</#list>],
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {

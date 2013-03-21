@@ -133,7 +133,9 @@
 					
 					{cggh_liaison cggh.metadata.liaison}
 				</line>
-				<line index="60" id="exec" view="detailed">{cggh_contacts
+				<line index="60" id="exec" view="detailed">
+					{cggh_primaryContactList
+					cggh.metadata.primaryContactsType} {cggh_contacts
 					cggh.metadata.contactsType}</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
 					{cggh_sampleCountry}
@@ -258,6 +260,7 @@
 					<!-- cggh:collaborationFolder -->
 					<show id="cggh:collaborationStatus" />
 					<show id="cggh:enquiryStatus" />
+					<show id="cggh:primaryContactList" />
 					<show id="cggh:contactList" />
 					<show id="cggh:liaison" force="true" />
 					<show id="cggh:species" />
@@ -305,6 +308,13 @@
 						set="cgghMetadata" />
 					<field id="cggh:enquiryStatus" label-id="cggh.metadata.enquiryStatus"
 						set="cgghMetadata" />
+					<field id="cggh:primaryContactList" label-id="cggh.metadata.primaryContacts"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/association.ftl">
+							<control-param name="startLocation">//cm:External_Contacts
+							</control-param>
+						</control>
+					</field>
 					<field id="cggh:contactList" label-id="cggh.metadata.contacts"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
