@@ -58,6 +58,7 @@
 				<css src="/modules/header/sites.css" />
 				<js src="/modules/create-site.js" />
 				<js src="/modules/header/sites.js" />
+				<css src="/components/forms/custom-label-layout.css" />
 			</dependencies>
 		</header>
 	</config>
@@ -286,6 +287,12 @@
 					<show id="cggh:strategicNature" />
 					<show id="cggh:internalDescription" />
 					<show id="cggh:collaborationNotes" />
+					<show id="cggh:webTitle" />
+					<show id="cggh:webTitleApproved" />
+					<show id="cggh:descriptionApproved" />
+					<show id="cggh:legacyID" />
+					<show id="cggh:projects" />
+					<show id="cggh:webStudy" />
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
@@ -299,6 +306,17 @@
 					<field id="cm:title">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 					</field>
+					<field id="cggh:webTitle">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                    <field id="cggh:legacyID" set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" >
+                            <control-param name="style">width: 8em;</control-param>
+                        </control>
+                    </field>
+                    <field id="cggh:webTitleApproved" set="cgghMetadata" label-id="cggh.metadata.webTitleApproved"/>
+                    <field id="cggh:descriptionApproved" set="cgghMetadata" label-id="cggh.metadata.descriptionApproved" />
+                    
 					<field id="cm:description">
 						<control template="/org/alfresco/components/form/controls/richtext.ftl">
 							<control-param name="editorAppearance">custom</control-param>
@@ -352,8 +370,24 @@
 							<control-param name="forceEditable">true</control-param>
 						</control>
 					</field>
+					<field id="cggh:webStudy" label-id="cggh.metadata.webStudy"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">{parent}</control-param>
+                        </control>
+                    </field>
+                    <field id="cggh:projects" label-id="cggh.metadata.projects"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">{siteshome}</control-param>
+                        </control>
+                    </field>
 					<field id="cggh:sampleCountry" label-id="cggh.metadata.studySites"
-						set="cgghMetadata" />
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/selectmany.ftl">
+                            <control-param name="size">8</control-param>
+                        </control>
+					</field>
 
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />

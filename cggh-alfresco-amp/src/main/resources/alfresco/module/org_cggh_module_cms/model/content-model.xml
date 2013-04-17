@@ -22,6 +22,7 @@
 		<!-- Import Alfresco Content Data Lists Model Definitions -->
 		<import uri="http://www.alfresco.org/model/datalist/1.0"
 			prefix="dl" />
+	    <import uri="http://www.alfresco.org/model/site/1.0" prefix="st"/>
 	</imports>
 
 	<!-- Introduction of new namespaces defined by this model -->
@@ -323,6 +324,13 @@
 	</constraints>
 
 	<types>
+	    
+	    <!-- Not really a very good idea as it doesn't show up in search for sites 
+	    <type name="cggh:project">
+            <title>CGGH Project Site</title>
+            <parent>st:site</parent>
+        </type>
+         -->
 		<type name="cggh:collaborationFolder">
 			<title>CGGH Collaboration Folder</title>
 			<parent>cm:folder</parent>
@@ -362,6 +370,26 @@
 		<aspect name="cggh:collaboration">
 			<title>Collaboration</title>
 			<properties>
+			    <property name="cggh:webTitle">
+                    <title>Web title</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh:webTitleApproved">
+                    <title>Web title approved</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh:descriptionApproved">
+                    <title>description approved</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh:legacyID">
+                    <title>Legacy ID</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
 				<property name="cggh:collaborationStatus">
 					<title>Collaboration Status</title>
 					<type>d:text</type>
@@ -481,7 +509,28 @@
                         <many>false</many>
                     </target>
                 </association>
-				
+				<association name="cggh:projects">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>st:site</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <association name="cggh:webStudy">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cggh:collaborationFolder</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
 			</associations>
 		</aspect>
 	</aspects>

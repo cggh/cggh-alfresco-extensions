@@ -5,7 +5,19 @@
 "nodeRef": "${collab.nodeRef}",
 "name": "${jsonUtils.encodeJSONString(collab.name)}",
 "title": "${jsonUtils.encodeJSONString(collab.properties["cm:title"])!''}",
+"legacyID": "${jsonUtils.encodeJSONString(collab.properties["cggh:legacyID"])!''}",
+"webTitle": "${jsonUtils.encodeJSONString(collab.properties["cm:webTitle"])!''}",
 "description": "${jsonUtils.encodeJSONString(collab.properties["cm:description"])!''}",
+<#if collab.properties["cggh:webTitleApproved"]??>
+"webTitleApproved": "${collab.properties["cggh:webTitleApproved"]?string}",
+<#else>
+"webTitleApproved": "false",
+</#if>
+<#if collab.properties["cggh:descriptionApproved"]??>
+"descriptionApproved": "${collab.properties["cggh:descriptionApproved"]?string}",
+<#else>
+"descriptionApproved": "false",
+</#if>
 "type": "${collab.type}",
 "collaborationStatus": "${collab.properties["cggh:collaborationStatus"]!''}",
 "enquiryStatus": "${collab.properties["cggh:enquiryStatus"]!''}",
@@ -47,6 +59,27 @@
 }
 <#if contact_has_next>,</#if>
 </#list>],
+<#if collab.assocs["cggh:webStudy"]??>
+<#list collab.assocs["cggh:webStudy"]![] as webStudy>
+"webStudy": {
+    "nodeRef": "${webStudy.nodeRef}",
+    "name": "${jsonUtils.encodeJSONString(webStudy.name)}",
+    "title": "${jsonUtils.encodeJSONString(webStudy.properties["cm:title"])!''}",
+    "legacyID": "${jsonUtils.encodeJSONString(webStudy.properties["cggh:legacyID"])!''}"
+}
+<#if webStudy_has_next>,</#if>
+</#list>,
+</#if>
+<#if collab.assocs["cggh:projects"]??>
+<#list collab.assocs["cggh:projects"]![] as project>
+"project": {
+    "nodeRef": "${project.nodeRef}",
+    "name": "${jsonUtils.encodeJSONString(project.name)}",
+    "title": "${jsonUtils.encodeJSONString(project.properties["cm:title"])!''}"
+}
+<#if project_has_next>,</#if>
+</#list>,
+</#if>
 <#if collab.assocs["cggh:liaison"]??>
 <#list collab.assocs["cggh:liaison"]![] as lia>
 "liaison": {

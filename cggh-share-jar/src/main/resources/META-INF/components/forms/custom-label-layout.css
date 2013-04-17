@@ -1,0 +1,9 @@
+.form-container .left-label ~ label
+{
+   display: inline;
+   float: left;
+   text-align: right;
+   width: 6em;
+   margin-right: 1em;
+   margin-top: 0.4em;
+}
