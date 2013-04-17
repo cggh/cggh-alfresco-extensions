@@ -5,9 +5,9 @@
 		<flags>
 			<!-- Developer debugging setting to turn on DEBUG mode for client scripts 
 				in the browser -->
- 
+
 			<client-debug>false</client-debug>
- 
+
 			<!-- LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, 
 				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
 			<client-debug-autologging>false</client-debug-autologging>
@@ -129,18 +129,22 @@
 				</evaluator>
 				<line index="10" id="date" view="detailed">{date}{size}</line>
 				<line index="50" id="contact" view="detailed">{cggh_collaborationStatus
-					cggh.metadata.statusType} {cggh_enquiryStatus} {cggh_strategicNature}{cggh_samplesExpected cggh.metadata.samplesExpected}
-					
+					cggh.metadata.statusType} {cggh_enquiryStatus}
+					{cggh_strategicNature}{cggh_samplesExpected
+					cggh.metadata.samplesExpected}
+
 					{cggh_liaison cggh.metadata.liaison}
 				</line>
 				<line index="60" id="exec" view="detailed">
-					{cggh_primaryContactList
+					{cggh_primaryContacts
 					cggh.metadata.primaryContactsType} {cggh_contacts
-					cggh.metadata.contactsType}</line>
+					cggh.metadata.contactsType}
+				</line>
 				<line index="70" id="species" view="detailed">{cggh_species}
 					{cggh_sampleCountry}
 				</line>
-				<line index="80" id="internal" view="detailed">{cggh_internalDescription}</line>
+				<line index="80" id="internal" view="detailed">{cggh_internalDescription}
+				</line>
 			</template>
 
 		</metadata-templates>
@@ -248,13 +252,23 @@
 
 	<config evaluator="node-type" condition="cggh:collaborationFolder">
 		<forms>
+		<!-- doesn't work here - only works for config sections without an evaluator and condition -->
+		<!-- 
+			<dependencies>
+				<css src="/components/forms/custom-label-layout.css" />
+			</dependencies>
+			-->
 			<form>
+			     <!-- 
+				<edit-form template="/org/cggh/cms/components/form/controls/common/2-column-edit-form.ftl" 
+					/>
+				 -->
 				<field-visibility>
 					<!-- cm:folder -->
 					<show id="cm:name" />
 					<show id="cm:title" force="true" />
 					<show id="cm:description" force="true" />
-					<show id="cm:taggable" for-mode="edit" force="true" />
+					<show id="cm:taggable" for-mode="view" force="true" />
 					<show id="cm:categories" />
 
 					<!-- cggh:collaborationFolder -->
@@ -275,16 +289,25 @@
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
+					<!--  
+					Seems to have trouble with associations 
+					 -->
 					<set id="cgghMetadata" appearance="bordered-panel"
-						label-id="cggh.collaborationFolder.metadata.header" />
+						label-id="cggh.collaborationFolder.metadata.header" template="/org/cggh/cms/components/form/controls/common/custom-set-study.ftl"/>
 
 					<!-- Field set "" -->
 					<field id="cm:title">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 					</field>
 					<field id="cm:description">
-						<control>
-							<control-param name="activateLinks">true</control-param>
+						<control template="/org/alfresco/components/form/controls/richtext.ftl">
+							<control-param name="editorAppearance">custom</control-param>
+							<control-param name="editorParameters">
+								theme_advanced_resizing: true,
+								theme_advanced_buttons1: "bold,italic,underline",
+								theme_advanced_buttons2: null,
+								theme_advanced_buttons3: null
+							</control-param>
 						</control>
 					</field>
 					<field id="cm:taggable">
@@ -335,18 +358,25 @@
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:samplesExpected" label-id="cggh.metadata.samplesExpected"
-						set="cgghMetadata" />
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/number.ftl">
+							<control-param name="style">width: 8em;</control-param>
+						</control>
+					</field>
 					<field id="cggh:firstSample" label-id="cggh.metadata.firstSample"
 						set="cgghMetadata" />
 					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"
 						set="cgghMetadata" />
 					<field id="cggh:reviewed" label-id="cggh.metadata.reviewed"
 						set="cgghMetadata" />
-					<field id="cggh:strategicNature"  label-id="cggh.metadata.strategicNature" set="cgghMetadata" />
-					<field id="cggh:internalDescription"  label-id="cggh.metadata.intDescrip" set="cgghMetadata">
+					<field id="cggh:strategicNature" label-id="cggh.metadata.strategicNature"
+						set="cgghMetadata" />
+					<field id="cggh:internalDescription" label-id="cggh.metadata.intDescrip"
+						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
 					</field>
-					<field id="cggh:collaborationNotes"  label-id="cggh.metadata.notes" set="cgghMetadata">
+					<field id="cggh:collaborationNotes" label-id="cggh.metadata.notes"
+						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/textarea.ftl" />
 					</field>
 				</appearance>

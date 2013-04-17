@@ -328,7 +328,8 @@
 
          editDetails.setOptions(
          {
-            width: "40em",
+            width: "80em",
+            styleClass: "editDetails",
             templateUrl: templateUrl,
             actionUrl: null,
             destroyOnHide: true,
