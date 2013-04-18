@@ -1,0 +1,6 @@
+<webscript>
+  <shortname>Overview</shortname>
+  <description>Shows an overview of projects and studies</description>
+  <family>dashlet</family>
+  <url>/org/cggh/cms/components/page/overview</url>
+</webscript>

@@ -1,0 +1,5 @@
+<webscript>
+  <shortname>Overview Title</shortname>
+  <description>Title component used in the overview page</description>
+  <url>/org/cggh/cms/components/title/overview</url>
+</webscript>

@@ -306,7 +306,7 @@
 					<field id="cm:title">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl" />
 					</field>
-					<field id="cggh:webTitle">
+					<field id="cggh:webTitle" label-id="cggh.metadata.webTitle">
                         <control template="/org/alfresco/components/form/controls/textfield.ftl" />
                     </field>
                     <field id="cggh:legacyID" set="cgghMetadata">

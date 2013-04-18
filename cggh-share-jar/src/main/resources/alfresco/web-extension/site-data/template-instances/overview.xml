@@ -1,0 +1,13 @@
+<template-instance>
+	<template-type>org/cggh/overview/overview</template-type>
+	<components>
+      <component>
+         <region-id>title</region-id>
+         <url>/org/cggh/cms/components/title/overview</url>
+      </component>
+      <component>
+         <region-id>overview</region-id>
+         <url>/org/cggh/cms/components/page/overview</url>
+      </component>
+   </components>
+</template-instance>
