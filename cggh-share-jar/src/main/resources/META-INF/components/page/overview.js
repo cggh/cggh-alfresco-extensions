@@ -616,30 +616,31 @@
          desc += collaboration.countries.join(', ');
          desc += '</div>';
          
-         var output = [];
+         desc += '<div class="primaryContacts">';
+         desc += '<h2>' + this.msg("cggh.metadata.primaryContacts") + '</h2>';
          
          if (collaboration.primaryContacts) {
             for(i = 0, j = collaboration.primaryContacts.length;i < j; i++) {
                 var person = collaboration.primaryContacts[i];
-                output.push(person.firstName + ' ' + person.lastName);
+                desc += person.firstName + ' ' + person.lastName + '<br/>' ;
+                desc += person.company + '<br/>' ;
+                desc += person.email + '<br/>' ;
             }
          }
         
-         desc += '<div class="primaryContacts">';
-         desc += '<h2>' + this.msg("cggh.metadata.primaryContacts") + '</h2>';
-         desc += output.join(', ');
          desc += '</div>';
-         output = [];
          
+         desc += '<div class="contacts">';
+         desc += '<h2>' + this.msg("cggh.metadata.contacts") + '</h2>';
          if (collaboration.contacts) {
             for(i = 0, j = collaboration.contacts.length;i < j; i++) {
                 var person = collaboration.contacts[i];
-                output.push(person.firstName + ' ' + person.lastName);
+                desc += person.firstName + ' ' + person.lastName + '<br/>' ;
+                desc += person.company + '<br/>' ;
+                desc += person.email + '<br/>' ;
             }
          }
-         desc += '<div class="contacts">';
-         desc += '<h2>' + this.msg("cggh.metadata.contacts") + '</h2>';
-         desc += output.join(', ');
+         
          desc += '</div>';
          desc += '</div>';
          
