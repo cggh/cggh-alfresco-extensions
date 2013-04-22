@@ -6,7 +6,7 @@
 "name": "${jsonUtils.encodeJSONString(collab.name)}",
 "title": "${jsonUtils.encodeJSONString(collab.properties["cm:title"])!''}",
 "legacyID": "${jsonUtils.encodeJSONString(collab.properties["cggh:legacyID"])!''}",
-"webTitle": "${jsonUtils.encodeJSONString(collab.properties["cm:webTitle"])!''}",
+"webTitle": "${jsonUtils.encodeJSONString(collab.properties["cggh:webTitle"])!''}",
 "description": "${jsonUtils.encodeJSONString(collab.properties["cm:description"])!''}",
 <#if collab.properties["cggh:webTitleApproved"]??>
 "webTitleApproved": "${collab.properties["cggh:webTitleApproved"]?string}",
