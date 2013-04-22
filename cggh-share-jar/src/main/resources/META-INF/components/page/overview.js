@@ -203,8 +203,9 @@
                               {
                                  MSG_EMPTY: me.msg("message.datatable.loading"),
                                  draggableColumns: true,
-                                 paginator: YAHOO.widget.Paginator,
-                                 width: "474px"
+                               //  paginator: YAHOO.widget.Paginator,
+                                 width: "464px",
+                                 height: "620px"
                               });
 
                               // Override abstract function within DataTable to set custom empty message
@@ -517,8 +518,16 @@
 
          this.collaborations.sort(function(a, b)
          {
-            var name1 = a.title ? a.title.toLowerCase() : a.name.toLowerCase(),
-                name2 = b.title ? b.title.toLowerCase() : b.name.toLowerCase();
+            if (a.webTitle == '')
+                title1 = a.name;
+            else
+                title1 = a.webTitle;
+            if (b.webTitle == '')
+                title2 = b.name;
+            else
+                title2 = b.webTitle;
+            var name1 = title1.toLowerCase(),
+                name2 = title2.toLowerCase();
             return (name1 > name2) ? 1 : (name1 < name2) ? -1 : 0;
          });
 
