@@ -277,6 +277,7 @@
 					<show id="cggh:enquiryStatus" />
 					<show id="cggh:primaryContactList" />
 					<show id="cggh:contactList" />
+					<show id="cggh:associates" />
 					<show id="cggh:liaison" force="true" />
 					<show id="cggh:species" />
 					<show id="cggh:sampleCountry" />
@@ -293,6 +294,7 @@
 					<show id="cggh:legacyID" />
 					<show id="cggh:projects" />
 					<show id="cggh:webStudy" />
+					<show id="cggh:publications" />
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
@@ -363,6 +365,13 @@
 							</control-param>
 						</control>
 					</field>
+					<field id="cggh:associates" label-id="cggh.metadata.associates"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">//cm:External_Contacts
+                            </control-param>
+                        </control>
+                    </field>
 					<field id="cggh:liaison" label-id="cggh.metadata.liaison"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/authority.ftl">
@@ -374,6 +383,12 @@
                         set="cgghMetadata">
                         <control template="/org/alfresco/components/form/controls/association.ftl">
                             <control-param name="startLocation">{parent}</control-param>
+                        </control>
+                    </field>
+                    <field id="cggh:publications" label-id="cggh.metadata.publications"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:documentLibrary/cm:Publications</control-param>
                         </control>
                     </field>
                     <field id="cggh:projects" label-id="cggh.metadata.projects"

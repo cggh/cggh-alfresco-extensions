@@ -38,10 +38,10 @@
             </div>
             <div class="yui-g">
                 <div class="yui-u first">
-                    <@formLib.renderField field=form.fields["assoc_cggh_contactList"] />
+                    <@formLib.renderField field=form.fields["assoc_cggh_associates"] />
                 </div>
                 <div class="yui-u">
-                    <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
+                    <@formLib.renderField field=form.fields["assoc_cggh_contactList"] />
                 </div>
             </div>
         </div>
@@ -54,10 +54,24 @@
                     <@formLib.renderField field=form.fields["prop_cggh_descriptionApproved"] />
                 </div>
                 <div class="yui-u">
-                    <@formLib.renderField field=form.fields["assoc_cggh_webStudy"] />
+                    
                 </div>
             </div>
         </div>
+        <div class="yui-gd">
+            <div class="yui-u">
+                    <@formLib.renderField field=form.fields["assoc_cggh_publications"] />
+            </div>
+            <div class="yui-g">
+                <div class="yui-u">
+                    <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
+                </div>
+                <div class="yui-u">
+                    <@formLib.renderField field=form.fields["assoc_cggh_webStudy"] />
+                </div>
+            </div>
+        </div>        
+                
         <div class="yui-gc">
             <div class="yui-u first">
                 <@formLib.renderField field=form.fields["prop_cggh_sampleCountry"] />

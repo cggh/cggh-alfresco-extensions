@@ -363,6 +363,19 @@
 				<aspect>cm:geographic</aspect>
 			</mandatory-aspects>
 		</type>
+		
+		   <!--
+              A Publication study file.
+              -->
+        <type name="cggh:publication">
+            <title>Publication</title>
+            <parent>cm:content</parent>
+            <mandatory-aspects>
+                <aspect>cggh:publicationData</aspect>
+            </mandatory-aspects>
+        </type>
+
+		
 	</types>
 	<aspects>
 
@@ -498,6 +511,17 @@
 						<many>true</many>
 					</target>
 				</association>
+				<association name="cggh:associates">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>dl:contact</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
 				<association name="cggh:liaison">
                     <source>
                         <mandatory>false</mandatory>
@@ -530,9 +554,45 @@
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
+                </association> 
+                <association name="cggh:publications">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cggh:publication</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
                 </association>
 			</associations>
 		</aspect>
+		
+		     <!--
+            Extra metadata for a publication file type.
+        -->
+        <aspect name="cggh:publicationData">
+            <title>Publication Data</title>
+            <properties>
+                <property name="cggh:DOI">
+                    <title>DOI</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh:PMID">
+                    <title>Pubmed ID</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh:citationText">
+                    <title>Citation Text</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+            </properties>
+        </aspect>
+		
 	</aspects>
 
 </model>
