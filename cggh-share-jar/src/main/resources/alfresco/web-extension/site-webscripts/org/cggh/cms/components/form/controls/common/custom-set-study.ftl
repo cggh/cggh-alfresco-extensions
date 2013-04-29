@@ -27,7 +27,7 @@
                 <div class="yui-u first">
                     <@formLib.renderField field=form.fields["prop_cggh_enquiryStatus"] />
                 </div>
-                <div class="yui-u first">
+                <div class="yui-u">
                     <@formLib.renderField field=form.fields["prop_cggh_reviewed"] />
                 </div>
             </div>
@@ -59,11 +59,11 @@
             </div>
         </div>
         <div class="yui-gd">
-            <div class="yui-u">
+            <div class="yui-u first">
                     <@formLib.renderField field=form.fields["assoc_cggh_publications"] />
             </div>
             <div class="yui-g">
-                <div class="yui-u">
+                <div class="yui-u first">
                     <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
                 </div>
                 <div class="yui-u">
