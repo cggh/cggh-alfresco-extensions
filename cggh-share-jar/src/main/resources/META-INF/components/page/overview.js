@@ -47,9 +47,10 @@ if (typeof Cggh == "undefined" || !Cggh)
      * Use the getDomId function to get some unique names for global event
      * handling
      */
-    var FAV_EVENTCLASS = Alfresco.util.generateDomId(null, "fav-collaboration"), IMAP_EVENTCLASS = Alfresco.util
-            .generateDomId(null, "imap-collaboration");
+    var FAV_EVENTCLASS = Alfresco.util.generateDomId(null, "fav-overview-collaboration"), IMAP_EVENTCLASS = Alfresco.util
+            .generateDomId(null, "imap-overview-collaboration");
 
+    var TABLES_READY_EVENTCLASS = Alfresco.util.generateDomId(null, "-overview-ready");
     /**
      * Preferences
      */
@@ -59,6 +60,7 @@ if (typeof Cggh == "undefined" || !Cggh)
     var FAVOURITE_OVERVIEW = PREFERENCES_OVERVIEW + ".favourites";
     var IMAP_FAVOURITE_OVERVIEW = PREFERENCES_OVERVIEW + ".imapFavourites";
 
+   
     /**
      * Dashboard Overview constructor.
      * 
@@ -175,6 +177,16 @@ if (typeof Cggh == "undefined" || !Cggh)
             });
             this.widgets.lookseq.value = false;
 
+            this.widgets.people_link = Alfresco.util.createYUIButton(this, "link-people", null,
+            {
+                type : "link",
+            });
+            
+            this.widgets.pub_link = Alfresco.util.createYUIButton(this, "link-pubs", null,
+            {
+                type : "link",
+            });
+            
             // DataSource definition
             this.widgets.dataSource = new YAHOO.util.DataSource(this.collaborations,
             {
@@ -232,31 +244,42 @@ if (typeof Cggh == "undefined" || !Cggh)
             {
                 width : '100%',
                 underlay : 'none',
-                close : false,
-                style: "z-index: 0"
+                close : false
             });
 
+            var container = Dom.getElementsByClassName('overview')[0];
+            var tb = Dom.getElementsByClassName('toolbar')[0];
+            var yn = Dom.getElementsByClassName('yui-nav')[0];
+            this.panel_width = container.offsetWidth - 4;
+            this.panel_height = container.offsetHeight - tb.offsetHeight - yn.offsetHeight;
+            this.list_width = this.panel_width * 0.35;
+            this.content_width = this.panel_width * 0.65;
+                
+            
             this.widgets.panel.setBody('<div id="layout"></div>');
             this.widgets.panel.beforeRenderEvent.subscribe(function()
             {
+                
                 Event.onAvailable('layout', function()
                 {
                     me.widgets.layout = new YAHOO.widget.Layout('layout',
                     {
-                        height : 643,
-                        width : 1600,
+                        height : me.panel_height,
+                        width : me.panel_width,
+                        gutter: '0 0 0 0',
                         units : [
                         {
                             position : 'left',
-                            width : 474,
+                            width : me.list_width,
                             body : '',
-                            gutter : '0 5 0 2'
+                            gutter : '0 0 0 0'
                         },
                         {
                             position : 'center',
-                            width : 1113,
-                            body : 'Select a study',
-                            gutter : '0 2 0 0'
+                            width : me.content_width,
+                            body : me.msg("cggh.message.select.study"),
+                            scroll: true,
+                            gutter : '0 0 0 0'
                         } ]
                     });
 
@@ -272,8 +295,8 @@ if (typeof Cggh == "undefined" || !Cggh)
                                     MSG_EMPTY : me.msg("message.datatable.loading"),
                                     draggableColumns : true,
                                     // paginator: YAHOO.widget.Paginator,
-                                    width : "464px",
-                                    height : "620px"
+                                    width : (me.list_width - 10) + "px",
+                                    height : me.panel_height + "px"
                                 });
 
                         // Override abstract function within DataTable to set
@@ -331,20 +354,21 @@ if (typeof Cggh == "undefined" || !Cggh)
                 {
                     me.widgets.projects_layout = new YAHOO.widget.Layout('layout-projects',
                     {
-                        height : 643,
-                        width : 1600,
+                        height : me.panel_height,
+                        width : me.panel_width,
+                        gutter: '0 0 0 0',
                         units : [
                         {
                             position : 'left',
-                            width : 474,
+                            width : me.list_width,
                             body : '',
-                            gutter : '0 5 0 2'
+                            gutter : '0 0 0 0'
                         },
                         {
                             position : 'center',
-                            width : 1113,
-                            body : 'Select a study',
-                            gutter : '0 2 0 0'
+                            width : me.content_width,
+                            body : me.msg("cggh.message.select.project"),
+                            gutter : '0 0 0 0'
                         } ]
                     });
 
@@ -360,8 +384,8 @@ if (typeof Cggh == "undefined" || !Cggh)
                                     MSG_EMPTY : me.msg("message.datatable.loading"),
                                     draggableColumns : true,
                                     // paginator: YAHOO.widget.Paginator,
-                                    width : "464px",
-                                    height : "620px"
+                                    width : (me.list_width - 10) + "px",
+                                    height : me.panel_height + "px"
                                 });
 
                         // Override abstract function within DataTable to set
@@ -402,6 +426,8 @@ if (typeof Cggh == "undefined" || !Cggh)
                     });
 
                     me.widgets.projects_layout.render();
+                    
+                    YAHOO.Bubbling.fire(TABLES_READY_EVENTCLASS, null);
                 });
             });
 
@@ -680,12 +706,10 @@ if (typeof Cggh == "undefined" || !Cggh)
             // Select the preferred filter in the ui
             var filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_OVERVIEW_DASHLET_FILTER,
                     "all");
-            filter = this.options.validFilters.hasOwnProperty(filter) ? filter : "all";
-
-            if (!this.widgets.project_select.value) {
-                this.widgets.project_select.value = "all";
-            }
-            
+//Going to assume that this is valid otherwise need to check against projects which may not
+//be set yet            
+//            filter = this.options.validFilters.hasOwnProperty(filter) ? filter : "all";
+   
             // Display the toolbar now that we have selected the filter
             Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
 
@@ -702,7 +726,7 @@ if (typeof Cggh == "undefined" || !Cggh)
                 var collaboration = YAHOO.lang.merge(
                 {}, p_items[i]);
 
-                if (this.filterAccept(this.widgets.project_select.value,collaboration))
+                if (this.filterAccept(filter,collaboration))
                 {
                     this.collaborations[ii] = collaboration;
                     ii++;
@@ -731,7 +755,11 @@ if (typeof Cggh == "undefined" || !Cggh)
                                     "studies": [ collaboration ]
                             };
                         
-                        this.widgets.project_select.getMenu().addItem({ value:key, text:collaboration.projects[k].title});                     
+                        this.widgets.project_select.getMenu().addItem({ value:key, text:collaboration.projects[k].title});
+                        if (filter == key) {
+                            this.widgets.project_select.set("label", collaboration.projects[k].title);
+                            this.widgets.project_select.value = filter;
+                        }
                     }
                     
                 }
@@ -755,6 +783,17 @@ if (typeof Cggh == "undefined" || !Cggh)
                 return (name1 > name2) ? 1 : (name1 < name2) ? -1 : 0;
             });
 
+            this.reloadTables();
+        },
+
+        reloadTables : function Overview_reloadTables()
+        {
+
+            if (!this.widgets.dataTable) {
+                //
+                this.widgets.project_select.subscribe(TABLES_READY_EVENTCLASS, this.reloadTables);
+                return;
+            }
             var successHandler = function Overview_onCollaborationsUpdate_success(sRequest, oResponse, oPayload)
             {
                 oResponse.results = this.collaborations;
@@ -783,7 +822,6 @@ if (typeof Cggh == "undefined" || !Cggh)
                         scope : this
                     });
         },
-
         /**
          * Generate "Favourite" UI
          * 
@@ -848,7 +886,7 @@ if (typeof Cggh == "undefined" || !Cggh)
                 for (i = 0, j = personList.length; i < j; i++)
                 {
                     var person = personList[i];
-                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + person.nodeRef + '">' + person.name + '</a><br/>';
+                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + person.nodeRef + '">' + person.name + '(' + this.msg("cggh.action.edit") + ')</a><br/>';
                     desc += person.firstName + ' ' + person.lastName + '<br/>';
                     desc += person.company + '<br/>';
                     desc += person.email + '<br/>';
@@ -896,9 +934,9 @@ if (typeof Cggh == "undefined" || !Cggh)
                 for (i = 0, j = collaboration.publications.length; i < j; i++)
                 {
                     var pub = collaboration.publications[i];
-                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + pub.nodeRef + '">' + pub.name + '</a><br/>';
+                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + pub.nodeRef + '">' + pub.name + '(' + this.msg("cggh.action.edit") + ')</a><br/>';
                     desc += "PMID:" + pub.pmid + '<br/>';
-                    desc += "DOI:" + pub.doi + +'<br/>';
+                    desc += "DOI:" + pub.doi +'<br/>';
                     desc += pub.citation + '<br/>';
                 }
             }
@@ -912,7 +950,7 @@ if (typeof Cggh == "undefined" || !Cggh)
                 for (i = 0, j = collaboration.projects.length; i < j; i++)
                 {
                     var proj = collaboration.projects[i];
-                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + proj.nodeRef + '">' + proj.name + '</a><br/>';
+                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + proj.nodeRef + '">' + proj.name + '(' + this.msg("cggh.action.edit") + ')</a><br/>';
                     desc += proj.title + '<br/>';
                 }
             }

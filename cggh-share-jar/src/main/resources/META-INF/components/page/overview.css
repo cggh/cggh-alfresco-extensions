@@ -1,0 +1,11 @@
+div[id$='tabview'] .yui-content {
+	border: none !important;
+	border-width: 0px !important;
+    padding: 0em 0em !important;
+}
+
+.yui-panel .hd { 
+      padding:0; 
+      border:none;  
+      height:0px;  
+} 
