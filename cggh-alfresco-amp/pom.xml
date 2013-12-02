@@ -1,545 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>cggh-alfresco-amp</artifactId>
+	<name>Alfresco AMP Module</name>
 	<packaging>amp</packaging>
-	<name>Test Alfresco AMP</name>
-    <description>Test AMP Project for extending alfresco.war</description>	
+	<description>This is a sample AMP project, depended upon by the alfresco WAR module</description>
 
 	<parent>
 		<groupId>org.cggh</groupId>
 		<artifactId>cggh-alfresco-extensions</artifactId>
-		<version>1.2.5-SNAPSHOT</version>
+		<version>1.3.0-SNAPSHOT</version>
 	</parent>
-	
-	<properties>
-        <env>${user.name}</env>
-        <webapp.name>alfresco</webapp.name>
-		<module.id>org_cggh_module_cms</module.id>
-        <module.log.level>warn</module.log.level>
-        <alfresco.data.location>${project.build.directory}/alf_data</alfresco.data.location>
-		
-		<!-- The rest of the properties are inherited from the parent POM -->
-    </properties>
-	
-	
-	<!-- Defined in the parent POM 
-	<repositories>
-	</pluginRepositories>
-	-->
-	
-	<!--
-		Include libs that the AMP will use. Alfresco SDK libs by default. 
-		They are provided by Alfresco during runtime so scope should be set as provided.
-		(if in doubt then check for the lib in tomcat/webapps/alfresco/WEB-INF/lib, if it's there then it's provided).
-	-->
+
+	<!-- Following dependencies are needed for compiling Java code in src/main/java; 
+		<scope>provided</scope> is inherited for each of the following; for more 
+		info, please refer to alfresco-integration-parent POM definition @TODO - 
+		document -->
 	<dependencies>
-		<!-- Include JAR that has classes such as AlfrescoRuntimeException -->
-        <dependency>
-            <groupId>${alfresco.groupId}</groupId> 
-            <artifactId>alfresco-core</artifactId>
-            <version>${alfresco.version}</version>
-            <scope>provided</scope>
-        </dependency>
-		<!-- Include JAR that has classes such as ForumModel, AbstractContentTransformer, ExporterComponent, RetryingTransactionHelper, NodeServicePolicies -->
-        <dependency>
-            <groupId>${alfresco.groupId}</groupId> 
+		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
 			<artifactId>alfresco-repository</artifactId>
-			<version>${alfresco.version}</version>
-			<scope>provided</scope>
 		</dependency>
-		<!-- Include JAR that has classes such as NodeService, SearchService, DictionaryService, StoreRef, NodeRef, and ContentModel -->
 		<dependency>
-            <groupId>${alfresco.groupId}</groupId> 
-			<artifactId>alfresco-data-model</artifactId>
-			<version>${alfresco.version}</version>
-			<scope>provided</scope>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco</artifactId>
+			<type>war</type>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-			<scope>provided</scope>
-		</dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-		<!-- Include Spring Webscripts so we can write Java based web scripts, includes classes such as AbstractWebScript, WebScriptRequest, WebScriptException -->
-		<dependency>
-			<groupId>org.springframework.extensions.surf</groupId>
-			<artifactId>spring-webscripts</artifactId>
-			<version>1.0.0</version>
-            <scope>provided</scope>
-		</dependency>		
-
-		<!-- Include Apache Commons Lang so classes such as StringUtils can be used -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>com.springsource.org.apache.commons.lang</artifactId>
-			<version>2.5.0</version>
-            <scope>provided</scope>
-		</dependency>
-		
-		<!-- Include Java Mail so email can be sent from Java -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4</version>
-            <scope>provided</scope>
-		</dependency>
-
-		<!-- Include JUnit so we can write Java unit tests -->
-		<dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-	   
-	   <!-- Warning the alfresco.war uses a SNAPSHOT of this -->
-	    <dependency>
-	        <groupId>commons-validator</groupId>
-	        <artifactId>commons-validator</artifactId>
-	        <version>1.4.0</version>
-	        <scope>provided</scope>
-	    </dependency>
-	    <!--
-			Example Jar dependency: will be properly packed into the AMP /lib directory 
-			
-			<dependency> 
-				<groupId>rome</groupId>
-				<artifactId>opensearch</artifactId> 
-				<version>0.1</version>
-			</dependency>
-		-->
-		<!--
-			Example AMP dependency: will be properly overlayed in the WAR produced by the integration-test phase in profile 'webapp'
-			<dependency> 
-				<groupId>org.alfresco</groupId>
-				<artifactId>recordsmanagement</artifactId> 
-				<version>2.1.0</version>
-				<type>amp</type> 
-			</dependency>
-		-->
 	</dependencies>
 
-	<!-- To be defined later (in another blog)
-    <distributionManagement>
-    </distributionManagement>
-    <scm>
-    </scm> -->
-	
+	<properties>
+		<!-- This property allow to switch Repo AMP vs Share AMP. Set alfresco.client.war=share 
+			to run this AMP against Share -->
+		<alfresco.client.war>alfresco</alfresco.client.war>
+	</properties>
+
 	<build>
-        <plugins>
-			<!-- 
-				Generate build properties into env.build.properties file 
-				-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>compute-build-properties</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <path id="alfresco.data.location">
-                                    <pathelement location="${alfresco.data.location}" />
-                                </path>
-                                <!--
-                                    we need to generate a unix-style path for alfresco.data.location,
-                                    this will be used by jdbc urls because H2 does not like windows backslashes in urls
-                                 -->
-                                <pathconvert targetos="unix" property="alfresco.data.location.unix" refid="alfresco.data.location" />
-                                <propertyfile file="${project.build.directory}/env.build.properties" comment="Computed build properties">
-                                    <entry key="alfresco.data.location.unix" value="${alfresco.data.location.unix}" />
-                                </propertyfile>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-		
-			<!-- 
-				Merge default and user specific build properties into env.build.properties 
-				-->
-            <plugin>
-                <groupId>org.beardedgeeks</groupId>
-                <artifactId>maven-merge-properties-plugin</artifactId>
-                <version>0.2</version>
-                <configuration>
-                    <merges>
-                        <merge>
-                            <targetFile>${project.build.directory}/env.build.properties</targetFile>
-                            <propertiesFiles>
-                                <propertiesFile>src/test/envconfig/env.${env}.properties</propertiesFile>
-                                <propertiesFile>src/test/envconfig/env.default.properties</propertiesFile>
-                                <propertiesFile>${project.build.directory}/env.build.properties</propertiesFile>
-                            </propertiesFiles>
-                        </merge>
-                    </merges>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>merge</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-		
-			<!-- 
-				Load build properties from merged env.build.properties file 
-				-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>${project.build.directory}/env.build.properties</file>
-                            </files>
-                            <quiet>false</quiet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>		
-		
-			<!-- 
-				Strip off -SNAPSHOT from version and put this in the noSnapshotVersion variable 
-				-->
-            <plugin>
-				<artifactId>maven-nosnapshot-plugin</artifactId>
-				<groupId>org.alfresco.maven</groupId>
-				 <version>0.0.8</version>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
 				<executions>
 					<execution>
-						<id>default</id>
-						<phase>initialize</phase>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target>
+								<zip basedir="${basedir}/tools/export/cggh/cggh_scripts.acp"
+									destfile="${project.build.directory}/${project.artifactId}/config/alfresco/module/${project.artifactId}/bootstrap/cggh_scripts.acp" />
+							</target>
+						</configuration>
 						<goals>
-							<goal>strip</goal>
+							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-			
-			<!-- 
-				Compile Java Source code with JDK 1.6 (config in parent POM)
-				-->
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			
-			<!-- 
-				Run JUnit Tests (config in parent POM)
-				-->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>			
-			
-			<!-- 
-				Package the AMP 
-				-->
-			<plugin>
-				<groupId>org.alfresco.maven.plugin</groupId>
-				<artifactId>maven-amp-plugin</artifactId>
-				<version>3.0.4</version>
-				<extensions>true</extensions>
-				<configuration>
-					<mModuleProperties>${project.build.directory}/module.properties</mModuleProperties>
-					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
-					</archive>
-				</configuration>
-			</plugin>
-			
 		</plugins>
-				
-		<!-- 
-			Copy and Filter Application Resources/Files from src/ to target/ 
-			-->
-        <resources>
-			<!-- Copy and filter application resource files from default location. They go into /target/classes. -->
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>**/module.properties</exclude> 		<!-- Copied and Filtered separately -->
-					<exclude>**/file-mapping.properties</exclude> 	<!-- Copied and Filtered separately -->
-                </excludes>     
-            </resource>
-			
-			<!-- Copy and filter AMP module.properties file separately as it goes into /target directory instead of src location-->
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources/alfresco/module/${module.id}</directory>
-				<targetPath>${project.build.directory}</targetPath>
-                <includes>
-                    <include>module.properties</include> 		
-                </includes>     
-            </resource>
-			
-			<!-- Copy and filter AMP file-mapping.properties file separately as it goes into /target/test-alfresco-amp-1.0-SNAPSHOT directory instead of src location -->
-			<!-- Note. An incorrectly named file-mappings.properties file is added by default by the maven-amp-plugin -->
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources/alfresco/module/${module.id}</directory>
-				<targetPath>${project.build.directory}/${project.artifactId}-${project.version}</targetPath>
-                <includes>
-					<include>file-mapping.properties</include>
-                </includes>     
-            </resource>
-        </resources>
-
-    </build>
-
-	<profiles>
-		<!-- 
-			Profile used to build extended Alfresco WAR and running it in Jetty 
-			-->
-        <profile>
-            <id>webapp</id>
-            <build>
-				<!-- <defaultGoal>jetty:run-exploded</defaultGoal>  -->
-                
-				<!-- 
-					Include property files that we need just for testing, and filter them at the same time. They end up in target/test-classes 
-					-->
-				<testResources>
-                    <testResource>
-                        <filtering>true</filtering>
-                        <directory>src/test/resources</directory>
-                    </testResource>
-				
-					<!--
-						Copy AMP module.properties file separately as it goes into the module directory (that's where the MMT tool puts it during installation of AMP)
-						It's already been filtered when we pick it up so no need to turn on filtering.
-					-->
-					<testResource>
-						<directory>${project.build.directory}</directory>
-						<targetPath>${project.build.directory}/${webapp.name}/WEB-INF/classes/alfresco/module/${module.id}</targetPath>
-						<includes>
-							<include>module.properties</include>
-						</includes>
-					</testResource>
-				</testResources>
-
-                <plugins>
-				
-					<!-- 
-						If we have defined any other AMPs, in the <dependencies> section above, that our AMP is dependent on, 
-						then this plug-in will unpack them into the destination webapp directory. 
-						
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-								<id>unpack-dependency-amps</id>
-                                <phase>process-resources</phase> runs before compile phase, copy and process the resources into the destination directory, ready for packaging. 
-                                <goals>
-                                    <goal>unpack-dependencies</goal>
-                                </goals>
-                                <configuration>
-                                    <includeTypes>amp</includeTypes>
-                                    <outputDirectory>${project.build.directory}/${webapp.name}</outputDirectory> Copy AMP files into the target/alfresco directory 
-                                    <excludes>META*</excludes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>-->
-                            <!--
-							    See if this is needed....
-								The maven-dependency-plugin is dependent on the maven-amp-plugin to do the actual unpacking of the AMP(s) 
-								so it can be overlayed on top of the exploaded WAR 
-                            <dependency>
-                                <groupId>org.alfresco.maven.plugin</groupId>
-                                <artifactId>maven-amp-plugin</artifactId>
-                                <version>3.0.4</version>
-                            </dependency>							
-                        </dependencies>
-                    </plugin>-->
-				
-
-					<!-- 
-						Build an extended Alfresco.WAR that includes the AMP (and any AMPs from <dependencies> section)
-						
-						The maven-war-plugin will automatically pick up AMP files from:
- 
-						 `== src
-							 `== main
-								 |== java
-								 |== resources
-								 `== webapp
-								 
-						These AMP files are then overlayed by the original Alfresco WAR defined in the dependencies section below in the profile.
-						-->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-						<version>2.3</version>
-                        <configuration>
-                            <primaryArtifact>false</primaryArtifact>
-                            <!--
-                                Assemble WAR in a different directory (/target/alfresco) than the AMP (/target), so we do not get unexpected results
-                            -->
-                            <webappDirectory>${project.build.directory}/${webapp.name}</webappDirectory>
-                            <archive>
-                                <addMavenDescriptor>false</addMavenDescriptor>
-                            </archive>
-                            <webResources>
-                                <resource>
-                                    <directory>${project.build.testOutputDirectory}</directory>
-                                    <targetPath>WEB-INF/classes</targetPath>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                        <executions>
-                            <!-- Create an exploded WAR in specified webapp dir when the 'package' phase is called by maven 
-								 and the plug-in goal 'exploded' is run -->
-                            <execution>
-                                <id>createExplodedAlfrescoWebappWithAmp</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exploded</goal>
-                                </goals>
-								<configuration>
-									<!--
-										Make sure the AMP content is copied into target/alfresco/WEB-INF/classes, where the module.properties has also been copied.
-										 
-										Enable the archiveClasses property if you want all the classpath stuff (both classes and resource files) for the AMP 
-										to end up in a lib (test-alfresco-amp-1.0-SNAPSHOT.jar) and put in target/alfresco/WEB-INF/lib. 
-										-->
-									<archiveClasses>false</archiveClasses> 
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <!--
-                                This is required to be re-defined explicitly at plugin level as otherwise the 'amp'
-                                extension unarchiver won't be available to the maven-war-plugin
-								
-								Not sure why this is here, maven-war-plugin has no default dependency to maven-amp-plugin
-
-                            <dependency>
-                                <groupId>org.alfresco.maven.plugin</groupId>
-                                <artifactId>maven-amp-plugin</artifactId>
-                                <version>3.0.4</version>
-                            </dependency>
-								-->							
-                        </dependencies>
-                    </plugin>
-					
-					<!-- 
-						Run exploded WAR (in target/alfresco) in Jetty Servlet engine 
-						-->
-                    <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <version>6.1.26</version>
-						<configuration>
-							<webApp>${project.build.directory}/${webapp.name}</webApp>
-							<webAppConfig>
-								<contextPath>/${webapp.name}</contextPath>
-								<jettyEnvXmlFile>${project.build.directory}/${webapp.name}/WEB-INF/classes/jetty-env.xml</jettyEnvXmlFile> 
-							</webAppConfig>
-							<scanIntervalSeconds>10</scanIntervalSeconds>
-							<connectors>
-								<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-									<port>8080</port>
-									<maxIdleTime>60000</maxIdleTime>
-								</connector>
-							</connectors>
-						</configuration>
-                        <executions>
-                            <!-- Run the extended and exploded Alfresco WAR when the 'integration-test' phase is called by maven 
-								 and the plug-in goal 'run-exploded' is run -->
-                            <execution>
-								<id>jetty-run</id>
-                                <phase>integration-test</phase> <!-- Integration test phase comes after package phase, so you can package independently of testing with Jetty -->
-                                <goals>
-                                    <goal>run-exploded</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-						<dependencies>
-							<!-- 
-								Need to use Commons DB Connection Pool as org.h2.jdbcx.JdbcDataSource does not have the setDriverClassName method
-								java.lang.NoSuchMethodException: class org.h2.jdbcx.JdbcDataSource.setDriverClassName(class java.lang.String)
-								See also src/test/webapp/jetty-env.xml
-							-->						
-                            <dependency> 
-                                <groupId>commons-dbcp</groupId>
-                                <artifactId>commons-dbcp</artifactId>
-                                <version>1.4</version>
-					            <scope>provided</scope>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-
-            <!--
-                Here you can add test dependencies you want to have included in the the WAR (not in the AMP,
-                built in the main profile). Typical use case: add here additional
-                AMPs that you want to test compatibility of with the current module.
-            -->
-            <dependencies>
-                <!--
-                    This is the alfresco version you're testing the AMP against. Don't remove if you want jetty
-                    to be able to deploy a WAR
-                -->
-                <dependency>
-				    <groupId>${alfresco.groupId}</groupId> 
-                    <artifactId>alfresco</artifactId>
-                    <version>${alfresco.version}</version>
-                    <type>war</type>
-                </dependency>
-				<!-- The H2 file based DB that we are testing with -->
-				<dependency>
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<version>1.3.160</version>
-				</dependency>	
-				<!-- 
-					H2 Support module version depend on Alfresco edition and version:
-					
-					Alfresco 	H2 support module
-					v4.0.2 		v1.4
-					v4.0.1 		v1.3
-					v4.0.0 		v1.2
-					v3.4.x 		v1.1
-					
-					v4.0.d 		v1.2
-					v4.0.b 		v1.2
-				-->							
-				<dependency>
-					<groupId>tk.skuro.alfresco</groupId>
-					<artifactId>h2-support</artifactId>
-					<version>1.3</version> 
-				</dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+	</build>
 </project>
