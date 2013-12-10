@@ -3,8 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <import resource="classpath:alfresco/module/org_cggh_module_cms/context/bootstrap-context.xml" />
-    <import resource="classpath:alfresco/module/org_cggh_module_cms/context/services-context.xml" />
-    <import resource="classpath:alfresco/module/org_cggh_module_cms/context/actions-context.xml" />
-   <import resource="classpath:alfresco/module/org_cggh_module_cms/context/OutboundSMTP/outboundSMTP-context.xml" />
+    <import resource="classpath:alfresco/module/${artifactId}/context/bootstrap-context.xml" />
+    <import resource="classpath:alfresco/module/${artifactId}/context/service-context.xml" />
+    <import resource="classpath:alfresco/module/${artifactId}/context/actions-context.xml" />
+    <import resource="classpath:alfresco/module/${artifactId}/context/public-services-security-context.xml" />
+    <import resource="classpath:alfresco/module/${artifactId}/context/scheduled-action-services-context.xml" />
 </beans>
