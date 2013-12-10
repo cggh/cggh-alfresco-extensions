@@ -1,0 +1,1 @@
+document.addAspect("cm:versionable");
