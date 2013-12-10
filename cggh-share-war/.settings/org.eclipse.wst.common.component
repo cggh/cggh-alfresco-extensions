@@ -1,19 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="share-war">
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="share">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="cggh-share-jar-1.2.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-jar/cggh-share-jar">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/properties/local"/>
+        <dependent-module archiveName="cggh-share-extensions-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-jar/cggh-share-jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/4.0.e/share-4.0.e.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integration/alfresco-googledocs-share/2.0.4-11/alfresco-googledocs-share-2.0.4-11.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/4.2.e/share-4.2.e.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/slf/?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <property name="context-root" value="share"/>
-        <property name="java-output-path" value="/share-war/target/classes"/>
+        <property name="java-output-path" value="/share/target/classes"/>
+        <property name="component.exclusion.patterns" value="tools/**"/>
     </wb-module>
 </project-modules>
