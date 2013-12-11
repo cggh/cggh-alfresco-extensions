@@ -12,56 +12,9 @@
 				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
 			<client-debug-autologging>false</client-debug-autologging>
 		</flags>
-		<header>
-			<app-items>
-				<!-- defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description" -->
-				<item type="link" id="my-dashboard">{userdashboardpage}</item>
-				<item type="js" id="sites">Alfresco.module.Sites</item>
-				<item type="link" id="repository" condition="conditionRepositoryRootNode">/repository</item>
-				<item type="container" id="more">
-					<container-group id="my">
-						<item type="link" id="my-tasks">/my-tasks</item>
-						<item type="link" id="my-workflows">/my-workflows</item>
-						<item type="link" id="my-content">/user/user-content</item>
-						<item type="link" id="my-sites">/user/user-sites</item>
-						<item type="link" id="my-profile">{userprofilepage}</item>
-						<item type="link" id="collaborations" label="Collaborations"
-							description="View collaborations">/collaborations</item>
-					</container-group>
-					<container-group id="tools" permission="admin">
-						<item type="link" id="application">/console/admin-console/application
-						</item>
-						<item type="link" id="groups">/console/admin-console/groups</item>
-						<item type="link" id="replication-jobs" condition="!conditionEditionTeam">/console/admin-console/replication-jobs
-						</item>
-						<item type="link" id="repository">/console/admin-console/repository</item>
-						<item type="link" id="trashcan">/console/admin-console/trashcan</item>
-						<item type="link" id="users">/console/admin-console/users</item>
-						<item type="link" id="more">/console/admin-console/</item>
-					</container-group>
-				</item>
-			</app-items>
-			<user-items>
-				<item type="container" id="user" icon="" description="">
-					<container-group id="usermenu" label="">
-						<item type="user" id="status">{userprofilepage}</item>
-						<item type="link" id="my-profile">{userprofilepage}</item>
-						<item type="link" id="change-password" condition="user.capabilities.isMutable">/user/change-password
-						</item>
-						<item type="external-link" id="help">{share-help}</item>
-						<item type="link" id="logout" condition="!context.externalAuthentication">/dologout</item>
-					</container-group>
-				</item>
-			</user-items>
-			<dependencies>
-				<css src="/modules/create-site.css" />
-				<css src="/modules/header/sites.css" />
-				<js src="/modules/create-site.js" />
-				<js src="/modules/header/sites.js" />
-				<css src="/components/forms/custom-label-layout.css" />
-			</dependencies>
-		</header>
+
 	</config>
+
 	<config evaluator="string-compare" condition="DocLibCustom">
 		<dependencies>
 			<js src="components/documentlibrary/cggh-collab-renderer.js" />
@@ -86,20 +39,6 @@
 		<aspects>
 			<!-- Aspects that a user can see -->
 			<visible>
-				<aspect name="cm:generalclassifiable" />
-				<aspect name="cm:complianceable" />
-				<aspect name="cm:dublincore" />
-				<aspect name="cm:effectivity" />
-				<aspect name="cm:summarizable" />
-				<aspect name="cm:versionable" />
-				<aspect name="cm:templatable" />
-				<aspect name="cm:emailed" />
-				<aspect name="emailserver:aliasable" />
-				<aspect name="cm:taggable" />
-				<aspect name="app:inlineeditable" />
-				<aspect name="gd:googleEditable" />
-				<aspect name="cm:geographic" />
-				<aspect name="exif:exif" />
 				<aspect name="cggh:collaboration" />
 			</visible>
 
@@ -569,6 +508,46 @@
 				</appearance>
 			</form>
 		</forms>
+	</config>
+
+	<config evaluator="string-compare" condition="Remote">
+		<remote>
+			<keystore>
+				<path>alfresco/web-extension/alfresco-system.p12</path>
+				<type>pkcs12</type>
+				<password>alfresco-system</password>
+			</keystore>
+
+			<connector>
+				<id>alfrescoCookie</id>
+				<name>Alfresco Connector</name>
+				<description>Connects to an Alfresco instance using cookie-based
+					authentication</description>
+				<class>org.alfresco.web.site.servlet.SlingshotAlfrescoConnector
+				</class>
+			</connector>
+
+			<connector>
+				<id>alfrescoHeader</id>
+				<name>Alfresco Connector</name>
+				<description>Connects to an Alfresco instance using header and
+					cookie-based authentication</description>
+				<class>org.alfresco.web.site.servlet.SlingshotAlfrescoConnector
+				</class>
+				<userHeader>X-Alfresco-Remote-User</userHeader>
+			</connector>
+
+			<endpoint>
+				<id>alfresco</id>
+				<name>Alfresco - user access</name>
+				<description>Access to Alfresco Repository WebScripts that require
+					user authentication</description>
+				<connector-id>alfrescoCookie</connector-id>
+				<endpoint-url>http://localhost:8080/alfresco/wcs</endpoint-url>
+				<identity>user</identity>
+				<external-auth>true</external-auth>
+			</endpoint>
+		</remote>
 	</config>
 
 </alfresco-config>
