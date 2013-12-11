@@ -1,4 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<template-instance>collaborations</template-instance>
-	<authentication>user</authentication>
+   <title>Collaborations</title>
+   <title-id>page.collaborations.title</title-id>
+   <description>Browse our collaborations</description>
+   <description-id>page.collaborations.description</description-id>
+   <template-instance>collaborations</template-instance>
+   <authentication>user</authentication>
 </page>

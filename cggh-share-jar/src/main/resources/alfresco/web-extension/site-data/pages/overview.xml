@@ -1,4 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<template-instance>overview</template-instance>
-	<authentication>user</authentication>
+   <title>Overview</title>
+   <title-id>page.overview.title</title-id>
+   <description>Browse our studies</description>
+   <description-id>page.overview.description</description-id>
+   <template-instance>overview</template-instance>
+   <authentication>user</authentication>
 </page>
+

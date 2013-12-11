@@ -3,8 +3,7 @@
 
 <@templateBody>
 <div id="alf-hd">
-<@region id="header" scope="global" protected=true/>
-<@region id="title" scope="template" protected=true />
+<@region id="share-header" scope="global" protected=true/>
 </div>
 <div id="bd">
 <@region id="overview" scope="template" protected=true />
