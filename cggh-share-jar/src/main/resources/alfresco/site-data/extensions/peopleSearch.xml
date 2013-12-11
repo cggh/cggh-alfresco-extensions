@@ -1,0 +1,15 @@
+<extension>
+	<modules>
+		<module>
+			<id>Customize title menu by removing People</id>
+			<version>1.0</version>
+			<customizations>
+				<customization>
+					<targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+					<sourcePackageRoot>org.cggh.alfresco.peoplesearch</sourcePackageRoot>
+				</customization>
+			</customizations>
+			<auto-deploy>true</auto-deploy>
+		</module>
+	</modules>
+</extension>
