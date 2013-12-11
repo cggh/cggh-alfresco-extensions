@@ -46,6 +46,19 @@
 }
 <#if contact_has_next>,</#if>
 </#list>],
+"groupPI": [
+<#list collab.assocs["cggh:groupPI"]![] as pi>
+<#list pi.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
+    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {
@@ -106,12 +119,19 @@
 <#list collab.assocs["cggh:projects"]![] as project>
 {
     "nodeRef": "${project.nodeRef}",
+<#attempt>
     "name": "${jsonUtils.encodeJSONString(project.name)}",
     "title": "${jsonUtils.encodeJSONString(project.properties["cm:title"])!''}",
     "description": "${jsonUtils.encodeJSONString(project.properties["cm:description"])!''}"
+<#recover>
+    "name": "Unknown",
+    "title": "Unknown",
+    "description": "Access denied"
+</#attempt>
 }
 <#if project_has_next>,</#if>
 </#list>
+
 </#if>],
 <#if collab.assocs["cggh:liaison"]??>
 <#list collab.assocs["cggh:liaison"]![] as lia>
