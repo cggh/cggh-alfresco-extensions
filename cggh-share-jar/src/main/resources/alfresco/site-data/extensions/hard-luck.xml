@@ -1,0 +1,131 @@
+<extension>
+	<modules>
+		<module>
+			<id>Hard Luck</id>
+			<version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+			<components>
+				<component>
+					<region-id>full-width-dashlet</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="New_Content" index="25">
+							<url>/org/cggh/alfresco/hard-luck</url>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+			<evaluator type="cggh.group.component.evaluator">
+				<params>
+					<groups>GROUP_all_site_users</groups>
+					<relation>OR</relation>
+					<negate>true</negate>
+				</params>
+			</evaluator>
+		</module>
+		<module>
+			<id>Customize title menu for Hard Luck</id>
+			<version>1.0</version>
+			<customizations>
+				<customization>
+					<targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+					<sourcePackageRoot>org.cggh.alfresco.hard-luck</sourcePackageRoot>
+				</customization>
+			</customizations>
+			<auto-deploy>true</auto-deploy>
+			<evaluator type="cggh.group.component.evaluator">
+				<params>
+					<groups>GROUP_all_site_users</groups>
+					<relation>OR</relation>
+					<negate>true</negate>
+				</params>
+			</evaluator>
+		</module>
+		<module>
+			<id>Hide Default Dashlets</id>
+			<version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+			<evaluator type="cggh.group.component.evaluator">
+				<params>
+					<groups>GROUP_all_site_users</groups>
+					<relation>OR</relation>
+					<negate>true</negate>
+				</params>
+			</evaluator>
+			<components>
+				<!-- Hide all the default stuff -->
+				<component>
+					<region-id>full-width-dashlet</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="guaranteedToHide">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<region-id>component-1-1</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="guaranteedToHide">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<region-id>component-1-2</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="guaranteedToHide">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<region-id>component-2-1</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="guaranteedToHide">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<region-id>component-2-2</region-id>
+					<source-id>user/{userid}/dashboard</source-id>
+					<scope>page</scope>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="guaranteedToHide">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+		</module>
+	</modules>
+</extension>

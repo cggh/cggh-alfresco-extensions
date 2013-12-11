@@ -1,0 +1,3 @@
+model.jsonModel = {
+   widgets: []
+};
