@@ -318,6 +318,7 @@
 					<value>YEMEN</value>
 					<value>ZAMBIA</value>
 					<value>ZIMBABWE</value>
+					<value>N/A</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -489,6 +490,19 @@
 				</property>
 			</properties>
 			<associations>
+			<!--
+                <association name="cggh:groupPI">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>cm:authorityContainer</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                -->
 				<association name="cggh:primaryContactList">
 					<source>
 						<mandatory>false</mandatory>
