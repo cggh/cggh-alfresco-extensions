@@ -46,6 +46,7 @@
 }
 <#if contact_has_next>,</#if>
 </#list>],
+<#-- Not enabled in content model yet
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
@@ -59,6 +60,7 @@
 <#if myPerson_has_next>,</#if>
 </#list>
 </#list>],
+-->
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {
