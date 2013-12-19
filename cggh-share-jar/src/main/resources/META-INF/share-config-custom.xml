@@ -166,6 +166,7 @@
 				<endpoint-url>http://localhost:8080/alfresco/s</endpoint-url>
 				<basic-auth>true</basic-auth>
 				<identity>user</identity>
+                <external-auth>true</external-auth>
 			</endpoint>
 
 			<endpoint>
