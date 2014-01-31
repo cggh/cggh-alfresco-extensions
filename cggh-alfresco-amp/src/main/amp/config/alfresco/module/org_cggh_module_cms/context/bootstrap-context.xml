@@ -49,6 +49,7 @@
 		</list> </property> <property name="labels"> <list> <value>alfresco.module.org_cggh_module_cms.ui.review-and-approve-workflow</value> 
 		</list> </property> </bean> -->
 
+<!-- 
 	<bean id="org_cggh_module_cms_bootstrapSpaces" class="org.alfresco.repo.module.ImporterModuleComponent" 
         parent="module.baseComponent">
         <property name="moduleId" value="${artifactId}" />
@@ -64,16 +65,10 @@
                      <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}/app:scripts</prop>
                      <prop key="location">alfresco/module/${artifactId}/bootstrap/cggh_scripts.acp</prop>
                  </props>
-<!--
-                 <props>
-                     <prop key="path">/${spaces.company_home.childname}/${spaces.dictionary.childname}</prop>
-                     <prop key="location">alfresco/module/${artifactId}/bootstrap/import_into_datadictionary.acp</prop>
-                 </props>
--->
             </list>
         </property>
     </bean>
-
+-->
     <bean id="usernamePropertiesDecorator" parent="baseDecorator" class="org.cggh.repo.jscript.app.CustomUsernamePropertyDecorator">
         <property name="nodeService" ref="nodeService"/>
         <property name="personService" ref="PersonService" />
