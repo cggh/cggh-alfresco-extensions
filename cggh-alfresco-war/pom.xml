@@ -33,14 +33,14 @@
 		<!-- Demonstrating the dependency on the AMP developed in the 'amp' project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cggh-alfresco-amp</artifactId>
+			<artifactId>org_cggh_module_cms</artifactId>
 			<version>${project.version}</version>
 			<type>amp</type>
 		</dependency>
 		<!-- Demonstrating the usage of a well known GA AMP (Web Quick Start Repository 
 			component) -->
 		<dependency>
-			<groupId>org.alfresco.integration</groupId>
+			<groupId>org.alfresco.integrations</groupId>
 			<artifactId>alfresco-googledocs-repo</artifactId>
 			<version>${google.docs.version}</version>
 			<type>amp</type>
@@ -89,11 +89,11 @@
 						<!-- Add / order your AMPs here -->
 						<overlay>
 							<groupId>${project.groupId}</groupId>
-							<artifactId>cggh-alfresco-amp</artifactId>
+							<artifactId>org_cggh_module_cms</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>
-							<groupId>org.alfresco.integration</groupId>
+							<groupId>org.alfresco.integrations</groupId>
 							<artifactId>alfresco-googledocs-repo</artifactId>
 							<type>amp</type>
 						</overlay>

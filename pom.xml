@@ -28,7 +28,7 @@
 		<alfresco.version>4.2.e</alfresco.version>
         <cas.client.version>3.2.1</cas.client.version>
         <!-- not updated yet... 2.0.5-6com -->
-        <google.docs.version>2.0.4-11</google.docs.version>
+        <google.docs.version>2.0.5</google.docs.version>
 		<!-- This control the root logging level for all apps -->
 		<app.log.root.level>error</app.log.root.level>
 		<!-- This controls the default data location for dir.root -->

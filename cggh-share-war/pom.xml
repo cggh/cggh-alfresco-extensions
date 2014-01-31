@@ -28,7 +28,7 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>org.alfresco.integration</groupId>
+			<groupId>org.alfresco.integrations</groupId>
 			<artifactId>alfresco-googledocs-share</artifactId>
 			<version>${google.docs.version}</version>
 			<type>amp</type>
@@ -77,7 +77,7 @@
 						<!-- <overlay> <groupId>${alfresco.groupId}</groupId> <artifactId>alfresco-wcm-quickstart-share</artifactId> 
 							<type>amp</type> </overlay> -->
 						<overlay>
-							<groupId>org.alfresco.integration</groupId>
+							<groupId>org.alfresco.integrations</groupId>
 							<artifactId>alfresco-googledocs-share</artifactId>
 							<type>amp</type>
 						</overlay>
