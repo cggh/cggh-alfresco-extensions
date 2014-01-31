@@ -8,7 +8,7 @@
         <dependent-module archiveName="cggh-share-extensions-1.3.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-jar/cggh-share-jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integration/alfresco-googledocs-share/2.0.4-11/alfresco-googledocs-share-2.0.4-11.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integrations/alfresco-googledocs-share/2.0.5/alfresco-googledocs-share-2.0.5.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/4.2.e/share-4.2.e.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
