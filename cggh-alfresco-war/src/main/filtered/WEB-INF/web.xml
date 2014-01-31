@@ -247,6 +247,106 @@
 		<url-pattern>/t/*</url-pattern>
 	</filter-mapping>
 
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/faces/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/s/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/navigate/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/command/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/download/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/template/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/n/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/c/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/t/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/faces/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/s/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/navigate/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/command/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/download/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/template/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/n/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/c/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/t/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/faces/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/s/*</url-pattern>
+	</filter-mapping>
+
    <filter-mapping>
       <filter-name>Global Localization Filter</filter-name>
       <url-pattern>/*</url-pattern>
@@ -898,6 +998,7 @@
 
    <session-config>
       <session-timeout>60</session-timeout>
+      <tracking-mode>COOKIE</tracking-mode>
    </session-config>
 
    <welcome-file-list>
