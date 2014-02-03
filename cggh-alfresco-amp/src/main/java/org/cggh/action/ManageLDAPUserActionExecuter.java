@@ -37,365 +37,368 @@ import org.springframework.beans.factory.InitializingBean;
 
 public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase implements InitializingBean, TestModeable {
 
-    private static Log log = LogFactory.getLog(ManageLDAPUserActionExecuter.class);
+	private static Log log = LogFactory.getLog(ManageLDAPUserActionExecuter.class);
 
-    private static final String PARAM_ALL_SITE_USERS_GROUP = "usersGroup";
-    private static final String DEFAULT_ALL_SITE_USERS_GROUP = "GROUP_all_site_users";
-    private static final String PARAM_DN = "dn";
-    private static final String DEFAULT_DN = "cn=siteUsers,ou=alfresco,ou=groups,dc=malariagen,dc=net";
-    private static final String PARAM_MEMBER = "member";
-    private static final String DEFAULT_MEMBER = "member";
-    private static final String PARAM_USER_ID_ATTR = "userId";
-    private static final String DEFAULT_USER_ID_ATTR = "uid";
-    private static final String PARAM_SEARCH_BASE = "searchBase";
-    private static final String DEFAULT_SEARCH_BASE = "ou=users,ou=people,dc=malariagen,dc=net";
+	private static final String PARAM_ALL_SITE_USERS_GROUP = "usersGroup";
+	private static final String DEFAULT_ALL_SITE_USERS_GROUP = "GROUP_all_site_users";
+	private static final String PARAM_DN = "dn";
+	private static final String DEFAULT_DN = "cn=siteUsers,ou=alfresco,ou=groups,dc=malariagen,dc=net";
+	private static final String PARAM_MEMBER = "member";
+	private static final String DEFAULT_MEMBER = "member";
+	private static final String PARAM_USER_ID_ATTR = "userId";
+	private static final String DEFAULT_USER_ID_ATTR = "uid";
+	private static final String PARAM_SEARCH_BASE = "searchBase";
+	private static final String DEFAULT_SEARCH_BASE = "ou=users,ou=people,dc=malariagen,dc=net";
 
-    private String usersGroup;
-    private String dn;
-    private String member;
-    private String userId;
-    private String searchBase;
+	private String usersGroup;
+	private String dn;
+	private String member;
+	private String userId;
+	private String searchBase;
 
-    private LDAPInitialDirContextFactory ldapInitialContextFactory;
-    private NamespacePrefixResolver nspr;
-    private NodeService nodeService;
-    private AuthorityService authorityService;
-    private PersonService personService;
+	private LDAPInitialDirContextFactory ldapInitialContextFactory;
+	private NamespacePrefixResolver nspr;
+	private NodeService nodeService;
+	private AuthorityService authorityService;
+	private PersonService personService;
 
-    @Override
-    public boolean isTestMode() {
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    @Override
-    public void setTestMode(boolean arg0) {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-	if (usersGroup == null || usersGroup.length() == 0)
-	{
-	    usersGroup = DEFAULT_ALL_SITE_USERS_GROUP;
+	@Override
+	public boolean isTestMode() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	if (dn == null || dn.length() == 0)
-	{
-	    dn = DEFAULT_DN;
-	}
-	if (member == null || member.length() == 0)
-	{
-	    member = DEFAULT_MEMBER;
-	}
-	if (userId == null || userId.length() == 0)
-	{
-	    userId = DEFAULT_USER_ID_ATTR;
-	}
-	if (searchBase == null || searchBase.length() == 0)
-	{
-	    searchBase = DEFAULT_SEARCH_BASE;
-	}
-    }
+	@Override
+	public void setTestMode(boolean arg0) {
+		// TODO Auto-generated method stub
 
-    @Override
-    protected void executeImpl(Action ruleAction, NodeRef actionedOn) {
-
-	QName personQName = QName.createQName("cm:person", nspr);
-	QName nodeType = nodeService.getType(actionedOn);
-
-	if (!personQName.isMatch(nodeType))
-	{
-	    log.debug("Node must be a person:" + nodeType);
-	    return;
 	}
 
-	PersonInfo person = personService.getPerson(actionedOn);
+	@Override
+	public void afterPropertiesSet() throws Exception {
 
-	boolean isDisabled = nodeService.hasAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED);
-
-	boolean shouldBeDisabled = true;
-	boolean inSiteUsers = false;
-	String personUserName = person.getUserName();
-	Set<String> personAuthorities = authorityService.getAuthoritiesForUser(personUserName);
-
-	log.debug("Authorities for:" + personUserName);
-
-	for (String auth : personAuthorities)
-	{
-	    log.debug(auth);
-	    if (auth.startsWith("GROUP_site_"))
-	    {
-		shouldBeDisabled = false;
-	    }
-	    if (auth.equals("GROUP_ALFRESCO_ADMINISTRATORS"))
-	    {
-		shouldBeDisabled = false;
-	    }
-	    if (auth.equals(usersGroup))
-	    {
-		inSiteUsers = true;
-	    }
-	}
-
-	try
-	{
-
-	    String userName = getUserDn(person.getUserName(), ruleAction);
-
-	    BasicAttribute memberAttr = new BasicAttribute(member, userName);
-
-	    if (shouldBeDisabled)
-	    {
-		if (!isDisabled)
+		if (usersGroup == null || usersGroup.length() == 0)
 		{
-		    Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
-		    nodeService.addAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED, aspectValues);
-
-		    if (log.isInfoEnabled())
-		    {
-			log.info("Enabled:" + person.getUserName());
-		    }
-
+			usersGroup = DEFAULT_ALL_SITE_USERS_GROUP;
 		}
-		if (inSiteUsers && userName != null)
+
+		if (dn == null || dn.length() == 0)
 		{
-		    log.debug("Removing from group");
-		    // remove from group
-		    DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
-
-		    // Create a LDAP add attribute for the member attribute
-		    ModificationItem mods[] = new ModificationItem[1];
-
-		    mods[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, memberAttr);
-
-		    // update the group
-		    ctx.modifyAttributes(dn, mods);
-
-		    ctx.close();
-		    if (log.isInfoEnabled())
-		    {
-			log.info("Removed from ldap group:" + usersGroup + ":" + dn);
-		    }
+			dn = DEFAULT_DN;
 		}
-	    } else
-	    {
-		if (isDisabled)
+		if (member == null || member.length() == 0)
 		{
-		    log.debug("Removing disabled aspect");
-		    nodeService.removeAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED);
-		    if (log.isInfoEnabled())
-		    {
-			log.info("Disabled:" + person.getUserName());
-		    }
+			member = DEFAULT_MEMBER;
 		}
-		if (!inSiteUsers && userName != null)
+		if (userId == null || userId.length() == 0)
 		{
-		    log.debug("Adding to group");
-		    // add to group
-		    DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
-
-		    // Create a LDAP add attribute for the member attribute
-		    ModificationItem mods[] = new ModificationItem[1];
-
-		    mods[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, memberAttr);
-
-		    // update the group
-		    ctx.modifyAttributes(dn, mods);
-
-		    ctx.close();
-		    if (log.isInfoEnabled())
-		    {
-			log.info("Added to ldap group:" + usersGroup + ":" + dn);
-		    }
+			userId = DEFAULT_USER_ID_ATTR;
 		}
-	    }
-
-	} catch (NamingException e)
-	{
-	    log.error("Failed to modify ldap", e);
+		if (searchBase == null || searchBase.length() == 0)
+		{
+			searchBase = DEFAULT_SEARCH_BASE;
+		}
 	}
 
-    }
+	@Override
+	protected void executeImpl(Action ruleAction, NodeRef actionedOn) {
 
-    private String getUserDn(String userName, Action ruleAction) throws NamingException {
-	String idAttr = userId;
+		QName personQName = QName.createQName("cm:person", nspr);
+		QName nodeType = nodeService.getType(actionedOn);
 
-	DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+		if (!personQName.isMatch(nodeType))
+		{
+			log.debug("Node must be a person:" + nodeType);
+			return;
+		}
 
-	// Create the search controls
-	SearchControls searchCtls = new SearchControls();
+		PersonInfo person = personService.getPerson(actionedOn);
 
-	// Specify the search scope
-	searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+		boolean isDisabled = nodeService.hasAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED);
 
-	// specify the LDAP search filter
-	String searchFilter = "(" + idAttr + "=" + userName + ")";
+		boolean shouldBeDisabled = true;
+		boolean inSiteUsers = false;
+		String personUserName = person.getUserName();
+		Set<String> personAuthorities = authorityService.getAuthoritiesForUser(personUserName);
 
-	if (log.isDebugEnabled())
-	{
-	    log.debug("search filter:" + searchFilter);
+		log.debug("Authorities for:" + personUserName);
+
+		for (String auth : personAuthorities)
+		{
+			log.debug(auth);
+			if (auth.startsWith("GROUP_site_"))
+			{
+				shouldBeDisabled = false;
+			}
+			if (auth.equals("GROUP_ALFRESCO_ADMINISTRATORS"))
+			{
+				shouldBeDisabled = false;
+			}
+			if (auth.equals(usersGroup))
+			{
+				inSiteUsers = true;
+			}
+		}
+
+		try
+		{
+
+			String userName = getUserDn(person.getUserName(), ruleAction);
+
+			BasicAttribute memberAttr = new BasicAttribute(member, userName);
+
+			if (shouldBeDisabled)
+			{
+				if (!isDisabled)
+				{
+					Map<QName, Serializable> aspectValues = new HashMap<QName, Serializable>();
+					nodeService.addAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED, aspectValues);
+
+					if (log.isInfoEnabled())
+					{
+						log.info("Enabled:" + person.getUserName());
+					}
+
+				}
+				if (inSiteUsers && userName != null)
+				{
+					log.debug("Removing from group");
+					// remove from group
+					DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+
+					// Create a LDAP add attribute for the member attribute
+					ModificationItem mods[] = new ModificationItem[1];
+
+					mods[0] = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, memberAttr);
+
+					// update the group
+					ctx.modifyAttributes(dn, mods);
+
+					ctx.close();
+					if (log.isInfoEnabled())
+					{
+						log.info("Removed from ldap group:" + usersGroup + ":" + dn);
+					}
+				}
+			} else
+			{
+				if (isDisabled)
+				{
+					log.debug("Removing disabled aspect");
+					nodeService.removeAspect(actionedOn, ContentModel.ASPECT_PERSON_DISABLED);
+					if (log.isInfoEnabled())
+					{
+						log.info("Disabled:" + person.getUserName());
+					}
+				}
+				if (!inSiteUsers && userName != null)
+				{
+					log.debug("Adding to group");
+					// add to group
+					DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+
+					// Create a LDAP add attribute for the member attribute
+					ModificationItem mods[] = new ModificationItem[1];
+
+					mods[0] = new ModificationItem(DirContext.ADD_ATTRIBUTE, memberAttr);
+
+					// update the group
+					ctx.modifyAttributes(dn, mods);
+
+					ctx.close();
+					if (log.isInfoEnabled())
+					{
+						log.info("Added to ldap group:" + usersGroup + ":" + dn);
+					}
+				}
+			}
+
+		} catch (NamingException e)
+		{
+			log.error("Failed to modify ldap", e);
+		}
+
 	}
-	// Search for objects using the filter
-	NamingEnumeration answer = ctx.search(searchBase, searchFilter, searchCtls);
 
-	String userDn = null;
-	// Loop through the search results
-	while (answer.hasMoreElements())
-	{
-	    SearchResult sr = (SearchResult) answer.next();
+	private String getUserDn(String userName, Action ruleAction) throws NamingException {
+		String idAttr = userId;
 
-	    if (log.isDebugEnabled())
-	    {
-		log.debug(">>>" + sr.getName());
-		log.debug(">>>" + sr.getNameInNamespace());
-	    }
-	    userDn = sr.getNameInNamespace();
-	    Attributes attrs = sr.getAttributes();
-	    if (attrs != null)
-	    {
+		DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+
+		// Create the search controls
+		SearchControls searchCtls = new SearchControls();
+
+		// Specify the search scope
+		searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+
+		// specify the LDAP search filter
+		String searchFilter = "(" + idAttr + "=" + userName + ")";
 
 		if (log.isDebugEnabled())
 		{
-		    try
-		    {
-			int totalResults = 0;
-			for (NamingEnumeration ae = attrs.getAll(); ae.hasMore();)
-			{
-			    Attribute attr = (Attribute) ae.next();
-			    log.debug("Attribute: " + attr.getID());
-			    for (NamingEnumeration e = attr.getAll(); e.hasMore(); totalResults++)
-			    {
-
-				log.debug(" " + totalResults + ". " + e.next());
-			    }
-
-			}
-
-		    } catch (NamingException e)
-		    {
-			log.error("Problem listing members: ", e);
-		    }
+			log.debug("search filter:" + searchFilter);
 		}
-	    }
+		// Search for objects using the filter
+		NamingEnumeration answer = ctx.search(searchBase, searchFilter, searchCtls);
+
+		String userDn = null;
+		// Loop through the search results
+		while (answer.hasMoreElements())
+		{
+			SearchResult sr = (SearchResult) answer.next();
+
+			if (log.isDebugEnabled())
+			{
+				log.debug(">>>" + sr.getName());
+				log.debug(">>>" + sr.getNameInNamespace());
+			}
+			userDn = sr.getNameInNamespace();
+			Attributes attrs = sr.getAttributes();
+			if (attrs != null)
+			{
+
+				if (log.isDebugEnabled())
+				{
+					try
+					{
+						int totalResults = 0;
+						for (NamingEnumeration ae = attrs.getAll(); ae.hasMore();)
+						{
+							Attribute attr = (Attribute) ae.next();
+							log.debug("Attribute: " + attr.getID());
+							for (NamingEnumeration e = attr.getAll(); e.hasMore(); totalResults++)
+							{
+
+								log.debug(" " + totalResults + ". " + e.next());
+							}
+
+						}
+
+					} catch (NamingException e)
+					{
+						log.error("Problem listing members: ", e);
+					}
+				}
+			}
+		}
+
+		ctx.close();
+		if (log.isDebugEnabled())
+		{
+			log.debug("userDn:" + userDn);
+		}
+		if (userDn == null && log.isInfoEnabled()) {
+			log.info("User not found in LDAP:" + searchFilter);
+		}
+		return userDn;
 	}
 
-	ctx.close();
-	if (log.isDebugEnabled())
-	{
-	    log.debug("userDn:" + userDn);
+	@Override
+	protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
+		// Add definitions for action parameters
+
+		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+				// defintion to add to the
+				// list
+				PARAM_USER_ID_ATTR, // The name used to identify the parameter
+				DataTypeDefinition.TEXT, // The parameter value type
+				false, // Indicates whether the parameter is mandatory
+				getParamDisplayLabel(PARAM_USER_ID_ATTR))); // The parameters
+		// display label
+		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+				// defintion to add to the
+				// list
+				PARAM_ALL_SITE_USERS_GROUP, // The name used to identify the
+				// parameter
+				DataTypeDefinition.TEXT, // The parameter value type
+				false, // Indicates whether the parameter is mandatory
+				getParamDisplayLabel(PARAM_ALL_SITE_USERS_GROUP))); // The
+		// parameters
+		// display label
+		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+				// defintion to add to the
+				// list
+				PARAM_DN, // The name used to identify the
+				// parameter
+				DataTypeDefinition.TEXT, // The parameter value type
+				false, // Indicates whether the parameter is mandatory
+				getParamDisplayLabel(PARAM_DN))); // The parameters
+		// display label
+
+		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+				// defintion to add to the
+				// list
+				PARAM_MEMBER, // The name used to identify the
+				// parameter
+				DataTypeDefinition.TEXT, // The parameter value type
+				false, // Indicates whether the parameter is mandatory
+				getParamDisplayLabel(PARAM_MEMBER))); // The parameters
+		// display label
+
+		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+				// defintion to add to the
+				// list
+				PARAM_SEARCH_BASE, // The name used to identify the
+				// parameter
+				DataTypeDefinition.TEXT, // The parameter value type
+				false, // Indicates whether the parameter is mandatory
+				getParamDisplayLabel(PARAM_SEARCH_BASE))); // The parameters
+		// display label
 	}
-	return userDn;
-    }
 
-    @Override
-    protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
-	// Add definitions for action parameters
+	/**
+	 * Sets the LDAP initial dir context factory.
+	 * 
+	 * @param ldapInitialDirContextFactory
+	 *            the new LDAP initial dir context factory
+	 */
+	public void setLDAPInitialDirContextFactory(LDAPInitialDirContextFactory ldapInitialDirContextFactory) {
+		this.ldapInitialContextFactory = ldapInitialDirContextFactory;
+	}
 
-	paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-		// defintion to add to the
-		// list
-		PARAM_USER_ID_ATTR, // The name used to identify the parameter
-		DataTypeDefinition.TEXT, // The parameter value type
-		false, // Indicates whether the parameter is mandatory
-		getParamDisplayLabel(PARAM_USER_ID_ATTR))); // The parameters
-	// display label
-	paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-						   // defintion to add to the
-						   // list
-		PARAM_ALL_SITE_USERS_GROUP, // The name used to identify the
-					    // parameter
-		DataTypeDefinition.TEXT, // The parameter value type
-		false, // Indicates whether the parameter is mandatory
-		getParamDisplayLabel(PARAM_ALL_SITE_USERS_GROUP))); // The
-								    // parameters
-	// display label
-	paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-						   // defintion to add to the
-						   // list
-		PARAM_DN, // The name used to identify the
-			  // parameter
-		DataTypeDefinition.TEXT, // The parameter value type
-		false, // Indicates whether the parameter is mandatory
-		getParamDisplayLabel(PARAM_DN))); // The parameters
-						  // display label
+	public void setUsersGroup(String usersGroup) {
+		this.usersGroup = usersGroup;
+	}
 
-	paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-		// defintion to add to the
-		// list
-		PARAM_MEMBER, // The name used to identify the
-		// parameter
-		DataTypeDefinition.TEXT, // The parameter value type
-		false, // Indicates whether the parameter is mandatory
-		getParamDisplayLabel(PARAM_MEMBER))); // The parameters
-	// display label
+	public void setDn(String dn) {
+		this.dn = dn;
+	}
 
-	paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-		// defintion to add to the
-		// list
-		PARAM_SEARCH_BASE, // The name used to identify the
-		// parameter
-		DataTypeDefinition.TEXT, // The parameter value type
-		false, // Indicates whether the parameter is mandatory
-		getParamDisplayLabel(PARAM_SEARCH_BASE))); // The parameters
-	// display label
-    }
+	public void setMember(String member) {
+		this.member = member;
+	}
 
-    /**
-     * Sets the LDAP initial dir context factory.
-     * 
-     * @param ldapInitialDirContextFactory
-     *            the new LDAP initial dir context factory
-     */
-    public void setLDAPInitialDirContextFactory(LDAPInitialDirContextFactory ldapInitialDirContextFactory) {
-	this.ldapInitialContextFactory = ldapInitialDirContextFactory;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public void setUsersGroup(String usersGroup) {
-	this.usersGroup = usersGroup;
-    }
+	public void setSearchBase(String searchBase) {
+		this.searchBase = searchBase;
+	}
 
-    public void setDn(String dn) {
-	this.dn = dn;
-    }
+	public void setLdapInitialContextFactory(LDAPInitialDirContextFactory ldapInitialContextFactory) {
+		this.ldapInitialContextFactory = ldapInitialContextFactory;
+	}
 
-    public void setMember(String member) {
-	this.member = member;
-    }
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
-    public void setUserId(String userId) {
-	this.userId = userId;
-    }
+	public void setAuthorityService(AuthorityService authorityService) {
+		this.authorityService = authorityService;
+	}
 
-    public void setSearchBase(String searchBase) {
-	this.searchBase = searchBase;
-    }
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
+	}
 
-    public void setLdapInitialContextFactory(LDAPInitialDirContextFactory ldapInitialContextFactory) {
-	this.ldapInitialContextFactory = ldapInitialContextFactory;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-	this.nodeService = nodeService;
-    }
-
-    public void setAuthorityService(AuthorityService authorityService) {
-	this.authorityService = authorityService;
-    }
-
-    public void setPersonService(PersonService personService) {
-	this.personService = personService;
-    }
-
-    /**
-     * Set the namespace prefix resolver
-     * 
-     * @param nspr
-     */
-    public void setNamespacePrefixResolver(NamespacePrefixResolver nspr) {
-	this.nspr = nspr;
-    }
+	/**
+	 * Set the namespace prefix resolver
+	 * 
+	 * @param nspr
+	 */
+	public void setNamespacePrefixResolver(NamespacePrefixResolver nspr) {
+		this.nspr = nspr;
+	}
 
 }
