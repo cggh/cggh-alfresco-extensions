@@ -5,7 +5,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/properties/local"/>
-        <dependent-module archiveName="org_cggh_module_cms-1.3.0-SNAPSHOT.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-alfresco-amp/cggh-alfresco-amp">
+        <dependent-module archiveName="org_cggh_module_cms-1.3.1-SNAPSHOT.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-alfresco-amp/cggh-alfresco-amp">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/alfresco-spp/4.2.e/alfresco-spp-4.2.e.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
