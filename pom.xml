@@ -26,9 +26,9 @@
 		<!-- Defines the Alfresco version to work against. Allowed values are: 
 			org.alfresco | org.alfresco.enterprise -->
 		<alfresco.version>4.2.e</alfresco.version>
-        <cas.client.version>3.2.1</cas.client.version>
-        <!-- not updated yet... 2.0.5-6com -->
-        <google.docs.version>2.0.5</google.docs.version>
+		<cas.client.version>3.2.1</cas.client.version>
+		<!-- not updated yet... 2.0.5-6com -->
+		<google.docs.version>2.0.5</google.docs.version>
 		<!-- This control the root logging level for all apps -->
 		<app.log.root.level>error</app.log.root.level>
 		<!-- This controls the default data location for dir.root -->
@@ -95,24 +95,35 @@
 					</webResources>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<!-- Not using a profile for release at this point -->
+					<releaseProfiles />
+					<goals>install</goals>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
 	<modules>
 		<module>cggh-alfresco-amp</module>
 		<module>cggh-alfresco-war</module>
-<!-- 	<module>solr</module> -->
+		<!-- <module>solr</module> -->
 		<module>cggh-share-jar</module>
 		<module>cggh-share-war</module>
-<!-- 	<module>wcmqs</module> -->
-<!-- 	<module>runner</module> -->
+		<!-- <module>wcmqs</module> -->
+		<!-- <module>runner</module> -->
 	</modules>
-	
- 	<scm>
- 		<connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
- 		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
- 		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
- 		<!-- <tag>cggh-alfresco-extensions-1.0</tag> -->
- 	</scm>
+
+	<scm>
+		<connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
+		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
+		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
+		<!-- <tag>cggh-alfresco-extensions-1.0</tag> -->
+	</scm>
 </project>
 
