@@ -1,9 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-      version="3.0"> 
-      
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+
    <display-name>Alfresco Project Slingshot</display-name>
    <description>Alfresco Project Slingshot application</description>
    
@@ -19,6 +17,35 @@
       <param-value>classpath:web-application-config.xml</param-value>
    </context-param>
 
+    <filter>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+        <init-param>
+            <param-name>casServerLoginUrl</param-name>
+            <param-value>${cas.server.prefix}/login</param-value>
+        </init-param>
+        <init-param>
+            <param-name>serverName</param-name>
+            <param-value>${share.server.name}</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+        <init-param>
+            <param-name>casServerUrlPrefix</param-name>
+            <param-value>${cas.server.prefix}</param-value>
+        </init-param>
+        <init-param>
+            <param-name>serverName</param-name>
+            <param-value>${share.server.name}</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+    
    <filter>
       <description>Set HTTP cache Expires header 30 days forward for a mapping.</description>
       <filter-name>CacheExpiresFilter</filter-name>
@@ -63,6 +90,68 @@
       <filter-name>Security Headers Filter</filter-name>
       <filter-class>org.alfresco.web.site.servlet.SecurityHeadersFilter</filter-class>
    </filter>
+
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+
    <filter-mapping>
       <filter-name>CacheExpiresFilter</filter-name>
       <url-pattern>*.jpg</url-pattern>
@@ -209,6 +298,8 @@
    
    <session-config>
       <session-timeout>60</session-timeout>
+      <!-- Disables URL-based sessions (no more 'jsessionid' in the URL using Tomcat) -->
+      <tracking-mode>COOKIE</tracking-mode>
    </session-config>
 
    <!-- welcome file list precedence order is index.jsp -->
