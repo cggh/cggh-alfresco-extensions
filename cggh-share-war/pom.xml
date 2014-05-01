@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>share</artifactId>
 	<name>Alfresco Share Client</name>
@@ -38,17 +39,17 @@
 			<version>${project.version}</version>
 			<type>jar</type>
 		</dependency>
-        <dependency>
-            <groupId>org.jasig.cas.client</groupId>
-            <artifactId>cas-client-core</artifactId>
-            <version>${cas.client.version}</version>
-            <exclusions>
-                <exclusion>  <!-- declare the exclusion here -->
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>${cas.client.version}</version>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -69,12 +70,15 @@
 							<artifactId>share</artifactId>
 							<type>war</type>
 							<!-- To allow inclusion of META-INF -->
-                            <excludes>
-                            </excludes>
+							<excludes>
+							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
-						<!-- <overlay> <groupId>${alfresco.groupId}</groupId> <artifactId>alfresco-wcm-quickstart-share</artifactId> 
-							<type>amp</type> </overlay> -->
+						<overlay>
+							<groupId>${alfresco.groupId}</groupId>
+							<artifactId>alfresco-wcm-quickstart-share</artifactId>
+							<type>amp</type>
+						</overlay>
 						<overlay>
 							<groupId>org.alfresco.integrations</groupId>
 							<artifactId>alfresco-googledocs-share</artifactId>

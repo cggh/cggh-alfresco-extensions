@@ -51,6 +51,13 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
+			<groupId>${alfresco.groupId}</groupId>
+			<artifactId>alfresco-wcm-quickstart-repo</artifactId>
+			<version>${alfresco.version}</version>
+			<type>amp</type>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.jasig.cas.client</groupId>
 			<artifactId>cas-client-core</artifactId>
 			<version>${cas.client.version}</version>
@@ -101,6 +108,11 @@
 							<artifactId>alfresco-spp</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+                            <groupId>${alfresco.groupId}</groupId>
+                            <artifactId>alfresco-wcm-quickstart-repo</artifactId>
+                            <type>amp</type>
+                        </overlay>
 					</overlays>
 				</configuration>
 			</plugin>
