@@ -37,9 +37,9 @@
 		<env>local</env>
 		<app.log.dir>/var/log/tomcat7/</app.log.dir>
 		<!-- CAS settings for web.xml -->
-		<alfresco.server.name>https://alfresco-sso-java:8443</alfresco.server.name>
-		<share.server.name>https://alfresco-sso-java:8443</share.server.name>
-		<cas.server.prefix>https://www.malariagen.net/sso</cas.server.prefix>
+		<alfresco.server.name>https://localhost:8443</alfresco.server.name>
+		<share.server.name>https://localhost:8444</share.server.name>
+		<cas.server.prefix>https://sso-dev.cggh.org/sso</cas.server.prefix>
 	</properties>
 
 	<!-- Here we realize the connection with the Alfresco selected platform 
@@ -83,7 +83,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<webResources>
@@ -116,6 +115,8 @@
 		<module>cggh-share-war</module>
 		<!-- <module>wcmqs</module> -->
 		<!-- <module>runner</module> -->
+		<module>cggh-publications-amp</module>
+		<module>cggh-publications-share</module>
 	</modules>
 
 	<scm>
