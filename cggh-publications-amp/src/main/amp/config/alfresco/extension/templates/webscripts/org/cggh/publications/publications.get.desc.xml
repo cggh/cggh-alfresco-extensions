@@ -1,0 +1,11 @@
+<webscript>
+  <shortname>Publications</shortname>
+  <description>Returns publications details
+  To test: curl -v -u admin:admin http://localhost:8080/alfresco/service/cggh/publications
+  </description>
+  <url>/cggh/publications</url>
+  <format default="json"/>
+  <authentication>user</authentication>
+  <transaction>required</transaction>
+</webscript>
+

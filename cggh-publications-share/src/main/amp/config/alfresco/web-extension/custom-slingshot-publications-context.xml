@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+	<bean id="evaluator.doclib.metadata.hasPublicationAspect"
+		parent="evaluator.doclib.action.hasAspect">
+		<property name="aspects">
+			<list>
+				<value>cggh-pub:publication</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
+

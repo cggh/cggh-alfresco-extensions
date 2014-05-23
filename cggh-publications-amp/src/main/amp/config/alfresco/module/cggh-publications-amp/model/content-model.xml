@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Custom Model -->
+
+<!-- Note: This model is pre-configured to load at startup of the Repository. 
+	So, all custom -->
+<!-- types and aspects added here will automatically be registered -->
+
+<model name="cggh-pub:publicationsModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+	<!-- Optional meta-data about the model -->
+	<description>Publications Model</description>
+	<author>ian.wright@well.ox.ac.uk</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0"
+			prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<!-- Import Alfresco Content Data Lists Model Definitions -->
+		<import uri="http://www.alfresco.org/model/datalist/1.0"
+			prefix="dl" />
+	    <import uri="http://www.alfresco.org/model/site/1.0" prefix="st"/>
+	</imports>
+
+	<!-- Introduction of new namespaces defined by this model -->
+	<namespaces>
+		<namespace uri="http://alfresco.cggh.org/model/publications/1.0"
+			prefix="cggh-pub" />
+	</namespaces>
+
+	<constraints>
+		<constraint name="cggh-pub:lead-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Partner</value>
+					<value>Team</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cggh-pub:category-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>banner</value>
+					<value>overarching</value>
+					<value>selective</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cggh-pub:status-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>analysis</value>
+					<value>draft</value>
+					<value>under discussion</value>
+					<value>submitted</value>
+					<value>re-draft</value>
+					<value>rejected</value>
+					<value>re-submitted</value>
+					<value>stalled</value>
+				</list>
+			</parameter>
+		</constraint>
+			<constraint name="cggh-pub:review-status-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>yes</value>
+					<value>no</value>
+					<value>not MalariaGEN</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="cggh-pub:type-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Plasmodium</value>
+					<value>Anophales</value>
+					<value>Human</value>
+					<value>Ethics</value>
+					<value>Other</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+	    
+		<type name="cggh-pub:publicationFolder">
+			<title>CGGH Publication Folder</title>
+			<parent>cm:folder</parent>
+			<mandatory-aspects>
+				<aspect>cggh-pub:publication</aspect>
+			</mandatory-aspects>
+
+		</type>
+		
+		
+	</types>
+	<aspects>
+
+		<!-- Collaboration aspect -->
+		<aspect name="cggh-pub:publication">
+			<title>Publication</title>
+			<properties>
+				<property name="cggh-pub:type">
+					<title>Type</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cggh-pub:type-constraint" />
+					</constraints>
+				</property>
+				<property name="cggh-pub:lead">
+					<title>Manuscript lead</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>false</multiple>
+					<constraints>
+						<constraint ref="cggh-pub:lead-constraint" />
+					</constraints>
+				</property>
+				<property name="cggh-pub:category">
+					<title>Manuscript category</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cggh-pub:category-constraint" />
+					</constraints>
+				</property>
+                <property name="cggh-pub:onProdSchedule">
+                    <title>Captured on Production Schedule</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh-pub:pubTitle">
+                    <title>Publication Title</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh-pub:contactsText">
+					<title>Contacts</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
+                <property name="cggh-pub:fundingCodes">
+                    <title>Funding Codes</title>
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
+                <property name="cggh-pub:submittedPubComm">
+					<title>Submitted to Publications Committee</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<default>no</default>
+					<constraints>
+						<constraint ref="cggh-pub:review-status-constraint" />
+					</constraints>
+				</property>
+				<property name="cggh-pub:reviewedDK">
+					<title>Reviewed by DK</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<default>no</default>
+					<constraints>
+						<constraint ref="cggh-pub:review-status-constraint" />
+					</constraints>
+				</property>
+				<property name="cggh-pub:submittedDate">
+					<title>Date manuscripted submitted</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh-pub:submittedJournal">
+					<title>Submitted to Journal</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh-pub:publicationStatus">
+					<title>Publication Status</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<default>analysis</default>
+					<constraints>
+						<constraint ref="cggh-pub:status-constraint" />
+					</constraints>
+				</property>
+				<property name="cggh-pub:depositedPMC">
+                    <title>Deposited in PMC within 6 months</title>
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
+			</properties>
+			<associations>
+			
+				<association name="cggh-pub:leadContact">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:person</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+			</associations>
+		</aspect>
+				
+	</aspects>
+
+</model>
