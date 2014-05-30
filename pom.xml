@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cggh</groupId>
 	<artifactId>cggh-alfresco-extensions</artifactId>
@@ -108,6 +109,8 @@
 	</build>
 
 	<modules>
+		<module>cggh-publications-amp</module>
+		<module>cggh-publications-share</module>
 		<module>cggh-alfresco-amp</module>
 		<module>cggh-alfresco-war</module>
 		<!-- <module>solr</module> -->
@@ -115,8 +118,7 @@
 		<module>cggh-share-war</module>
 		<!-- <module>wcmqs</module> -->
 		<!-- <module>runner</module> -->
-		<module>cggh-publications-amp</module>
-		<module>cggh-publications-share</module>
+
 	</modules>
 
 	<scm>
@@ -124,7 +126,7 @@
 		<url>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</url>
 		<developerConnection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</developerConnection>
 		<!-- <tag>cggh-alfresco-extensions-1.0</tag> -->
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 </project>
 
