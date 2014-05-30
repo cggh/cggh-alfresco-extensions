@@ -37,6 +37,12 @@
 			<version>${project.version}</version>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cggh-publications-amp</artifactId>
+			<version>${project.version}</version>
+			<type>amp</type>
+		</dependency>
 		<!-- Demonstrating the usage of a well known GA AMP (Web Quick Start Repository 
 			component) -->
 		<dependency>
@@ -109,6 +115,11 @@
 						<overlay>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>org_cggh_module_cms</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>cggh-publications-amp</artifactId>
 							<type>amp</type>
 						</overlay>
 						<overlay>

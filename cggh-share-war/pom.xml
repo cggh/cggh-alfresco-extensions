@@ -40,6 +40,12 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cggh-publications-share</artifactId>
+			<version>${project.version}</version>
+			<type>amp</type>
+		</dependency>
+		<dependency>
 			<groupId>org.jasig.cas.client</groupId>
 			<artifactId>cas-client-core</artifactId>
 			<version>${cas.client.version}</version>
@@ -74,6 +80,11 @@
 							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
+						<overlay>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>cggh-publications-share</artifactId>
+							<type>amp</type>
+						</overlay>
 						<overlay>
 							<groupId>${alfresco.groupId}</groupId>
 							<artifactId>alfresco-wcm-quickstart-share</artifactId>

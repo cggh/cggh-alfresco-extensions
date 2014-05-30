@@ -3,6 +3,8 @@
 	<name>alfresco</name>
 	<comment></comment>
 	<projects>
+		<project>amp</project>
+		<project>cggh-publications-amp</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
