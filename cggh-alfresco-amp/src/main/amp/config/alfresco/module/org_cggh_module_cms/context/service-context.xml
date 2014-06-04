@@ -1,20 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
 
-	<!-- The services-context.xml file is used to define beans for any new 
-		 module services that we build, event handlers, web scripts, actions etc.   
-		 
-		 When defining new beans you can include the group id and artifact id in the bean id:
-		
-		<bean id="${groupId}.${artifactId}.exampleBean" class="org.alfresco.demoamp.Demo" init-method="init" />	 
-		 -->
+	<!-- The services-context.xml file is used to define beans for any new module 
+		services that we build, event handlers, web scripts, actions etc. When defining 
+		new beans you can include the group id and artifact id in the bean id: <bean 
+		id="${groupId}.${artifactId}.exampleBean" class="org.alfresco.demoamp.Demo" 
+		init-method="init" /> -->
 
-    <!-- The services-context.xml file is used to define beans for any new 
-		 module services that we build, event handlers, web scripts, actions etc.   -->
+	<!-- The services-context.xml file is used to define beans for any new module 
+		services that we build, event handlers, web scripts, actions etc. -->
+
+	<!-- Patch https://issues.alfresco.com/jira/browse/MNT-10835 
+	  * org.alfresco.repo.security.permissions.AccessDeniedException: 
+		03160433 * The current user xxx does not have sufficient permissions to get 
+		the preferences of the user xxx@xxx * -->
+	<bean id="preferenceService" class="org.cggh.repo.preference.PatchedPreferenceService ">
+		<property name="nodeService" ref="NodeService" />
+		<property name="contentService" ref="ContentService" />
+		<property name="personService" ref="PersonService" />
+		<property name="permissionService" ref="PermissionService" />
+		<property name="authenticationContext" ref="authenticationContext" />
+		<property name="authorityService" ref="AuthorityService" />
+	</bean>
 
 
 </beans>
