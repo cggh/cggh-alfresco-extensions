@@ -1,4 +1,5 @@
 <webscript>
    <shortname>My New Page</shortname>
+   <!--  Actual URL is /share/page/dp/ws/publications or hdp -->
    <url>/publications</url>
 </webscript>

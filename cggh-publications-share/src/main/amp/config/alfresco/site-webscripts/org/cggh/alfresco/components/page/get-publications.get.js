@@ -1,5 +1,8 @@
 model.jsonModel = {
    widgets: [{
-      name: "cggh/publications/List"
+      name: "cggh/publications/List",
+      config: {
+    	  
+      }
    }]
 };

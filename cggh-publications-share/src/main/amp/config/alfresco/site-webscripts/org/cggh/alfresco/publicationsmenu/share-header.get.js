@@ -4,18 +4,12 @@ if (appMenu != null) {
 	var loggingWidget = {
 		name : "alfresco/header/AlfMenuBarPopup",
 		config : {
-			label : "Collaborations",
-			widgets : [ {
-				name : "alfresco/header/AlfMenuItem",
-				config : {
-					label : "Overview",
-					targetUrl : "overview"
-				}
-			}, {
+			label : "Publications",
+			widgets : [  {
 				name : "alfresco/header/AlfMenuItem",
 				config : {
 					label : "List",
-					targetUrl : "collaborations"
+					targetUrl : "/hdp/ws/publications"
 				}
 			} ]
 		}
