@@ -20,6 +20,9 @@
         <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integrations/alfresco-googledocs-repo/2.0.5/alfresco-googledocs-repo-2.0.5.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
+        <dependent-module deploy-path="/" handle="module:/overlay/prj/cggh-publications-amp?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+            <dependency-type>consumes</dependency-type>
+        </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/prj/amp?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
