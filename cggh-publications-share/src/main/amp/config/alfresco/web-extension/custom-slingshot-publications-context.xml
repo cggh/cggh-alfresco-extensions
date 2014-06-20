@@ -7,7 +7,7 @@
 		parent="evaluator.doclib.action.hasAspect">
 		<property name="aspects">
 			<list>
-				<value>cggh-pub:publication</value>
+				<value>cgghPub:publication</value>
 			</list>
 		</property>
 	</bean>

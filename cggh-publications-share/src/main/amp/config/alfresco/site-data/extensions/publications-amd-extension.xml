@@ -10,6 +10,9 @@
                 <dojo-pages>
                   <packages>
                     <package name="cggh" location="js/cggh"/>
+                    <package name="dgrid" location="js/lib/dgrid"/>
+                    <package name="put-selector" location="js/lib/put-selector"/>
+                    <package name="xstyle" location="js/lib/xstyle"/>
                   </packages>
                </dojo-pages>
              </web-framework>

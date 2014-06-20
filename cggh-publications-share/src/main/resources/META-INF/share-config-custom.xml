@@ -4,7 +4,7 @@
 		<aspects>
 			<!-- Aspects that a user can see -->
 			<visible>
-				<aspect name="cggh-pub:publication" />
+				<aspect name="cgghPub:publication" />
 			</visible>
 
 			<!-- Aspects that a user can add. Same as "visible" if left empty -->
@@ -18,7 +18,7 @@
 
 		<types>
 			<type name="cm:folder">
-				<subtype name="cggh-pub:publicationFolder" />
+				<subtype name="cgghPub:publicationFolder" />
 			</type>
 		</types>
 		
@@ -26,11 +26,11 @@
 			<template id="isPublication">
 				<evaluator>evaluator.doclib.metadata.hasPublicationAspect</evaluator>
 				<line index="10" id="date" view="detailed">{date}{size}</line>
-				<line index="50" id="contact" view="detailed">{cggh-pub_leadContact cggh.pub.leadContact}
+				<line index="50" id="contact" view="detailed">{cgghPub_leadContact cggh.pub.leadContact}
 				</line>
 				<line index="60" id="exec" view="detailed">
-					{cggh-pub:publicationStatus cggh.pub.pubStatus}
-					{cggh-pub:submittedJournal cggh.pub.submittedJournal} {cggh-pub:submittedDate
+					{cgghPub:publicationStatus cggh.pub.pubStatus}
+					{cgghPub:submittedJournal cggh.pub.submittedJournal} {cgghPub:submittedDate
 					cggh.pub.submittedDate}
 				</line>
 			</template>
@@ -39,7 +39,7 @@
 		
 	</config>
 	
-	<config evaluator="node-type" condition="cggh-pub:publicationFolder">
+	<config evaluator="node-type" condition="cgghPub:publicationFolder">
 		<forms>
 			<form>
 				<field-visibility>
@@ -51,19 +51,18 @@
 					<show id="cm:categories" />
 
 
-					<show id="cggh-pub:type" />
-					<show id="cggh-pub:lead" />
-					<show id="cggh-pub:category" />
-					<show id="cggh-pub:onProdSchedule" />
-					<show id="cggh-pub:pubTitle" />
-					<show id="cggh-pub:leadContact" force="true" />
-					<show id="cggh-pub:fundingCodes" />
-					<show id="cggh-pub:submittedPubComm" />
-					<show id="cggh-pub:reviewedDK" />
-					<show id="cggh-pub:submittedDate" />
-					<show id="cggh-pub:submittedJournal" />
-					<show id="cggh-pub:publicationStatus" />
-					<show id="cggh-pub:depositedPMC" />
+					<show id="cgghPub:type" />
+					<show id="cgghPub:lead" />
+					<show id="cgghPub:category" />
+					<show id="cgghPub:onProdSchedule" />
+					<show id="cgghPub:leadContact" force="true" />
+					<show id="cgghPub:fundingCodes" />
+					<show id="cgghPub:submittedPubComm" />
+					<show id="cgghPub:reviewedDK" />
+					<show id="cgghPub:submittedDate" />
+					<show id="cgghPub:submittedJournal" />
+					<show id="cgghPub:publicationStatus" />
+					<show id="cgghPub:depositedPMC" />
 					
 				</field-visibility>
 				<appearance>
@@ -105,37 +104,35 @@
 					</field>
 
 					<!-- Field set "pubMetadata" -->
-					<field id="cggh-pub:type" label-id="cggh.pub.type"
+					<field id="cgghPub:type" label-id="cggh.pub.type"
 						set="pubMetadata" />
-					<field id="cggh-pub:lead" label-id="cggh.pub.lead"
+					<field id="cgghPub:lead" label-id="cggh.pub.lead"
 						set="pubMetadata" />
-					<field id="cggh-pub:category" label-id="cggh.pub.category"
+					<field id="cgghPub:category" label-id="cggh.pub.category"
 						set="pubMetadata">
 						<control template="/org/alfresco/components/form/controls/selectmany.ftl">
 							<control-param name="size">3</control-param>
 						</control>
 					</field>
 					
-					<field id="cggh-pub:onProdSchedule" label-id="cggh.pub.prodSchedule"
+					<field id="cgghPub:onProdSchedule" label-id="cggh.pub.prodSchedule"
 						set="pubMetadata" />
-					<field id="cggh-pub:pubTitle" label-id="cggh.pub.pubTitle"
+					<field id="cgghPub:fundingCodes" label-id="cggh.pub.fundingCodes"
 						set="pubMetadata" />
-					<field id="cggh-pub:fundingCodes" label-id="cggh.pub.fundingCodes"
+					<field id="cgghPub:submittedPubComm" label-id="cggh.pub.submittedPC"
 						set="pubMetadata" />
-					<field id="cggh-pub:submittedPubComm" label-id="cggh.pub.submittedPC"
+					<field id="cgghPub:reviewedDK" label-id="cggh.pub.reviewed"
 						set="pubMetadata" />
-					<field id="cggh-pub:reviewedDK" label-id="cggh.pub.reviewed"
+					<field id="cgghPub:submittedDate" label-id="cggh.pub.submittedDate"
 						set="pubMetadata" />
-					<field id="cggh-pub:submittedDate" label-id="cggh.pub.submittedDate"
+					<field id="cgghPub:submittedJournal" label-id="cggh.pub.submittedJournal"
 						set="pubMetadata" />
-					<field id="cggh-pub:submittedJournal" label-id="cggh.pub.submittedJournal"
+					<field id="cgghPub:publicationStatus" label-id="cggh.pub.pubStatus"
 						set="pubMetadata" />
-					<field id="cggh-pub:publicationStatus" label-id="cggh.pub.pubStatus"
-						set="pubMetadata" />
-					<field id="cggh-pub:depositedPMC" label-id="cggh.pub.deposited"
+					<field id="cgghPub:depositedPMC" label-id="cggh.pub.deposited"
 						set="pubMetadata" />
 
-					<field id="cggh-pub:leadContact" label-id="cggh.pub.leadContact"
+					<field id="cgghPub:leadContact" label-id="cggh.pub.leadContact"
 						set="pubMetadata">
 						<control template="/org/alfresco/components/form/controls/authority.ftl">
 							<control-param name="compactMode">true</control-param>
