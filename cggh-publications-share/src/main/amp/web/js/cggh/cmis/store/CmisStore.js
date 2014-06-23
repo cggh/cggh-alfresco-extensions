@@ -72,6 +72,8 @@ define(
                 // whether to return succinct results
                 succinct : true,
 
+                //if true remove excludedProperties from put, if false only use allowedProperties
+                putExclude : true,
                 // properties excluded from put
                 excludeProperties : [
                         'cmis:allowedChildObjectTypeIds', 'cmis:path', 'cmis:creationDate', 'cmis:changeToken', 'cmis:lastModifiedBy',
@@ -300,31 +302,52 @@ define(
 
                     var i = 0;
 
+                    //Resolve properties
+                    //If namespaces are used i.e. a CMIS query has been used to retrieve the data
+                    //then it's possible that you will have a non-namespace(via a get from somewhere...) 
+                    //and a namespaced property - you don't want both so assume the namespaced one is correct
+                    for ( var key in properties) {
+                        //If the object was created via a CMIS query it could be of the form t.cm:title
+                        //in which case we want to remove the t.
+                        var alias = key.indexOf('.');
+                        if (alias > -1) {
+                            var noaliaskey = key.substr(alias + 1)
+                            properties[noaliaskey] = properties[key];
+                            delete properties[key];
+                        }
+                    }
                     for ( var key in properties) {
 
-                        var update = true;
-                        for ( var ex in this.excludeProperties) {
-                            if (this.excludeProperties[ex] === key) {
-                                update = false;
-                                break;
+                        var update = this.putExclude;
+                        //In practice only one of these will apply
+                        if (update) {
+                            for ( var ex in this.excludeProperties) {
+                                if (this.excludeProperties[ex] === key) {
+                                    update = false;
+                                    break;
+                                }
                             }
-                        }
-                        for ( var inc in this.allowedProperties) {
-                            if (this.allowedProperties[inc] === key) {
-                                update = true;
-                                break;
+                        } else {
+                            for ( var inc in this.allowedProperties) {
+                                if (this.allowedProperties[inc] === key) {
+                                    update = true;
+                                    break;
+                                }
                             }
                         }
                         if (update) {
-                            objectData["propertyId[" + i + "]"] = key;
                             var value;
                             if (this.succinct) {
                                 value = properties[key];
                             } else {
                                 value = properties[key].value;
                             }
-                            objectData["propertyValue[" + i + "]"] = value;
-                            i++;
+                            //Sometimes null (== "") causes problems e.g. datetime
+                            if (value != null) {
+                                objectData["propertyId[" + i + "]"] = key;
+                                objectData["propertyValue[" + i + "]"] = value;
+                                i++;
+                            }
                         }
                     }
 
