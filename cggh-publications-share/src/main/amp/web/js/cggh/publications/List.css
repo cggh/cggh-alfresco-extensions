@@ -2,5 +2,12 @@
    padding: 10px;
    color: green;
    font-weight: bold;
-   height: 60em;
+   height: 300em;
+}
+
+.field-p-cgghPub-submittedDate {
+width: 150px;
+}
+.dijitDateTextBox {
+width: 130px;
 }
