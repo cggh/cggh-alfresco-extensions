@@ -345,7 +345,13 @@ define(
                             //Sometimes null (== "") causes problems e.g. datetime
                             if (value != null) {
                                 objectData["propertyId[" + i + "]"] = key;
-                                objectData["propertyValue[" + i + "]"] = value;
+                                if (toString.call(value) === "[object Array]") {
+                                    for (j=0; j< value.length;j++) {
+                                        objectData["propertyValue[" + i + "][" + j + "]"] = value[j];
+                                    }
+                                } else {
+                                    objectData["propertyValue[" + i + "]"] = value;
+                                }
                                 i++;
                             }
                         }
