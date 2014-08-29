@@ -13,7 +13,10 @@ import javax.naming.directory.DirContext;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.action.executer.TestModeable;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.authentication.ldap.LDAPInitialDirContextFactory;
+import org.alfresco.repo.security.sync.UserRegistrySynchronizer;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
@@ -39,6 +42,13 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 
 	private String namespace;
 	private LDAPInitialDirContextFactory ldapInitialContextFactory;
+
+	private UserRegistrySynchronizer userRegistrySynchronizer;
+
+	public void setUserRegistrySynchronizer(
+			UserRegistrySynchronizer userRegistrySynchronizer) {
+		this.userRegistrySynchronizer = userRegistrySynchronizer;
+	}
 
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
@@ -115,6 +125,15 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 				objclass.add("top");
 				objclass.add("organizationalUnit");
 				attrs.put(objclass);
+				String descrip = (String) ruleAction
+						.getParameterValue(PARAM_DESCRIPTION);
+
+				if (descrip == null) {
+					descrip = groupName + "_default_description";
+				}
+				Attribute descripAttr = new BasicAttribute("description",
+						descrip);
+				attrs.put(descripAttr);
 				// Create the context
 				result = ctx.createSubcontext("ou=" + groupName + ","
 						+ parentContext, attrs);
@@ -124,9 +143,20 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 			// Close the contexts when we're done
 			result.close();
 			ctx.close();
+
+			// Sync so that the group appears in Alfresco now
+			//It works without the runAs but puts error messages in the log
+			AuthenticationUtil.runAs(new RunAsWork<String>()
+			{
+				public String doWork() throws Exception
+				{
+					userRegistrySynchronizer.synchronize(false, false, false);
+					return "";
+				}
+			}, AuthenticationUtil.getSystemUserName());
+
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Naming exception trying to create " + groupName, e);
 		}
 
 	}

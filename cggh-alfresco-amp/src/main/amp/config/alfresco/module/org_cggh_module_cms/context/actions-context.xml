@@ -102,6 +102,9 @@
 		<property name="LDAPInitialDirContextFactory">
 			<ref local="ldapInitialDirContextFactory" />
 		</property>
+		<property name="UserRegistrySynchronizer">
+			<ref bean="userRegistrySynchronizer"/>
+		</property>
 	</bean>
 
 	<bean id="cggh-manage-ldap-user" class="org.cggh.action.ManageLDAPUserActionExecuter" parent="action-executer">
