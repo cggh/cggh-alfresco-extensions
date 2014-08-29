@@ -46,7 +46,7 @@
 }
 <#if contact_has_next>,</#if>
 </#list>],
-<#-- Not enabled in content model yet
+
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
@@ -60,7 +60,60 @@
 <#if myPerson_has_next>,</#if>
 </#list>
 </#list>],
--->
+
+"groupData": [
+<#list collab.assocs["cggh:groupData"]![] as data>
+<#list data.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
+    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
+"groupMail": [
+<#list collab.assocs["cggh:groupMail"]![] as mail>
+<#list mail.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
+    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
+"groupPublic": [
+<#list collab.assocs["cggh:groupPublic"]![] as pub>
+<#list pub.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
+    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
+"groupContact": [
+<#list collab.assocs["cggh:groupContact"]![] as contact>
+<#list contact.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
+    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
+
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {

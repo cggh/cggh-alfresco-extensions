@@ -886,7 +886,6 @@ if (typeof Cggh == "undefined" || !Cggh)
                 for (i = 0, j = personList.length; i < j; i++)
                 {
                     var person = personList[i];
-                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + person.nodeRef + '">' + person.name + '(' + this.msg("cggh.action.edit") + ')</a><br/>';
                     desc += person.firstName + ' ' + person.lastName + '<br/>';
                     desc += person.company + '<br/>';
                     desc += person.email + '<br/>';
@@ -922,10 +921,11 @@ if (typeof Cggh == "undefined" || !Cggh)
             }
             desc += '</div>';
 
-            desc += this.renderPersonDetailsList(collaboration.primaryContacts, this.msg("cggh.metadata.primaryContacts"));
-            desc += this.renderPersonDetailsList(collaboration.contacts, this.msg("cggh.metadata.contacts"));
-            desc += this.renderPersonDetailsList(collaboration.associates, this.msg("cggh.metadata.associates"));
-            
+            desc += this.renderPersonDetailsList(collaboration.groupPI, this.msg("cggh.metadata.pi"));
+            desc += this.renderPersonDetailsList(collaboration.groupContact, this.msg("cggh.metadata.contacts"));
+            desc += this.renderPersonDetailsList(collaboration.groupData, this.msg("cggh.metadata.data"));
+            desc += this.renderPersonDetailsList(collaboration.groupPublic, this.msg("cggh.metadata.public"));
+            desc += this.renderPersonDetailsList(collaboration.groupMail, this.msg("cggh.metadata.mail"));
           
             desc += '<div class="publications">';
             desc += '<h2>' + this.msg("cggh.metadata.publications") + '</h2>';
