@@ -1,0 +1,27 @@
+<extension>
+	<modules>
+		<module>
+			<id>Customize title menu for Publications</id>
+			<version>1.0</version>
+			<customizations>
+				<customization>
+					<targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+					<sourcePackageRoot>org.cggh.alfresco.publicationsmenu</sourcePackageRoot>
+				</customization>
+			</customizations>
+			<!-- <evaluator type="evaluator.header.collaborationMenu"> <params> <group></group> 
+				</params> </evaluator> -->
+			<evaluator type="cggh.group.component.evaluator">
+				<params>
+					<groups>site_pct_SiteConsumer,site_pct_SiteCollaborator,site_pct_SiteContributor,site_pct_SiteManager</groups>
+					<relation>OR</relation>
+				</params>
+			</evaluator>
+			<auto-deploy>true</auto-deploy>
+			<!-- <configurations> <config evaluator="string-compare" condition="WebFramework" 
+				replace="false"> <web-framework> <dojo-pages> <packages> <package name="cggh" 
+				location="js/lib/cggh" /> </packages> </dojo-pages> </web-framework> </config> 
+				</configurations> -->
+		</module>
+	</modules>
+</extension>

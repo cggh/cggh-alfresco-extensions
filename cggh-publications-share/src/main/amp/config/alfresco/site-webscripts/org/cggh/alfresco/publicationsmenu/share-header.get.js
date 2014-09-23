@@ -9,7 +9,7 @@ if (appMenu != null) {
 				name : "alfresco/header/AlfMenuItem",
 				config : {
 					label : "List",
-					targetUrl : "/hdp/ws/publications"
+					targetUrl : "hdp/ws/publications"
 				}
 			} ]
 		}
