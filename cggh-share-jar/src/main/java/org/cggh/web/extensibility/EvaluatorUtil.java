@@ -1,5 +1,7 @@
 package org.cggh.web.extensibility;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -296,7 +298,7 @@ public class EvaluatorUtil
 				}
 				Connector connector = context.getServiceRegistry().getConnectorService()
 						.getConnector("alfresco", userName, ServletUtil.getSession());
-				Response res = connector.call("/api/people/" + context.getUserId() + "?groups=true");
+				Response res = connector.call(URLEncoder.encode("/api/people/" + context.getUserId() + "?groups=true","UTF-8"));
 				if (res.getStatus().getCode() == Status.STATUS_OK)
 				{
 					String response = res.getResponse();
@@ -316,6 +318,8 @@ public class EvaluatorUtil
 			} catch (ParseException e)
 			{
 				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				log.error("Error fetching group membership for " + context.getUserId(), e);
 			}
 		}
 
