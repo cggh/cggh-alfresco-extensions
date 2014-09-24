@@ -298,7 +298,7 @@ public class EvaluatorUtil
 				}
 				Connector connector = context.getServiceRegistry().getConnectorService()
 						.getConnector("alfresco", userName, ServletUtil.getSession());
-				Response res = connector.call(URLEncoder.encode("/api/people/" + context.getUserId() + "?groups=true","UTF-8"));
+				Response res = connector.call("/api/people/" + URLEncoder.encode(context.getUserId(),"UTF-8") + "?groups=true");
 				if (res.getStatus().getCode() == Status.STATUS_OK)
 				{
 					String response = res.getResponse();
