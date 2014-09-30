@@ -1,4 +1,7 @@
 {
+<#if searchTerm??>
+"searchTerm": "${jsonUtils.encodeJSONString(searchTerm)}",
+</#if>
 "collaborationNodes" : [
 <#list collabNodes as collab>
 {

@@ -13,5 +13,7 @@
 		<property name="cgghEvaluatorUtil" ref="cggh.evaluator.utility" />
 	</bean>
 
+	<bean id="cggh.type.component.evaluator" class="org.cggh.web.extensibility.TypeSubComponentEvaluator"/>
+
 </beans>
 

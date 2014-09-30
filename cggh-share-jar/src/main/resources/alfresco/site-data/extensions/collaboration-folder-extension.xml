@@ -1,0 +1,57 @@
+<extension>
+	<modules>
+		<module>
+			<id>CGGH Collaboration - Folder Details Page</id>
+			<version>1.0</version>
+			<evaluator type="cggh.type.component.evaluator">
+				<params>
+					<nodetype>cggh:collaborationFolder</nodetype>
+				</params>
+			</evaluator>
+			<components>
+				<component>
+					<scope>template</scope>
+					<region-id>comments</region-id>
+					<source-id>folder-details</source-id>
+					<sub-components>
+						<sub-component id="cggh-publication-metadata" index="-1">
+							<evaluations>
+								<evaluation id="cggh-publication-metadata">
+									<url>/components/folder-details/folder-metadata</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+						<sub-component id="cggh-collaboration" index="-1">
+							<evaluations>
+								<evaluation id="cggh-collabortion-addDetails">
+									<url>/org/cggh/alfresco/components/folder-details/collaboration</url>
+									<properties>
+										<nodeRef>{nodeRef}</nodeRef>
+									</properties>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+				<component>
+					<scope>template</scope>
+					<region-id>folder-metadata</region-id>
+					<source-id>folder-details</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="cggh-pub-removeMetadata">
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+			<auto-deploy>true</auto-deploy>
+		</module>
+	</modules>
+</extension>

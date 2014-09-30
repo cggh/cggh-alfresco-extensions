@@ -97,7 +97,7 @@ public class EvaluatorUtil
 								Connector connector = context.getServiceRegistry().getConnectorService()
 										.getConnector("alfresco", userName, ServletUtil.getSession());
 								Response res = connector.call("/api/sites/" + currentSite + "/memberships/"
-										+ context.getUserId());
+										+ URLEncoder.encode(context.getUserId(),"UTF-8"));
 								if (res.getStatus().getCode() == Status.STATUS_OK)
 								{
 									String response = res.getResponse();
@@ -136,6 +136,9 @@ public class EvaluatorUtil
 						e.printStackTrace();
 					} catch (ParseException e)
 					{
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -183,7 +186,7 @@ public class EvaluatorUtil
 
 			Connector connector = context.getServiceRegistry().getConnectorService()
 					.getConnector("alfresco", userName, ServletUtil.getSession());
-			Response res = connector.call("/api/people/" + context.getUserId() + "/sites");
+			Response res = connector.call("/api/people/" + URLEncoder.encode(context.getUserId(),"UTF-8") + "/sites");
 			if (res.getStatus().getCode() == Status.STATUS_OK)
 			{
 				String response = res.getResponse();
@@ -201,6 +204,9 @@ public class EvaluatorUtil
 			e.printStackTrace();
 		} catch (ParseException e)
 		{
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return sitesList;
@@ -319,7 +325,12 @@ public class EvaluatorUtil
 			{
 				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {
-				log.error("Error fetching group membership for " + context.getUserId(), e);
+				try {
+					log.error("Error fetching group membership for " + URLEncoder.encode(context.getUserId(),"UTF-8"), e);
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 
@@ -361,7 +372,7 @@ public class EvaluatorUtil
 							Connector connector = context.getServiceRegistry().getConnectorService()
 									.getConnector("alfresco", userName, ServletUtil.getSession());
 							Response res = connector.call("/api/sites/" + currentSite + "/memberships/"
-									+ context.getUserId());
+									+ URLEncoder.encode(context.getUserId(),"UTF-8"));
 							if (res.getStatus().getCode() == Status.STATUS_OK)
 							{
 								String response = res.getResponse();
@@ -388,6 +399,9 @@ public class EvaluatorUtil
 							e.printStackTrace();
 						} catch (ParseException e)
 						{
+							e.printStackTrace();
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

@@ -1,0 +1,5 @@
+<webscript>
+   <shortname>CGGH collaboration details</shortname>
+   <description>CGGH collaboration panel</description>
+   <url>/org/cggh/alfresco/components/folder-details/collaboration</url>
+</webscript>
