@@ -40,7 +40,7 @@
 "reviewedDK": "false",
 </#if>
 <#if pub.properties["cgghPub:submittedDate"]??>
-"submittedDate": "${jsonUtils.encodeJSONString(collab.properties["cgghPub:submittedDate"]?string("MM-yyyy"))!''}",
+"submittedDate": "${jsonUtils.encodeJSONString(pub.properties["cgghPub:submittedDate"]?string("MM-yyyy"))!''}",
 </#if>
 "journal": "${jsonUtils.encodeJSONString(pub.properties["cgghPub:submittedJournal"])!''}",
 "publicationStatus": "${jsonUtils.encodeJSONString(pub.properties["cgghPub:publicationStatus"])!''}",
