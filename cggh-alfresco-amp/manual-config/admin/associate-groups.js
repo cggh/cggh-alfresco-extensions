@@ -11,9 +11,10 @@ for each (var node in noderef.children) {
         "cggh:groupData",
         "cggh:groupMail",
         "cggh:groupContact",
-        "cggh:groupPublic"];
+        "cggh:groupPublic",
+        "cggh:groupNotPublic"];
 
-        var assocToCreate = ["PI", "Contact", "Mail", "Data", "Public"];
+        var assocToCreate = ["PI", "Contact", "Mail", "Data", "Public", "notPublic"];
         
         for each (remove in assocToRemove) {
             for each (targetNode in node.assocs[remove]) {

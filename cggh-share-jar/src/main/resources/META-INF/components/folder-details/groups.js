@@ -93,7 +93,7 @@
          * @param response {Object}
          */
         onFormLoaded : function FolderGroups_onFormLoaded(response) {
-            var items = ["PI", "Contact", "Public", "Mail", "Data"];
+            var items = ["PI", "Contact", "Public", "Mail", "Data", "NotPublic"];
             var collab = response.json.collaborationNodes[0];
             for (var i = 0; i < items.length; i++) {
                 var formEl = Dom.get(this.id + "-" + items[i] + "Container");

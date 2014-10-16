@@ -17,6 +17,7 @@
   <div id="${el}-PublicContainer"><h3>${msg("public")}</h3></div>
   <div id="${el}-MailContainer"><h3>${msg("mail")}</h3></div>
   <div id="${el}-DataContainer"><h3>${msg("data")}</h3></div>
+  <div id="${el}-NotPublicContainer"><h3>${msg("notPublic")}</h3></div>
   </span>
       <@inlineScript group="collaboration-details">
          YAHOO.util.Event.onContentReady("${args.htmlid?js_string}-heading", function() {

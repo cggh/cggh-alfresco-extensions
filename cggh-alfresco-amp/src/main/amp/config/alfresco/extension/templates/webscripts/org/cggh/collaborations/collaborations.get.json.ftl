@@ -57,8 +57,7 @@
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
-    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
-    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
 </#list>
@@ -71,8 +70,7 @@
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
-    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
-    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
 </#list>
@@ -84,8 +82,7 @@
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
-    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
-    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
 </#list>
@@ -97,8 +94,7 @@
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
-    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
-    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
 </#list>
@@ -110,13 +106,23 @@
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
-    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}",
-    "nodeRef": "${jsonUtils.encodeJSONString(myPerson.properties["sys:node-uuid"])!''}"
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
 </#list>
 </#list>],
-
+"groupNotPublic": [
+<#list collab.assocs["cggh:groupNotPublic"]![] as notPublic>
+<#list notPublic.children as myPerson>
+{
+    "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
+    "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
+    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
+    "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
+}
+<#if myPerson_has_next>,</#if>
+</#list>
+</#list>],
 "contacts": [
 <#list collab.assocs["cggh:contactList"]![] as contact>
  {

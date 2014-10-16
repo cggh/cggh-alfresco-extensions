@@ -926,7 +926,8 @@ if (typeof Cggh == "undefined" || !Cggh)
             desc += this.renderPersonDetailsList(collaboration.groupData, this.msg("cggh.metadata.data"));
             desc += this.renderPersonDetailsList(collaboration.groupPublic, this.msg("cggh.metadata.public"));
             desc += this.renderPersonDetailsList(collaboration.groupMail, this.msg("cggh.metadata.mail"));
-          
+            desc += this.renderPersonDetailsList(collaboration.groupNotPublic, this.msg("cggh.metadata.notpublic"));
+            
             desc += '<div class="publications">';
             desc += '<h2>' + this.msg("cggh.metadata.publications") + '</h2>';
             if (collaboration.publications)

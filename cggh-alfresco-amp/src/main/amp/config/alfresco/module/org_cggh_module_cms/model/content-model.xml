@@ -541,6 +541,17 @@
 						<many>false</many>
 					</target>
 				</association>
+				<association name="cggh:groupNotPublic">
+					<source>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</source>
+					<target>
+						<class>cm:authorityContainer</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
 				<association name="cggh:primaryContactList">
 					<source>
 						<mandatory>false</mandatory>
