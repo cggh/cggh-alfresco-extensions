@@ -107,6 +107,7 @@ define(
                 queryOptions : {
                     cmisselector : 'children' //(object|properties|children|allowedActions|relationships|renditions|content)
                 },
+                ticket: '',
                 // The number of milliseconds to wait for a response
                 // Due to the nature of jsonp you'll never get an e.g. 404 so to receive an error response it's necessary to timeout
                 timeout : 2000,
@@ -676,6 +677,11 @@ define(
                         queryParams += (queryParams || hasQuestionMark ? "&" : "?") + "succinct=true";
                     }
 
+                    if (this.ticket != '') {
+                        hasQuestionMark = queryParams.indexOf("?") > -1;
+                        queryParams += (queryParams || hasQuestionMark ? "&" : "?") + "alf_ticket=" + this.ticket;
+                    }
+                    
                     var deferred = script.get(requestURL + (queryParams || ""), {
                         jsonp : "callback",
                         timeout : this.timeout
