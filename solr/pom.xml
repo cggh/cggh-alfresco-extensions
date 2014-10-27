@@ -15,6 +15,8 @@
     <properties>
         <alfresco.solr.dir>${project.basedir}/solr_home</alfresco.solr.dir>
         <alfresco.solr.war.overlay>${project.build.directory}/${project.artifactId}-overlay</alfresco.solr.war.overlay>
+        <alfresco.port>8080</alfresco.port>
+        <alfresco.port.ssl>8443</alfresco.port.ssl>
     </properties>
     <build>
         <plugins>
