@@ -245,7 +245,7 @@ define(
                     		                                                                    }
                     		                                                            ]
                     		                                                        }
-                    		                                                    }), editor({
+                    		                                                    }, Select), editor({
                     		                                                        label : this.message("pub.review-dk"),
                     		                                                        field : "p.cgghPub:reviewedDK",
                     		                                                        autoSave : true,
@@ -263,7 +263,7 @@ define(
                     		                                                                    }
                     		                                                            ]
                     		                                                        }
-                    		                                                    }), editor({
+                    		                                                    }, Select), editor({
                     		                                                        label : this.message("pub.submitted.journal"),
                     		                                                        field : "p.cgghPub:submittedJournal",
                     		                                                        autoSave : true,
