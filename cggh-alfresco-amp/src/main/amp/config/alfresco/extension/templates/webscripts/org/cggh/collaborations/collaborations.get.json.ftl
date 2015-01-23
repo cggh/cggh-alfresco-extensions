@@ -24,6 +24,7 @@
 "type": "${collab.type}",
 "collaborationStatus": "${collab.properties["cggh:collaborationStatus"]!''}",
 "enquiryStatus": "${collab.properties["cggh:enquiryStatus"]!''}",
+"ragStatus": "${collab.properties["cggh:ragStatus"]!''}",
 "species": [
 <#list collab.properties["cggh:species"]![] as species>
  "${species}"
@@ -34,22 +35,21 @@
  "${country}"
 <#if country_has_next>,</#if>
 </#list>],
-"primaryContacts": [
-<#list collab.assocs["cggh:primaryContactList"]![] as contact>
+"projects": [
+<#list collab.assocs["cggh:projectsdl"]![] as project>
  {
-    "nodeRef": "${jsonUtils.encodeJSONString(contact.nodeRef)!''}",
-    "name": "${jsonUtils.encodeJSONString(contact.name)!''}",
-    "firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])!''}",
-    "lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])!''}",
-    "email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])!''}",
-    "phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])!''}",
-    "mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])!''}",
-    "notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])!''}"
+    "name": "${jsonUtils.encodeJSONString(project.name)!''}"
 }
-<#if contact_has_next>,</#if>
+<#if project_has_next>,</#if>
 </#list>],
-
+"collaborationDoc": [
+<#list collab.assocs["cggh:collaborationDoc"]![] as collaborationDoc>
+ {
+ 	"nodeRef": "${jsonUtils.encodeJSONString(collaborationDoc.nodeRef)!''}",
+    "name": "${jsonUtils.encodeJSONString(collaborationDoc.name)!''}"
+}
+<#if collaborationDoc_has_next>,</#if>
+</#list>],
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
@@ -123,36 +123,6 @@
 <#if myPerson_has_next>,</#if>
 </#list>
 </#list>],
-"contacts": [
-<#list collab.assocs["cggh:contactList"]![] as contact>
- {
-    "nodeRef": "${jsonUtils.encodeJSONString(contact.nodeRef)!''}",
-    "name": "${jsonUtils.encodeJSONString(contact.name)!''}",
-    "firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])!''}",
-    "lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])!''}",
-    "email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])!''}",
-    "phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])!''}",
-    "mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])!''}",
-    "notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])!''}"
-}
-<#if contact_has_next>,</#if>
-</#list>],
-"associates": [
-<#list collab.assocs["cggh:associates"]![] as contact>
- {
-    "nodeRef": "${jsonUtils.encodeJSONString(contact.nodeRef)!''}",
-    "name": "${jsonUtils.encodeJSONString(contact.name)!''}",
-    "firstName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactFirstName"])!''}",
-    "lastName": "${jsonUtils.encodeJSONString(contact.properties["dl:contactLastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(contact.properties["dl:contactCompany"])!''}",
-    "email": "${jsonUtils.encodeJSONString(contact.properties["dl:contactEmail"])!''}",
-    "phone": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneOffice"])!''}",
-    "mobile": "${jsonUtils.encodeJSONString(contact.properties["dl:contactPhoneMobile"])!''}",
-    "notes": "${jsonUtils.encodeJSONString(contact.properties["dl:contactNotes"])!''}"
-}
-<#if contact_has_next>,</#if>
-</#list>],
 <#if collab.assocs["cggh:webStudy"]??>
 <#list collab.assocs["cggh:webStudy"]![] as webStudy>
 "webStudy": {
@@ -179,23 +149,13 @@
 </#list>
 </#if>],
 "projects": [
-<#if collab.assocs["cggh:projects"]??>
-<#list collab.assocs["cggh:projects"]![] as project>
+<#if collab.assocs["cggh:projectsdl"]??>
+<#list collab.assocs["cggh:projectsdl"]![] as project>
 {
-    "nodeRef": "${project.nodeRef}",
-<#attempt>
-    "name": "${jsonUtils.encodeJSONString(project.name)}",
-    "title": "${jsonUtils.encodeJSONString(project.properties["cm:title"])!''}",
-    "description": "${jsonUtils.encodeJSONString(project.properties["cm:description"])!''}"
-<#recover>
-    "name": "Unknown",
-    "title": "Unknown",
-    "description": "Access denied"
-</#attempt>
+    "name": "${jsonUtils.encodeJSONString(project.name)}"
 }
 <#if project_has_next>,</#if>
 </#list>
-
 </#if>],
 <#if collab.assocs["cggh:liaison"]??>
 <#list collab.assocs["cggh:liaison"]![] as lia>
