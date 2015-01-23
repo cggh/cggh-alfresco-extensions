@@ -55,7 +55,11 @@
     * Preferences
     */
    var PREFERENCES_COLLABORATIONS = "org.cggh.share.collaborations",
-      PREFERENCES_COLLABORATIONS_DASHLET_FILTER = PREFERENCES_COLLABORATIONS + ".dashlet.filter";
+      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_FAV = PREFERENCES_COLLABORATIONS + ".dashlet.filter.fav",
+      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_STATUS = PREFERENCES_COLLABORATIONS + ".dashlet.filter.sstatus",
+      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY = PREFERENCES_COLLABORATIONS + ".dashlet.filter.estatus",
+      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_SPECIES = PREFERENCES_COLLABORATIONS + ".dashlet.filter.species",
+      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_RAG = PREFERENCES_COLLABORATIONS + ".dashlet.filter.rstatus";
 
    var FAVOURITE_COLLABORATIONS = PREFERENCES_COLLABORATIONS + ".favourites";
    var IMAP_FAVOURITE_COLLABORATIONS = PREFERENCES_COLLABORATIONS + ".imapFavourites";
@@ -128,7 +132,7 @@
           * @type boolean
           * @default false
           */
-         imapEnabled: false,
+         imapEnabled: true,
          
          /**
           * Result list size maximum
@@ -137,7 +141,7 @@
           * @type integer
           * @default 100
           */
-         listSize: 100
+         listSize: 10
       },
 
       /**
@@ -148,6 +152,7 @@
       {
          var me = this;
 
+         if (! this.widgets.type) {
          // Create Dropdown filter
          this.widgets.type = Alfresco.util.createYUIButton(this, "type", this.onTypeFilterChanged,
          {
@@ -162,27 +167,27 @@
             menu: "status-menu",
             lazyloadmenu: false
          });
-         
+
          this.widgets.enquiry = Alfresco.util.createYUIButton(this, "enquiry", this.onEnquiryFilterChanged,
                  {
                     type: "menu",
                     menu: "enquiry-menu",
                     lazyloadmenu: false
                  });
-         
+
          this.widgets.species = Alfresco.util.createYUIButton(this, "species", this.onSpeciesFilterChanged,
                  {
                     type: "menu",
                     menu: "species-menu",
                     lazyloadmenu: false
                  });
-         
-         this.widgets.lookseq = Alfresco.util.createYUIButton(this, "lookseq", this.onLookSeqFilterChanged,
-         {
-             type: "checkbox"
-         });
-         this.widgets.lookseq.value = false;
-         
+         this.widgets.rag = Alfresco.util.createYUIButton(this, "rag", this.onRagFilterChanged,
+                 {
+                    type: "menu",
+                    menu: "rag-menu",
+                    lazyloadmenu: false
+                 });
+         }      
          // DataSource definition
          this.widgets.dataSource = new YAHOO.util.DataSource(this.collaborations,
          {
@@ -193,34 +198,29 @@
          var columnDefinitions =
          [
             { key: "name", label: this.msg("cggh.label.name"), sortable: true, formatter: this.bind(this.renderCellName) },
+            { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
             { key: "title", label: this.msg("cggh.label.title"), sortable: false, formatter: this.bind(this.renderCellTitle) },
             { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
             { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
-            { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
+            { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) },
+            { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), sortable: false, formatter: this.bind(this.renderCellRagStatus) },
             { key: "reviewed", label: this.msg("cggh.metadata.reviewed"), sortable: true, sortOptions:{sortFunction:this.sortReviewed},formatter: this.bind(this.renderCellReviewed) },
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
-            { key: "contacts", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellContact) },
-            { key: "species", label: this.msg("cggh.metadata.species"), sortable: false, formatter: this.bind(this.renderCellSpecies) },
-            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
             { key: "firstSample", label: this.msg("cggh.metadata.firstSample"), sortable: true, sortOptions:{sortFunction:this.sortFirstSampleExpected},formatter: this.bind(this.renderCellFirstSampleExpected) },
             { key: "lastSample", label: this.msg("cggh.metadata.lastSample"), sortable: true, sortOptions:{sortFunction:this.sortLastSampleExpected},formatter: this.bind(this.renderCellLastSampleExpected) },
+            { key: "collaborationDoc", label: this.msg("cggh.metadata.collabDoc"), sortable: false, formatter: this.bind(this.renderCellCollaborationDoc) },
+            { key: "projectsdl", label: this.msg("cggh.metadata.projects"), sortable: false, formatter: this.bind(this.renderCellProjects) },
+            /*
             { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
             { key: "intDescrip", label: this.msg("cggh.metadata.intDescrip"), sortable: false, formatter: this.bind(this.renderCellIntDescrip) },
-            { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) }
+            { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
+            { key: "contacts", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellContact) },
+            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
+            */
             ];
-         var lsCols = 
-         [
-            { key: "sTitle", label: this.msg("cggh.external.solaris.title"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisTitle) },
-            { key: "sPi", label: this.msg("cggh.external.solaris.pi"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisPI) },
-            { key: "sOther", label: this.msg("cggh.external.solaris.otherPeople"), hidden: true, sortable: false, formatter: this.bind(this.renderCellSolarisOtherPeople) }
-         ];
-
-        
-        var cols = columnDefinitions.concat(lsCols);
-        columnDefinitions = cols;
-        
+      
          // DataTable definition
          this.widgets.dataTable = new YAHOO.widget.ScrollingDataTable(this.id + "-collaborations", columnDefinitions, this.widgets.dataSource,
          {
@@ -291,7 +291,7 @@
             this.widgets.type.value = menuItem.value;
 
             // Save preferences and load collaborations afterwards
-            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER, menuItem.value,
+            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_FAV, menuItem.value,
             {
                successCallback:
                {
@@ -310,9 +310,15 @@
             this.widgets.status.set("label", menuItem.cfg.getProperty("text"));
             this.widgets.status.value = menuItem.value;
 
-          
-            this.loadCollaborations();
-          
+         // Save preferences and load collaborations afterwards
+            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_STATUS, menuItem.value,
+            {
+               successCallback:
+               {
+                  fn: this.loadCollaborations,
+                  scope: this
+               }
+            });
          }
       },
       
@@ -324,9 +330,15 @@
             this.widgets.enquiry.set("label", menuItem.cfg.getProperty("text"));
             this.widgets.enquiry.value = menuItem.value;
 
-          
-            this.loadCollaborations();
-          
+         // Save preferences and load collaborations afterwards
+            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY, menuItem.value,
+            {
+               successCallback:
+               {
+                  fn: this.loadCollaborations,
+                  scope: this
+               }
+            });
          }
       },
       
@@ -338,29 +350,39 @@
             this.widgets.species.set("label", menuItem.cfg.getProperty("text"));
             this.widgets.species.value = menuItem.value;
 
+         // Save preferences and load collaborations afterwards
+            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_SPECIES, menuItem.value,
+            {
+               successCallback:
+               {
+                  fn: this.loadCollaborations,
+                  scope: this
+               }
+            });
           
-            this.loadCollaborations();
+         }
+      },
+      onRagFilterChanged: function Collaborations_onRagFilterChanged(p_sType, p_aArgs)
+      {
+         var menuItem = p_aArgs[1];
+         if (menuItem)
+         {
+            this.widgets.rag.set("label", menuItem.cfg.getProperty("text"));
+            this.widgets.rag.value = menuItem.value;
+
+         // Save preferences and load collaborations afterwards
+            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_RAG, menuItem.value,
+            {
+               successCallback:
+               {
+                  fn: this.loadCollaborations,
+                  scope: this
+               }
+            });
           
          }
       },
       
-      onLookSeqFilterChanged: function Collaborations_onLookSeqFilterChanged(p_sType, p_aArgs)
-      {
-         
-         this.widgets.lookseq.value = p_sType.newValue;
-                   
-         if (this.widgets.lookseq.value) {
-        	 this.widgets.dataTable.showColumn("sTitle");
-        	 this.widgets.dataTable.showColumn("sPi");
-        	 this.widgets.dataTable.showColumn("sOther");
-         } else {
-        	 this.widgets.dataTable.hideColumn("sTitle");
-        	 this.widgets.dataTable.hideColumn("sPi");
-        	 this.widgets.dataTable.hideColumn("sOther");
-         }
-         this.loadCollaborations();
-         
-      },
       /**
        * Load collaborations list
        *
@@ -381,95 +403,6 @@
          });
       },
 
-     
-      loadSolaris: function Collaborations_loadSolaris(p_items)
-      {
-    	  if (this.widgets.lookseq.value) {
-         // Load collaborations
-         Alfresco.util.Ajax.request(
-         {
-            //url: Alfresco.constants.PROXY_URI + "api/people/" + encodeURIComponent(Alfresco.constants.USERNAME) + "/sites?roles=user&size=" + this.options.listSize,
-        	 //Requires a proxy to https://lookseq.sanger.ac.uk/cgi-bin/pipeline_status/mystudies.pl?query=get_details
-        	 //Due to cross site scripting security
-        	 url: '/pipeline_status/mystudies.pl',
-        	 requestContentType: Alfresco.util.Ajax.JSON, // Set to JSON if json should be used
-        	 responseContentType: Alfresco.util.Ajax.JSON, // Set to JSON if json should be used
-        	 dataObj: { query: 'get_details'},
-        	 method: Alfresco.util.Ajax.GET,
-        	 successCallback:
-            {
-               fn: this.onSolarisLoaded,
-               obj: p_items,
-               scope: this
-            },
-            failureCallback: {
-            	fn: this.onSolarisLoaded,
-                obj: p_items,
-            	scope: this
-            }
-         });
-    	  } else {
-    		  this.onSolarisLoaded(null, p_items);
-    	  }
-      },
-      /**
-       * Retrieve user preferences after collaborations data has loaded
-       *
-       * @method onCollaborationsLoaded
-       * @param p_response {object} Response from "api/people/{userId}/collaborations" query
-       */
-      onSolarisLoaded: function Collaborations_onSolarisLoaded(p_response, p_items)
-      {
-    	  //Alfresco studies
-    	  var items = p_items.collaborationNodes;
-
-    	  var newItems = [];
-    	  //Solaris projects - ignore if connection failed
-    	if (p_response && p_response.json) {
-    	  var projects = p_response.json.data.projects;
-    	  for (var key in projects)
-    	  {
-    		  var project = projects[key];
-    		  var found = false;
-
-        	  for (i = 0, numItems = items.length; i < numItems; i++)
-    		  {
-    			var item = items[i];
-    			var words = item.name.split(" ");
-    			if (words.length > 1)
-    			{
-    			var item_code = words[1];
-    				if (item_code == project.project_code) 
-    				{
-    				  found = true;
-    				  item.solaris_people = project.people;
-    				  item.solaris_title = project.title;
-    				  break;
-    				}
-    			}
-    		  }
-    		  if (!found) {
-    			  var newItem = {
-    					  "solaris_people": "project.people",
-    					  "solaris_title":  "project.title"
-    			  };
-    			  newItems.push(newItem);
-    		  }
-    	  }
-    	}
-    	  //Could merge items and newItems if you want to see projects in Solaris
-    	  //but not in Alfresco
-         // Load preferences (after which the appropriate collaborations will be displayed)
-         this.services.preferences.request(PREFERENCES_COLLABORATIONS,
-         {
-            successCallback:
-            {
-               fn: this.onPreferencesLoaded,
-               scope: this,
-               obj: items
-            }
-         });
-      },
       /**
        * Retrieve user preferences after collaborations data has loaded
        *
@@ -478,7 +411,21 @@
        */
       onCollaborationsLoaded: function Collaborations_onCollaborationsLoaded(p_response)
       {
-          this.loadSolaris(p_response.json);
+	      var items = null;
+	      
+	      if (p_response.json) {
+	    	  items = p_response.json.collaborationNodes;
+	      }
+          this.services.preferences.request(PREFERENCES_COLLABORATIONS,
+        	         {
+        	            successCallback:
+        	            {
+        	               fn: this.onPreferencesLoaded,
+        	               scope: this,
+        	               obj: items
+        	            }
+        	         });
+
       },
 
       /**
@@ -507,22 +454,27 @@
          }
 
          // Select the preferred filter in the ui
-         var filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER, "all");
+         var filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_FAV, "all");
          filter = this.options.validFilters.hasOwnProperty(filter) ? filter : "all";
-         this.widgets.type.set("label", this.msg("filter." + filter));
+         this.widgets.type.set("label", this.msg("filter." + filter.replace(/ /g, '')));
          this.widgets.type.value = filter;
-         //Not saved as preferences
-         if (!this.widgets.status.value) {
-        	 this.widgets.status.value = "all";
-         }
          
-         if (!this.widgets.enquiry.value) {
-        	 this.widgets.enquiry.value = "all";
-         }
+         filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_STATUS, "all");
+         this.widgets.status.set("label", this.msg("filter.status." + filter.replace(/ /g, '')));
+         this.widgets.status.value = filter;
+
+         filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY, "all");
+         this.widgets.enquiry.set("label", this.msg("filter.enquiry." + filter.replace(/ /g, '')));
+         this.widgets.enquiry.value = filter;
          
-         if (!this.widgets.species.value) {
-        	 this.widgets.species.value = "all";
-         }
+         filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_SPECIES, "all");
+         this.widgets.species.set("label", this.msg("filter.species." + filter.replace(/ /g, '')));
+         this.widgets.species.value = filter;
+         
+         filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_RAG, "all");
+         this.widgets.rag.set("label", this.msg("filter.rag." + filter.replace(/ /g, '')));
+         this.widgets.rag.value = filter;
+         
          
          // Display the toolbar now that we have selected the filter
          Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
@@ -541,7 +493,7 @@
          {
             var collaboration = YAHOO.lang.merge({}, p_items[i]);
 
-            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, this.widgets.species.value,
+            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, this.widgets.species.value, this.widgets.rag.value,
             		collaboration))
             {
                this.collaborations[ii] = collaboration;
@@ -577,7 +529,7 @@
        * @param collaboration {object} Collaboration object literal
        * @return {boolean}
        */
-      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, speciesFilter, collaboration)
+      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, speciesFilter, ragFilter, collaboration)
       {
     	  var ret = false;
          switch (filter)
@@ -605,6 +557,15 @@
                break;
             default:
                ret = ret && (collaboration.enquiryStatus === enquiryFilter);
+               break;
+         }
+         switch (ragFilter)
+         {
+            case "all":
+              //leave unchanged
+               break;
+            default:
+               ret = ret && (collaboration.ragStatus === ragFilter);
                break;
          }
          switch (speciesFilter)
@@ -699,7 +660,7 @@
       	title = collaboration.name;
          var desc = '<div class="study-title"><a href="' + Alfresco.constants.URL_PAGECONTEXT + 'folder-details?nodeRef=' + objectId + '" class="theme-color-1">' + $html(title) + '</a></div>';
          /* Favourite / IMAP / (Likes) */
-         /*
+         
          desc += '<div class="detail detail-social">';
          desc +=    '<span class="item item-social">' + this.generateFavourite(oRecord) + '</span>';
          if (this.options.imapEnabled)
@@ -708,7 +669,7 @@
          }
          
          desc += '</div>';
-         */
+         
          elCell.innerHTML = desc;
       },
 
@@ -811,8 +772,11 @@
 
          var collaboration = oRecord.getData();
 
-        
-         elCell.innerHTML = collaboration.enquiryStatus;
+         var out = ''; 
+         if (collaboration.enquiryStatus) {
+        	 this.msg("filter.enquiry." + collaboration.enquiryStatus.replace(/ /g, ''));
+         }
+         elCell.innerHTML = out; 
       },
 
       sortEnquiryStatus: function Collaborations_sortEnquiryStatus(rec1, rec2, desc) {
@@ -1055,37 +1019,45 @@
          }
          elCell.innerHTML = render;
       },
-      renderCellSolarisTitle: function Collaborations_renderCellSolarisTitle(elCell, oRecord, oColumn, oData)
+      renderCellProjects: function Collaborations_renderCellProjects(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
          var collaboration = oRecord.getData();
 
-         if (collaboration.solaris_title) {
-        	 elCell.innerHTML = collaboration.solaris_title;
+         if (collaboration.projects) {
+        	 var output = [];
+        	 for(i = 0, j = collaboration.projects.length;i < j; i++) {
+        		 var proj = collaboration.projects[i];
+        		 output.push(proj.name);
+        		 
+        	 }
+        	 elCell.innerHTML = output;
          }
       },
-      renderCellSolarisPI: function Collaborations_renderCellSolarisPI(elCell, oRecord, oColumn, oData)
+      renderCellRagStatus: function Collaborations_renderCellRagStatus(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
          var collaboration = oRecord.getData();
-         var output = [];
          
-         if (collaboration.solaris_people) {
-        	 for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
-        		 var person = collaboration.solaris_people[i];
-        		 if (person.is_pi == 1) {
-        			 output.push(person.fullname);
-        		 }
-        	 }
+         
+         if (collaboration.ragStatus) {
+        	 var out = '';
+        	 if (collaboration.ragStatus === "red") {
+        		 out = '<font color="#FF0000"><strong>Red</strong></font>';
+        	 } else if (collaboration.ragStatus === "amber") {
+        		 out = '<font color="#FF9900"><strong>Amber</strong></font>';
+			 } else if (collaboration.ragStatus === "green") {
+				 out = '<font color="#339966"><strong>Green</strong></font>';
+			 }
+        	 elCell.innerHTML = out;
          }
         
-         elCell.innerHTML = output;
       },
-      renderCellSolarisOtherPeople: function Collaborations_renderCellSolarisOtherPeople(elCell, oRecord, oColumn, oData)
+      renderCellCollaborationDoc: function Collaborations_renderCellCollaborationDoc(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
@@ -1093,12 +1065,10 @@
          var collaboration = oRecord.getData();
          var output = [];
          
-         if (collaboration.solaris_people) {
-        	 for(i = 0, j = collaboration.solaris_people.length;i < j; i++) {
-        		 var person = collaboration.solaris_people[i];
-        		 if (person.is_pi == 0) {
-        			 output.push(person.fullname);
-        		 }
+         if (collaboration.collaborationDoc) {
+        	 for(i = 0, j = collaboration.collaborationDoc.length;i < j; i++) {
+        		 var cdoc = collaboration.collaborationDoc[i];
+        		 output.push('<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'document-details?nodeRef=' + cdoc.nodeRef + '">' + cdoc.name + '</a>');
         	 }
          }
          elCell.innerHTML = output;

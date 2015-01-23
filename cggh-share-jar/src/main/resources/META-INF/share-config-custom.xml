@@ -6,7 +6,7 @@
 			<!-- Developer debugging setting to turn on DEBUG mode for client scripts 
 				in the browser -->
 
-			<client-debug>false</client-debug>
+			<client-debug>true</client-debug>
 
 			<!-- LOGGING can always be toggled at runtime when in DEBUG mode (Ctrl, 
 				Ctrl, Shift, Shift). This flag automatically activates logging on page load. -->
@@ -216,9 +216,11 @@
 					<show id="cggh:collaborationStatus" />
 					<show id="cggh:enquiryStatus" />
 					<show id="cggh:liaison" force="true" />
+					<show id="cggh:ragStatus"/>
 					<show id="cggh:species" />
 					<show id="cggh:sampleCountry" />
 					<show id="cggh:samplesExpected" />
+					<show id="cggh:samplesProcessed"/>
 					<show id="cggh:firstSample" />
 					<show id="cggh:lastSample" />
 					<show id="cggh:reviewed" />
@@ -229,9 +231,10 @@
 					<show id="cggh:webTitleApproved" />
 					<show id="cggh:descriptionApproved" />
 					<show id="cggh:legacyID" />
-					<show id="cggh:projects" />
+					<show id="cggh:projectsdl" />
 					<show id="cggh:webStudy" />
 					<show id="cggh:publications" />
+					<show id="cggh:collaborationDoc" />
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
@@ -299,7 +302,12 @@
 					<field id="cggh:collaborationStatus" label-id="cggh.metadata.collaborationStatus"
 						set="cgghMetadata" />
 					<field id="cggh:enquiryStatus" label-id="cggh.metadata.enquiryStatus"
-						set="cgghMetadata" />
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/selectone.ftl">
+							<control-param name="options">enquiry email received,dialogue open,awaiting funding,application form sent,application to be presented to SG|{cggh.data.reviewSG},under consideration by DK,collaboration agreement being drawn,collaboration agreement sent,collaboration active</control-param>
+						</control>
+						
+					</field>
 					<field id="cggh:liaison" label-id="cggh.metadata.liaison"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/authority.ftl">
@@ -320,10 +328,26 @@
 							</control-param>
 						</control>
 					</field>
+					
+					<field id="cggh:projectsdl" label-id="cggh.metadata.projects"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/association.ftl">
+							<control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:dataLists/cm:sequencingProjects</control-param>
+						</control>
+					</field>
+					<!-- Linking to sites doesn't work brilliantly because not all projects have a site and 
+					not all people have permission on all sites 
 					<field id="cggh:projects" label-id="cggh.metadata.projects"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
 							<control-param name="startLocation">{siteshome}</control-param>
+						</control>
+					</field>
+					-->
+					<field id="cggh:collaborationDoc" label-id="cggh.metadata.collabDoc"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/association.ftl">
+							<control-param name="startLocation">{self}</control-param>
 						</control>
 					</field>
 					<field id="cggh:sampleCountry" label-id="cggh.metadata.studySites"
@@ -332,10 +356,17 @@
 							<control-param name="size">8</control-param>
 						</control>
 					</field>
-
+					<field id="cggh:ragStatus" label-id="cggh.metadata.ragStatus"
+						set="cgghMetadata" />
 					<field id="cggh:species" label-id="cggh.metadata.species"
 						set="cgghMetadata" />
 					<field id="cggh:samplesExpected" label-id="cggh.metadata.samplesExpected"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/number.ftl">
+							<control-param name="style">width: 8em;</control-param>
+						</control>
+					</field>
+					<field id="cggh:samplesProcessed" label-id="cggh.metadata.samplesProcessed"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/number.ftl">
 							<control-param name="style">width: 8em;</control-param>
@@ -375,6 +406,7 @@
 
 					<show id="cggh:contacts" force="true" />
 					<show id="cggh:species" />
+					<show id="cggh:ragStatus"/>
 					<show id="cggh:sampleCountry" />
 				</field-visibility>
 				<appearance>
@@ -385,6 +417,8 @@
 						set="cgghMetadata">
 					</field>
 					<field id="cggh:species" label-id="cggh.metadata.species"
+						set="cgghMetadata" />
+					<field id="cggh:ragStatus" label-id="cggh.metadata.ragStatus"
 						set="cgghMetadata" />
 					<field id="cggh:sampleCountry" label-id="cggh.metadata.sampleCountry"
 						set="cgghMetadata" />
@@ -415,10 +449,10 @@
 		</forms>
 	</config>
 
-	<!-- cggh:site type edit form config -->
-	<config evaluator="node-type" condition="cggh:site">
+	<!-- cggh:site type create form config -->
+	<config evaluator="model-type" condition="cggh:site">
 		<forms>
-			<!-- Data List pop-up edit form -->
+			<!-- Create item form -->
 			<form>
 				<field-visibility>
 					<!-- cggh:site type -->
@@ -427,11 +461,26 @@
 					<show id="cm:latitude" />
 					<show id="cm:longitude" />
 				</field-visibility>
-				<edit-form template="../data-lists/forms/dataitem.ftl" />
+				<create-form template="../data-lists/forms/dataitem.ftl" />
 				<appearance>
 
 					<field id="cm:latitude" label-id="cm.metadata.latitude" />
 					<field id="cm:longitude" label-id="cm.metadata.longitude" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	
+	<!-- cggh:site type edit form config -->
+	<config evaluator="model-type" condition="cggh:project">
+		<forms>
+			<!-- Data List pop-up edit form -->
+			<form>
+				<field-visibility>
+					<show id="cm:name" />
+				</field-visibility>
+				<edit-form template="../data-lists/forms/dataitem.ftl" />
+				<appearance>
 				</appearance>
 			</form>
 		</forms>

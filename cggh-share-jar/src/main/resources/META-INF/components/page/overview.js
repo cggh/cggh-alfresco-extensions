@@ -749,15 +749,11 @@ if (typeof Cggh == "undefined" || !Cggh)
                     {
                         this.projects[n] = {
                                     "name": key,
-                                    "title": collaboration.projects[k].title,
-                                    "description": collaboration.projects[k].description,
-                                    "nodeRef": collaboration.projects[k].nodeRef,
                                     "studies": [ collaboration ]
                             };
-                        
-                        this.widgets.project_select.getMenu().addItem({ value:key, text:collaboration.projects[k].title});
+                        this.widgets.project_select.getMenu().addItem({ value:key, text:collaboration.projects[k].name});
                         if (filter == key) {
-                            this.widgets.project_select.set("label", collaboration.projects[k].title);
+                            this.widgets.project_select.set("label", collaboration.projects[k].name);
                             this.widgets.project_select.value = filter;
                         }
                     }
@@ -951,8 +947,7 @@ if (typeof Cggh == "undefined" || !Cggh)
                 for (i = 0, j = collaboration.projects.length; i < j; i++)
                 {
                     var proj = collaboration.projects[i];
-                    desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + proj.nodeRef + '">' + proj.name + '(' + this.msg("cggh.action.edit") + ')</a><br/>';
-                    desc += proj.title + '<br/>';
+                    desc += proj.name + '<br/>';
                 }
             }
 
@@ -964,25 +959,16 @@ if (typeof Cggh == "undefined" || !Cggh)
 
         renderProjectDetails : function Overview_renderProjectDetails(area, project)
         {
-            var objectId = project.nodeRef, name = project.name, title = project.title;
+            var name = project.name;
 
-            var desc = '<div>';
-            desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + objectId
-                    + '" class="theme-color-1">' + this.msg("cggh.action.edit") + '</a></div>';
-            desc += '<div class="project-name">';
+            var desc = '<div class="project-name">';
             desc += name;
             desc += '</div>';
-            desc += '<div class="project-title">';
-            desc += title;
-            desc += '</div>';
-            desc += '<div class="project-description">';
-            desc += project.description;
-            desc += '</div>';
+
             desc += '<div class="project-studies">';
             for (i = 0; i < project.studies.length;i++) {
                 
-                desc += '<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'edit-metadata?nodeRef=' + project.studies[i].nodeRef
-                + '" class="theme-color-1">' + project.studies[i].name + '</a> ' + project.studies[i].title + '<br/>';
+                desc += project.studies[i].name + '<br/>';
             }
             desc += '</div>';
             desc += '</div>';
@@ -1031,7 +1017,7 @@ if (typeof Cggh == "undefined" || !Cggh)
             Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
             var project = oRecord.getData();
-            var desc = project.title;
+            var desc = project.name;
 
             // '<a href="' + Alfresco.constants.URL_PAGECONTEXT +
             // 'folder-details?nodeRef=' + objectId + '" class="theme-color-1">'

@@ -34,7 +34,6 @@
          
          <span class="align-right yui-button-align" id="${id}-links">
             <span class="first-child">
-                 <a id="${id}-link-people" tabindex="1" href="/share/page/site/sequencing/data-lists?list=External_Contacts">${msg("link.people")}</a>
                  <a id="${id}-link-pubs" tabindex="2" href="/share/page/site/sequencing/documentlibrary#filter=path|%2FPublications">${msg("link.publications")}</a>
             </span>
          </span>
