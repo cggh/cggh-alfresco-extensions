@@ -507,6 +507,11 @@
 					<type>d:date</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="cggh:nextReview">
+					<title>Date for next review</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
 				<property name="cggh:strategicNature">
 					<title>Strategic Nature</title>
 					<type>d:text</type>

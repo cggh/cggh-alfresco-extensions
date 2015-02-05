@@ -223,7 +223,7 @@
 					<show id="cggh:samplesProcessed"/>
 					<show id="cggh:firstSample" />
 					<show id="cggh:lastSample" />
-					<show id="cggh:reviewed" />
+					<show id="cggh:nextReview" />
 					<show id="cggh:strategicNature" />
 					<show id="cggh:internalDescription" />
 					<show id="cggh:collaborationNotes" />
@@ -376,7 +376,7 @@
 						set="cgghMetadata" />
 					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"
 						set="cgghMetadata" />
-					<field id="cggh:reviewed" label-id="cggh.metadata.reviewed"
+					<field id="cggh:nextReview" label-id="cggh.metadata.nextReview"
 						set="cgghMetadata" />
 					<field id="cggh:strategicNature" label-id="cggh.metadata.strategicNature"
 						set="cgghMetadata" />

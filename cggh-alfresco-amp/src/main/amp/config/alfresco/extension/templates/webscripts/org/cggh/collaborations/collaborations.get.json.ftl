@@ -168,6 +168,7 @@
 </#if>
 "notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
 "samplesExpected": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesExpected"])!''}",
+"samplesProcessed": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesProcessed"])!''}",
 <#if collab.properties["cggh:firstSample"]??>
 "firstSampleDate": "${jsonUtils.encodeJSONString(collab.properties["cggh:firstSample"]?string("MM-yyyy"))!''}",
 </#if>
@@ -178,6 +179,9 @@
 "intDescrip": "${jsonUtils.encodeJSONString(collab.properties["cggh:internalDescription"])!''}",
 <#if collab.properties["cggh:reviewed"]??>
 "reviewed": "${jsonUtils.encodeJSONString(collab.properties["cggh:reviewed"]?string("dd-MM-yyyy"))!''}",
+</#if>
+<#if collab.properties["cggh:nextReview"]??>
+"nextReview": "${jsonUtils.encodeJSONString(collab.properties["cggh:nextReview"]?string("dd-MM-yyyy"))!''}",
 </#if>
 "modified": "${jsonUtils.encodeJSONString(collab.properties["cm:modified"]?string("dd-MM-yyyy HH:mm:ss"))!''}"
 }<#if collab_has_next>,</#if>
