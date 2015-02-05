@@ -204,10 +204,11 @@
             { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
             { key: "notes", label: this.msg("cggh.metadata.notes"), sortable: false, formatter: this.bind(this.renderCellNotes) },
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), sortable: false, formatter: this.bind(this.renderCellRagStatus) },
-            { key: "reviewed", label: this.msg("cggh.metadata.reviewed"), sortable: true, sortOptions:{sortFunction:this.sortReviewed},formatter: this.bind(this.renderCellReviewed) },
+            { key: "nextReview", label: this.msg("cggh.metadata.nextReview"), sortable: true, sortOptions:{sortFunction:this.sortReview},formatter: this.bind(this.renderCellReview) },
             { key: "liaision", label: this.msg("cggh.metadata.liaison"), sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
+            { key: "samplesProcessed", label: this.msg("cggh.metadata.samplesProcessed"), sortable: false, formatter: this.bind(this.renderCellSamplesProcessed) },
             { key: "firstSample", label: this.msg("cggh.metadata.firstSample"), sortable: true, sortOptions:{sortFunction:this.sortFirstSampleExpected},formatter: this.bind(this.renderCellFirstSampleExpected) },
             { key: "lastSample", label: this.msg("cggh.metadata.lastSample"), sortable: true, sortOptions:{sortFunction:this.sortLastSampleExpected},formatter: this.bind(this.renderCellLastSampleExpected) },
             { key: "collaborationDoc", label: this.msg("cggh.metadata.collabDoc"), sortable: false, formatter: this.bind(this.renderCellCollaborationDoc) },
@@ -994,6 +995,18 @@
          }
          elCell.innerHTML = render;
       },
+      renderCellSamplesProcessed: function Collaborations_renderCellSamplesProcessed(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var render = '';
+         if (collaboration.samplesProcessed) {
+        	 render = collaboration.samplesProcessed;
+         }
+         elCell.innerHTML = render;
+      },
       renderCellStrategicNature: function Collaborations_renderCellStrategicNature(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
@@ -1127,24 +1140,24 @@
           }
           return (ret);
       },
-      renderCellReviewed: function Collaborations_renderCellReviewed(elCell, oRecord, oColumn, oData)
+      renderCellReview: function Collaborations_renderCellReviewed(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
          var collaboration = oRecord.getData();
 
-         if (collaboration.reviewed) {
-             elCell.innerHTML = collaboration.reviewed;
+         if (collaboration.nextReview) {
+             elCell.innerHTML = collaboration.nextReview;
          }
          
       },
 
-      sortReviewed: function Collaborations_sortReviewed(rec1, rec2, desc) {
+      sortReview: function Collaborations_sortReview(rec1, rec2, desc) {
           var a = rec1.getData();
           var b = rec2.getData();
-          var date1s = a.reviewed;
-          var date2s = b.reviewed;
+          var date1s = a.nextReview;
+          var date2s = b.nextReview;
           
           ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
           
