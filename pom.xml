@@ -108,8 +108,10 @@
 	</build>
 
 	<modules>
+<!--
 		<module>cggh-publications-amp</module>
 		<module>cggh-publications-share</module>
+-->
 		<module>cggh-alfresco-amp</module>
 		<module>cggh-alfresco-war</module>
 		<!-- <module>solr</module> -->
