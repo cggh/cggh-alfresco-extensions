@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cggh</groupId>
 	<artifactId>cggh-alfresco-extensions</artifactId>
-	<version>1.4.1-SNAPSHOT</version>
+	<version>1.5.0-SNAPSHOT</version>
 	<name>Quickstart of Alfresco and Share with DB and runner embedded</name>
 	<description>This All-in-One project allows to manage all the components involved in Alfresco development (Repo, Share, Solr, AMPs) in one project</description>
 	<packaging>pom</packaging>
@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>org.alfresco.maven</groupId>
 		<artifactId>alfresco-sdk-parent</artifactId>
-		<version>1.1.1</version>
+		<version>2.1.0</version>
 	</parent>
 
 	<!-- | SDK properties have sensible defaults in the SDK parent, but you 
@@ -24,10 +24,10 @@
 		<alfresco.groupId>org.alfresco</alfresco.groupId>
 		<!-- Defines the Alfresco version to work against. Allowed values are: 
 			org.alfresco | org.alfresco.enterprise -->
-		<alfresco.version>4.2.f</alfresco.version>
+		<alfresco.version>5.0.d</alfresco.version>
 		<cas.client.version>3.2.1</cas.client.version>
 		<!-- not updated yet... 2.0.5-6com -->
-		<google.docs.version>2.0.5</google.docs.version>
+		<google.docs.version>3.0.2</google.docs.version>
 		<!-- This control the root logging level for all apps -->
 		<app.log.root.level>error</app.log.root.level>
 		<!-- This controls the default data location for dir.root -->
@@ -40,18 +40,20 @@
 		<alfresco.server.name>https://localhost:8443</alfresco.server.name>
 		<share.server.name>https://localhost:8444</share.server.name>
 		<cas.server.prefix>https://sso-dev.cggh.org/sso</cas.server.prefix>
+		
+		<!-- The Alfresco Share web application is accessible via this URL -->
+        <share.client.url>http://localhost:8080/share</share.client.url>
 	</properties>
 
 	<!-- Here we realize the connection with the Alfresco selected platform 
 		(e.g.version and edition) -->
 	<dependencyManagement>
 		<dependencies>
-			<!-- This will import the dependencyManagement for all artifacts in the 
-				selected Alfresco plaftorm (see http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies) 
-				NOTE: You still need to define dependencies in your POM, but you can omit 
-				version as it's enforced by this dependencyManagement. NOTE: It defaults 
-				to the latest version this SDK pom has been tested with, but alfresco version 
-				can/should be overridden in your project's pom -->
+           <!-- This will import the dependencyManagement for all artifacts in the selected Alfresco plaftorm
+                 (see http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Importing_Dependencies)
+                 NOTE: You still need to define dependencies in your POM, but you can omit version as it's enforced by this dependencyManagement.
+                 NOTE: It defaults to the latest version this SDK pom has been tested with, but alfresco version can/should be overridden in your project's pom
+             -->
 			<dependency>
 				<groupId>${alfresco.groupId}</groupId>
 				<artifactId>alfresco-platform-distribution</artifactId>
@@ -104,21 +106,45 @@
 				</configuration>
 			</plugin>
 
+            <!-- Compress JavaScript files and store as *-min.js -->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>yuicompressor-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.alfresco.maven.plugin</groupId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+            </plugin>
 		</plugins>
 	</build>
 
+    <profiles>
+        <profile>
+            <!-- Invoke your build with -Prun to run the multimodule project and enable rapid dev mode in your IDE.
+                 See 'run' profile in the sub modules pom.xml for further behavioral details.
+             -->
+            <id>run</id>
+            <properties>
+                <!-- While running in rapid dev mode with -Prun, we don't want amp web resources 
+                    to be added to the war, so we can load them directly from the AMP project (see 
+                    runner/tomcat/context-*.xml for more details) -->
+                <maven.alfresco.includeWebResources>false</maven.alfresco.includeWebResources>
+            </properties>
+        </profile>
+    </profiles>
+    
 	<modules>
-<!--
 		<module>cggh-publications-amp</module>
 		<module>cggh-publications-share</module>
+<!--
 -->
 		<module>cggh-alfresco-amp</module>
 		<module>cggh-alfresco-war</module>
-		<!-- <module>solr</module> -->
+		<module>solr-config</module>
 		<module>cggh-share-jar</module>
 		<module>cggh-share-war</module>
 		<!-- <module>wcmqs</module> -->
-		<!-- <module>runner</module> -->
+		<module>runner</module>
 
 	</modules>
 

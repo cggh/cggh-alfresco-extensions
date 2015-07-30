@@ -76,10 +76,10 @@ public class EvaluatorUtil
 				// for a site specific group such as "SiteConsumer"
 				if (groupName.startsWith("site"))
 				{
-
+/*
 					try
 					{
-
+*/
 						// Look at all the sites we're a member of
 						if (sitesList != null)
 						{
@@ -94,6 +94,17 @@ public class EvaluatorUtil
 								{
 									log.debug("Checking site:" + currentSite);
 								}
+								String siteMembership = "site_" + currentSite;
+								if (log.isDebugEnabled())
+								{
+									log.debug("Check:" + siteMembership + " vs " + groupName);
+								}
+								isMemberOfCurrentGroup = siteMembership.equals(groupName);
+								if (isMemberOfCurrentGroup)
+								{
+									break;
+								}
+								/* gives security warnings in version 5.0.c
 								Connector connector = context.getServiceRegistry().getConnectorService()
 										.getConnector("alfresco", userName, ServletUtil.getSession());
 								Response res = connector.call("/api/sites/" + currentSite + "/memberships/"
@@ -128,9 +139,10 @@ public class EvaluatorUtil
 									// assume they are not a member of the site.
 									isMemberOfCurrentGroup = false;
 								}
+								*/
 							}
 						}
-
+/*
 					} catch (ConnectorServiceException e)
 					{
 						e.printStackTrace();
@@ -141,6 +153,7 @@ public class EvaluatorUtil
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					*/
 				}
 			}
 

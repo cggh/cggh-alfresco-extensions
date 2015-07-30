@@ -5,22 +5,19 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/properties/local"/>
-        <dependent-module archiveName="cggh-share-extensions-1.4.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-extensions/cggh-share-extensions">
+        <dependent-module archiveName="cggh-share-extensions-1.5.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-share-extensions/cggh-share-extensions">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="cggh-publications-share-1.4.0-SNAPSHOT.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-publications-share/cggh-publications-share">
+        <dependent-module archiveName="cggh-publications-share-1.5.0-SNAPSHOT.amp" deploy-path="/WEB-INF/lib" handle="module:/resource/cggh-publications-share/cggh-publications-share">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integrations/alfresco-googledocs-share/2.0.5/alfresco-googledocs-share-2.0.5.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
-            <dependency-type>consumes</dependency-type>
-        </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/alfresco-wcm-quickstart-share/4.2.f/alfresco-wcm-quickstart-share-4.2.f.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/integrations/alfresco-googledocs-share/3.0.2/alfresco-googledocs-share-3.0.2.amp?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/prj/cggh-publications-share?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/4.2.f/share-4.2.f.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
+        <dependent-module deploy-path="/" handle="module:/overlay/var/M2_REPO/org/alfresco/share/5.0.d/share-5.0.d.war?unpackFolder=target/m2e-wtp/overlays&amp;includes=**/**&amp;excludes=META-INF/MANIFEST.MF">
             <dependency-type>consumes</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/" handle="module:/overlay/slf/?includes=**/**&amp;excludes=META-INF/MANIFEST.MF">

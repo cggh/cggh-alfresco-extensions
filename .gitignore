@@ -1,1 +1,4 @@
-/target
+target
+*.swp
+alf_data_dev/
+*.log

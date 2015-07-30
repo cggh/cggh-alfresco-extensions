@@ -150,7 +150,7 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 			{
 				public String doWork() throws Exception
 				{
-					userRegistrySynchronizer.synchronize(false, false, false);
+					userRegistrySynchronizer.synchronize(false, false);
 					return "";
 				}
 			}, AuthenticationUtil.getSystemUserName());

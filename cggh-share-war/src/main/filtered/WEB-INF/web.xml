@@ -58,7 +58,7 @@
    </filter>
    
    <filter>
-      <description>MT authentication support - NOTE: does not support portlets</description>
+      <description>MT authentication support</description>
       <filter-name>MTAuthentationFilter</filter-name>
       <filter-class>org.alfresco.web.site.servlet.MTAuthenticationFilter</filter-class>
    </filter>
@@ -90,87 +90,82 @@
       <filter-name>Security Headers Filter</filter-name>
       <filter-class>org.alfresco.web.site.servlet.SecurityHeadersFilter</filter-class>
    </filter>
+<!-- Toggle CAS placeholder start -->
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/p/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/proxy/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/service/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/faces/*</url-pattern>
+    </filter-mapping>
+<!-- Toggle CAS placeholder end -->
 
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <url-pattern>/page/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <url-pattern>/p/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <url-pattern>/proxy/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <url-pattern>/service/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <url-pattern>/faces/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <url-pattern>/page/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <url-pattern>/p/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <url-pattern>/proxy/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <url-pattern>/service/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <url-pattern>/faces/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/page/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/p/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/proxy/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/service/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <url-pattern>/faces/*</url-pattern>
-    </filter-mapping>
-
    <filter-mapping>
-      <filter-name>CacheExpiresFilter</filter-name>
-      <url-pattern>*.jpg</url-pattern>
+      <filter-name>MTAuthentationFilter</filter-name>
+      <url-pattern>/page/*</url-pattern>
    </filter-mapping>
+   
    <filter-mapping>
-      <filter-name>CacheExpiresFilter</filter-name>
-      <url-pattern>*.png</url-pattern>
+      <filter-name>MTAuthentationFilter</filter-name>
+      <url-pattern>/p/*</url-pattern>
    </filter-mapping>
+   
    <filter-mapping>
-      <filter-name>CacheExpiresFilter</filter-name>
-      <url-pattern>*.gif</url-pattern>
-   </filter-mapping>
-   <filter-mapping>
-      <filter-name>CacheExpiresFilter</filter-name>
-      <url-pattern>*.css</url-pattern>
-   </filter-mapping>
-   <filter-mapping>
-      <filter-name>CacheExpiresFilter</filter-name>
-      <url-pattern>*.js</url-pattern>
+      <filter-name>MTAuthentationFilter</filter-name>
+      <url-pattern>/proxy/*</url-pattern>
    </filter-mapping>
    
    <filter-mapping>
@@ -259,12 +254,8 @@
    </filter-mapping>
    
    <filter-mapping>
-      <filter-name>MTAuthentationFilter</filter-name>
+      <filter-name>UrlRewriteFilter</filter-name>
       <url-pattern>/page/*</url-pattern>
-   </filter-mapping>
-   <filter-mapping>
-      <filter-name>MTAuthentationFilter</filter-name>
-      <url-pattern>/p/*</url-pattern>
    </filter-mapping>
    
    <!-- Spring Context Loader listener - the name of the default global context is passed to the DispatcherServlet

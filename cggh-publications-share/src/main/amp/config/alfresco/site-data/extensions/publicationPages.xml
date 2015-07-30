@@ -13,7 +13,7 @@
 				</params> </evaluator> -->
 			<evaluator type="cggh.group.component.evaluator">
 				<params>
-					<groups>site_pct_SiteConsumer,site_pct_SiteCollaborator,site_pct_SiteContributor,site_pct_SiteManager</groups>
+					<groups>site_pct</groups>
 					<relation>OR</relation>
 				</params>
 			</evaluator>
