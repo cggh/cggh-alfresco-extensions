@@ -119,13 +119,13 @@
 							<artifactId>org_cggh_module_cms</artifactId>
 							<type>amp</type>
 						</overlay>
-
+<!--
 						<overlay>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>cggh-publications-amp</artifactId>
 							<type>amp</type>
 						</overlay>
-
+-->
 						<overlay>
 							<groupId>org.alfresco.integrations</groupId>
 							<artifactId>alfresco-googledocs-repo</artifactId>

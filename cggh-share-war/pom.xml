@@ -90,11 +90,13 @@
 							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
+						<!--
 						<overlay>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>cggh-publications-share</artifactId>
 							<type>amp</type>
 						</overlay>
+-->
 						<!--
 						<overlay>
 							<groupId>${alfresco.groupId}</groupId>
