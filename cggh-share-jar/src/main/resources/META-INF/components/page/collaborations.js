@@ -504,9 +504,9 @@
 
          this.collaborations.sort(function(a, b)
          {
-            var name1 = a.title ? a.title.toLowerCase() : a.name.toLowerCase(),
-                name2 = b.title ? b.title.toLowerCase() : b.name.toLowerCase();
-            return (name1 > name2) ? 1 : (name1 < name2) ? -1 : 0;
+            var name1 = a.name.toLowerCase(),
+                name2 = b.name.toLowerCase();
+            return (name1 < name2) ? 1 : (name1 > name2) ? -1 : 0;
          });
 
          var successHandler = function Collaborations_onCollaborationsUpdate_success(sRequest, oResponse, oPayload)
