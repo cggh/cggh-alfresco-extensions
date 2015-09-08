@@ -1060,12 +1060,14 @@
          if (collaboration.ragStatus) {
         	 var out = '';
         	 if (collaboration.ragStatus === "red") {
-        		 out = '<font color="#FF0000"><strong>Red</strong></font>';
+        	     out = '<font color="#FF0000"><strong>Red</strong></font>';
         	 } else if (collaboration.ragStatus === "amber") {
-        		 out = '<font color="#FF9900"><strong>Amber</strong></font>';
-			 } else if (collaboration.ragStatus === "green") {
-				 out = '<font color="#339966"><strong>Green</strong></font>';
-			 }
+        	     out = '<font color="#FF9900"><strong>Amber</strong></font>';
+        	 } else if (collaboration.ragStatus === "green") {
+        	     out = '<font color="#339966"><strong>Green</strong></font>';
+        	 } else if (collaboration.ragStatus === "inactive") {
+                     out = '<font color="grey">Inactive</font>';
+                 }
         	 elCell.innerHTML = out;
          }
         

@@ -80,6 +80,7 @@
             <option value="red">${msg("filter.rag.red")}</option>
             <option value="amber">${msg("filter.rag.amber")}</option>
             <option value="green">${msg("filter.rag.green")}</option>
+            <option value="inactive">${msg("filter.rag.inactive")}</option>
          </select>
          <div class="clear"></div>
       </div>

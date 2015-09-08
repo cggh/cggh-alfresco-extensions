@@ -64,6 +64,7 @@
 					<value>red</value>
 					<value>amber</value>
 					<value>green</value>
+					<value>inactive</value>
 				</list>
 			</parameter>
 		</constraint>
