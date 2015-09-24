@@ -95,13 +95,13 @@
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Referer header.
          -->
-         <referer>https://alfresco(.*)\.(cggh|malariagen)\.(org|net)/.*</referer>
+         <referer>http(s)?://alfresco(.*)\.(cggh|malariagen)\.(org|net)(/)?.*</referer>
 
          <!--
             Override and set this property with a regexp that if you have placed Share behind a proxy that
             does not rewrite the Origin header.
          -->
-         <origin>https://alfresco(.*)\.(cggh|malariagen)\.(org|net)/.*</origin>
+         <origin>http(s)?://alfresco(.*)\.(cggh|malariagen)\.(org|net)(/)?.*</origin>
       </properties>
 
       <!--
