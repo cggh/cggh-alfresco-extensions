@@ -56,7 +56,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
@@ -69,7 +68,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
@@ -81,7 +79,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
@@ -93,7 +90,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
@@ -105,7 +101,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
@@ -117,7 +112,6 @@
 {
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
-    "company": "${jsonUtils.encodeJSONString(myPerson.properties["cm:organization"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
