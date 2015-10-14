@@ -100,7 +100,7 @@
                 var peeps = collab["group" + items[i]];
                 var out = '';
                 for (var j=0;j< peeps.length; j++) {
-                    out += peeps[j].firstName + ' ' + peeps[j].lastName + ',' + peeps[j].company + ',' + peeps[j].email + '<br/>';  
+                    out += peeps[j].firstName + ' ' + peeps[j].lastName + ',' + peeps[j].email + '<br/>';  
                 }
                 formEl.innerHTML += out;
             }

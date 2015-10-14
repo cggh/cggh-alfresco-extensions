@@ -883,7 +883,6 @@ if (typeof Cggh == "undefined" || !Cggh)
                 {
                     var person = personList[i];
                     desc += person.firstName + ' ' + person.lastName + '<br/>';
-                    desc += person.company + '<br/>';
                     desc += person.email + '<br/>';
                 }
             }
