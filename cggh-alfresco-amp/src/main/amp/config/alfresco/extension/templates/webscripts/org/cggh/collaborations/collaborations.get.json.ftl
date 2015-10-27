@@ -54,6 +54,7 @@
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -66,6 +67,7 @@
 <#list collab.assocs["cggh:groupData"]![] as data>
 <#list data.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -77,6 +79,7 @@
 <#list collab.assocs["cggh:groupMail"]![] as mail>
 <#list mail.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -88,6 +91,7 @@
 <#list collab.assocs["cggh:groupPublic"]![] as pub>
 <#list pub.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -99,6 +103,7 @@
 <#list collab.assocs["cggh:groupContact"]![] as contact>
 <#list contact.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -110,6 +115,7 @@
 <#list collab.assocs["cggh:groupNotPublic"]![] as notPublic>
 <#list notPublic.children as myPerson>
 {
+    "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
     "lastName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:lastName"])!''}",
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
@@ -154,6 +160,7 @@
 <#if collab.assocs["cggh:liaison"]??>
 <#list collab.assocs["cggh:liaison"]![] as lia>
 "liaison": {
+        "malariagenUID": "${jsonUtils.encodeJSONString(lia.properties["cm:userName"])!''}",
 	"firstName": "${jsonUtils.encodeJSONString(lia.properties["cm:firstName"])!''}",
 	"lastName": "${jsonUtils.encodeJSONString(lia.properties["cm:lastName"])!''}"
 }
