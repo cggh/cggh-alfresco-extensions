@@ -395,7 +395,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 	/**
 	 * Set the namespace prefix resolver
 	 * 
-	 * @param nspr
+	 * @param nspr the namespace prefix resolver
 	 */
 	public void setNamespacePrefixResolver(NamespacePrefixResolver nspr) {
 		this.nspr = nspr;
