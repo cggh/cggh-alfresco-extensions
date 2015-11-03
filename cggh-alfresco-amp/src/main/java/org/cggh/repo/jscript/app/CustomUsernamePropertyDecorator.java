@@ -25,8 +25,6 @@ public class CustomUsernamePropertyDecorator extends UsernamePropertyDecorator {
     }
 
     /**
-     * @see org.alfresco.repo.jscript.app.PropertyDecorator#decorate(org.alfresco.service.cmr.repository.NodeRef,
-     *      java.io.Serializable)
      */
     @SuppressWarnings("unchecked")
     public JSONAware decorate(QName propertyName, NodeRef nodeRef, Serializable value) {
