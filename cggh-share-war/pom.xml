@@ -47,6 +47,12 @@
 			<version>${project.version}</version>
 			<type>amp</type>
 		</dependency>
+               <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>aikau-patched</artifactId>
+                        <version>${project.version}</version>
+                        <type>jar</type>
+                </dependency>
 
 		<dependency>
 			<groupId>org.jasig.cas.client</groupId>
@@ -87,6 +93,7 @@
 							<type>war</type>
 							<!-- To allow inclusion of META-INF -->
 							<excludes>
+                                                                <exclude>WEB-INF/lib/aikau-${aikau.version}.jar</exclude>
 							</excludes>
 						</overlay>
 						<!-- Add / order your AMPs here -->
