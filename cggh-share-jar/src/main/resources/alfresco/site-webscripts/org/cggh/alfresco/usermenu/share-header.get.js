@@ -1,6 +1,6 @@
 var userMenuWidgets = 
   widgetUtils.findObject(model.jsonModel, "id", "HEADER_USER_MENU");
-if (false && userMenuWidgets != null)
+if (userMenuWidgets != null)
 {
     //Would need to replace the LogoutService module as well
     //Also logout is now a POST which makes life more complicated
@@ -13,7 +13,6 @@ if (false && userMenuWidgets != null)
            label: "logout.label",
            iconClass: "alf-user-logout-icon",
            publishTopic: "ALF_DOLOGOUT",
-//           targetUrl:  "/dologout" + "?redirectURL=https://www.malariagen.net/sso/logout&redirectURLQueryKey=service&redirectURLQueryValue=https://www.malariagen.net/"
         }
      });
 
