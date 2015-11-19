@@ -44,7 +44,7 @@
 		<!-- The Alfresco Share web application is accessible via this URL -->
         <share.client.url>http://localhost:8080/share</share.client.url>
                 		
-                <cas.logout.dest.url>http://cggh.org</cas.logout.dest.url>
+                <cas.logout.dest.url>http://www.malariagen.net</cas.logout.dest.url>
 		<alfresco.aikau.artifactId>aikau</alfresco.aikau.artifactId>
 		<aikau.version>1.0.8.1</aikau.version>
 
