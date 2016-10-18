@@ -5,7 +5,7 @@
 			<version>1.0</version>
 			<evaluator type="cggh.type.component.evaluator">
 				<params>
-					<nodetype>cggh:collaborationFolder</nodetype>
+					<nodetype>{http://alfresco.cggh.org/model/custom/1.0}collaborationFolder</nodetype>
 				</params>
 			</evaluator>
 			<components>

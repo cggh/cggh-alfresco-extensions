@@ -1,107 +1,80 @@
 package org.cggh.web.extensibility;
 
-import java.net.URLEncoder;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import org.alfresco.web.extensibility.SlingshotEvaluatorUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.extensions.surf.RequestContext;
-import org.springframework.extensions.surf.ServletUtil;
-import org.springframework.extensions.surf.exception.ConnectorServiceException;
 import org.springframework.extensions.surf.extensibility.ExtensionModuleEvaluator;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.connector.Connector;
-import org.springframework.extensions.webscripts.connector.Response;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
+/*
+ * You might think you could use evaluator.doclib.metadata.nodeType
+ * but that's a different type of Evaluator.
+ * 
+ * It's surprising how widely this is called e.g. when a Create dialog is retrieved
+ * from the forms service e.g.
+ * /share/service/components/form?itemKind=type&itemId=cm:folder&destination=workspace://SpacesStore/4dc219a4-00eb-4293-a622-4e12dea9d331&mode=create&submitType=json&formId=doclib-common&showCancelButton=true&htmlid=template_x002e_documentlist_v2_x002e_documentlibrary_x0023_default-createFolder
+ */
 public class TypeSubComponentEvaluator implements ExtensionModuleEvaluator {
 
-    private static final String TYPE = "nodetype";
+	private static Log logger = LogFactory.getLog(TypeSubComponentEvaluator.class);
+
+	private static final String TYPE = "nodetype";
 	private static final String NEGATE = "negate";
 
-	@Override
-    public boolean applyModule(RequestContext context,
-			Map<String, String> evaluationProperties) {
+	protected SlingshotEvaluatorUtil util = null;
 
-        String requestedType = evaluationProperties.get(TYPE);
-        boolean resultSuccess = evaluationProperties.get(NEGATE) != null ? false : true;
+	public void setSlingshotEvaluatorUtil(SlingshotEvaluatorUtil slingshotExtensibilityUtil) {
+		this.util = slingshotExtensibilityUtil;
+	}
 
-        if (null == requestedType)
-            return !resultSuccess;
+	public boolean applyModule(RequestContext context, Map<String, String> evaluationProperties) {
 
-        Map<String, String> uriTokens = context.getUriTokens();
-        String nodeRef = uriTokens.get("nodeRef");
-        if (nodeRef == null) {
-            nodeRef = context.getParameter("nodeRef");
-        }
+		String requestedType = evaluationProperties.get(TYPE);
+		boolean resultSuccess = evaluationProperties.get(NEGATE) != null ? false : true;
 
-        if (nodeRef == null) {
-        	nodeRef = context.getParameter("itemId");
-        }
-        //This is a bit dubious - it seems that the comments component only has the ref as part of the URL
-        //hence nodeRef is null
-        //Could attempt to parse it out
-        if (nodeRef == null) {
-        	return resultSuccess;
-        }
-        try {
+		if (null == requestedType)
+			return !resultSuccess;
 
-            final Connector conn = context
-                    .getServiceRegistry()
-                    .getConnectorService()
-                    .getConnector("alfresco", context.getUserId(),
-                            ServletUtil.getSession());
-            
-            final Response response = conn.call("/api/node/"
-                    + nodeRef.replace(":/", ""));
-            if (response.getStatus().getCode() == Status.STATUS_OK) {
+		Map<String, String> uriTokens = context.getUriTokens();
+		String nodeRef = uriTokens.get("nodeRef");
+		if (nodeRef == null) {
+			nodeRef = context.getParameter("nodeRef");
+		}
+		
+		// This is a bit dubious - it seems that the comments component only has
+		// the ref as part of the URL
+		// hence nodeRef is null
+		// Could attempt to parse it out
+		if (nodeRef == null) {
+			return !resultSuccess;
+		}
 
-                String type = parseReponse(response);
+		if (nodeRef.indexOf("//") < 0) {
+			return !resultSuccess;
+		}
+		String url = "/api/metadata?nodeRef=" + nodeRef;
+		JSONObject response = util.jsonGet(url);
+		try {
+			//If it's not a valid nodeRef
+			//nodeRef could be e.g. cm:folder
+			if (response == null) {
+				return resultSuccess;
+			}
+			String type = response.getString("type");
+			if (requestedType.equals(type)) {
+				return resultSuccess;
+			}
+		} catch (JSONException e) {
+			logger.error("Unable to get type", e);
+		}
 
-                if (requestedType.equals(type))
-                    return resultSuccess;
-            } else {
-                return !resultSuccess;
-            }
-        } catch (ConnectorServiceException cse) {
-            cse.printStackTrace();
-            return !resultSuccess;
-        }
+		return !resultSuccess;
+	}
 
-        return !resultSuccess;
-    }
-
-    private String parseReponse(Response response) {
-        try {
-            Document dom = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder().parse(response.getResponseStream());
-            NodeList list = dom.getElementsByTagName("cmis:propertyId");
-            int len = list.getLength();
-
-            for (int i = 0; i < len; i++) {
-                Element element = (Element) list.item(i);
-                String propertyName = element
-                        .getAttribute("propertyDefinitionId");
-                String objectTypeId = null;
-                if (propertyName.equals("cmis:objectTypeId")) {
-                    objectTypeId = ((Element)(element.getElementsByTagName("cmis:value")
-                            .item(0))).getFirstChild().getNodeValue();
-                    objectTypeId = objectTypeId.replaceAll("F:", "");
-                }
-                if (objectTypeId == null) {
-                    continue;
-                }
-                return objectTypeId;
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-        return null;
-    }
-
-	@Override
 	public String[] getRequiredProperties() {
 		String[] props = { TYPE, NEGATE };
 		return props;
