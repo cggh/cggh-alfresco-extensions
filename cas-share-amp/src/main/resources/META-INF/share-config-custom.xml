@@ -1,0 +1,76 @@
+<alfresco-config>
+
+   
+   <config evaluator="string-compare" condition="Remote">
+      <remote>
+         <connector>
+            <id>alfrescoCookie</id>
+            <name>Alfresco Connector</name>
+            <description>Connects to an Alfresco instance using cookie-based authentication</description>
+            <class>org.${connector.package}.web.site.servlet.SlingshotAlfrescoConnector</class>
+         </connector>
+
+         <connector>
+            <id>alfrescoHeader</id>
+            <name>Alfresco Connector</name>
+            <description>Connects to an Alfresco instance using header and cookie-based authentication</description>
+            <class>org.${connector.package}.web.site.servlet.SlingshotAlfrescoConnector</class>
+            <userHeader>X-Alfresco-Remote-User</userHeader>
+         </connector>
+
+         <endpoint>
+            <id>alfresco</id>
+            <name>Alfresco - user access</name>
+            <description>Access to Alfresco Repository WebScripts that require user authentication</description>
+            <connector-id>alfrescoHeader</connector-id>
+            <endpoint-url>${useraccess.endpoint}</endpoint-url>
+            <identity>user</identity>
+            <external-auth>true</external-auth>
+         </endpoint>
+
+         <endpoint>
+            <id>alfresco-feed</id>
+            <parent-id>alfresco</parent-id>
+            <name>Alfresco Feed</name>
+            <description>Alfresco Feed - supports basic HTTP authentication via the EndPointProxyServlet</description>
+            <connector-id>alfrescoHeader</connector-id>
+            <endpoint-url>${feed.endpoint}</endpoint-url>
+            <identity>user</identity>
+            <external-auth>true</external-auth>
+         </endpoint>
+
+         <endpoint>
+            <id>alfresco-api</id>
+            <parent-id>alfresco</parent-id>
+            <name>Alfresco Public API - user access</name>
+            <description>Access to Alfresco Repository Public API that require user authentication.
+                         This makes use of the authentication that is provided by parent 'alfresco' endpoint.</description>
+            <connector-id>alfrescoHeader</connector-id>
+            <endpoint-url>${api.endpoint}</endpoint-url>
+            <identity>user</identity>
+            <external-auth>true</external-auth>
+         </endpoint>
+      </remote>
+   </config>
+   
+
+   <!-- Cookie settings -->
+   <!-- To disable alfUsername2 cookie set enableCookie value to "false" -->
+   <!--
+   <plug-ins>
+      <element-readers>
+         <element-reader element-name="cookie" class="org.alfresco.web.config.cookie.CookieElementReader"/>
+      </element-readers>
+   </plug-ins>
+
+   <config evaluator="string-compare" condition="Cookie" replace="true">
+      <cookie>
+         <enableCookie>false</enableCookie>
+         <cookies-to-remove>
+            <cookie-to-remove>alfUsername3</cookie-to-remove>
+            <cookie-to-remove>alfLogin</cookie-to-remove>
+         </cookies-to-remove>
+      </cookie>
+   </config>
+   -->
+</alfresco-config>
