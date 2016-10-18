@@ -1,3 +1,0 @@
-http://mindthegab.com/2014/08/07/rapid-development-and-hot-reloading-for-your-maven-project-in-eclipse-and-idea-for-free-yes-with-spring-loaded-and-tomcat7-virtualwebapp/
-
- on the server properties page in STS there is a section "Application Reload Behaviour", choose the java agent based reloading option. You don't need to set any options. Then I think you also need to set your publish options possibly for the app as well as for the server. (turn off auto reload for the app?). Clicking the option on the server properties page will add an 'old' version of Springloaded to you launch configuration, which you should replace with the 1.2.0 build you are using. 
