@@ -1,0 +1,44 @@
+{
+	"name" : "Project Studies Virtual Folders",
+	"nodes" : [
+        { "id": "1",
+            "name": "Partner Studies",
+            "nodes": [
+                {
+                        "id" : "11",
+                        "name" : "Approved",
+                        "description" : "All studies in First project - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "+TYPE:'cggh:collaborationFolder' AND @cggh:projectsText:'First project' AND @cggh:collaborationStatus:'active'"
+                        },
+                       "nodes": [
+                            
+                       ]
+
+                }, 
+                {
+                        "id" : "12",
+                        "name" : "Pending",
+                        "description" : "All unapproved studies in First project",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "+TYPE:'cggh:collaborationFolder' AND @cggh:projectsText:'First project' AND @cggh:collaborationStatus:'enquiry'"
+                         }
+                        
+                
+                },
+                {
+                        "id" : "13",
+                        "name" : "Collaboration Agreements",
+                        "description" : "All studies in First project - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "+ASPECT:'cggh:collaborationDocument' AND @cggh:projectsText:'First project'"
+                        }                   
+                 }
+            ]
+        }
+	]
+}
+

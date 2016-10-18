@@ -1,0 +1,33 @@
+{
+	"name" : "Collaborations Virtual Folders",
+	"nodes" : [
+                {
+                        "id" : "1",
+                        "name" : "Publications",
+                        "description" : "All publications in all sites - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "TYPE:'cggh:publication'"
+                                    }
+                },
+                {
+                        "id" : "2",
+                        "name" : "My Studies",
+                        "description" : "Studies for which I am the liaison - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "TYPE:'cggh:collaborationFolder' AND =@cggh:liaisonUsername:%CURRENT_USER%"
+                                    }
+                },
+                {
+                        "id" : "3",
+                        "name" : "First project",
+                        "description" : "All studies in First project - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "TYPE:'cggh:collaborationFolder' AND @cggh:projectsText:'First project'"
+                                   }
+                }
+	]
+}
+
