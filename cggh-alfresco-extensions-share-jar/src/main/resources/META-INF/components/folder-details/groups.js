@@ -74,7 +74,7 @@
             Alfresco.util.Ajax.jsonGet({
                 url : Alfresco.constants.PROXY_URI + "cggh/collaborations",
                 dataObj : {
-                    itemId : this.options.nodeRef
+                    nodeRef : this.options.nodeRef
                 },
                 successCallback : {
                     fn : this.onFormLoaded,

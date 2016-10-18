@@ -2,8 +2,8 @@ var folder = null;
 
 folder = companyhome.childByNamePath('/Sites/sequencing/documentLibrary/Collaborations');
 var collab = null;
-if (args.itemId != null) {
-    collab = args.itemId
+if (args.nodeRef != null) {
+    collab = args.nodeRef
 }
 
 var collabNodes = new Array();
