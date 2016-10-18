@@ -22,6 +22,7 @@ if (typeof Cggh == "undefined" || !Cggh)
              */
             Alfresco.util.ComponentManager.register(this);
             YAHOO.Bubbling.subscribe("collaborationsUpdated", this.updateLiaison, this);
+            YAHOO.Bubbling.subscribe("collaborationsUpdated", this.updateContacts, this);
             YAHOO.Bubbling.subscribe("complete", this.onFolderChanged, this);
             YAHOO.Bubbling.subscribe("folderRenamed", this.onFolderChanged, this);
             // Hack to make me go first
@@ -32,8 +33,9 @@ if (typeof Cggh == "undefined" || !Cggh)
 
             this.collaborations = [];
             this.nodesToUpdate = [];
-            this.reloading = false;
-
+            this.contactNodesToUpdate = [];
+            this.loading = false;
+            this.loaded = false;
             return this;
         };
 
@@ -46,8 +48,6 @@ if (typeof Cggh == "undefined" || !Cggh)
              */
             onReady : function Collaborations_onReady()
             {
-                // Load collaborations & preferences
-                this.loadCollaborations();
             },
             /**
              * File or folder renamed event handler
@@ -60,28 +60,56 @@ if (typeof Cggh == "undefined" || !Cggh)
              */
             onFolderChanged : function Collaborations_onFolderChanged(layer, args)
             {
-                // Load collaborations & preferences
-                this.reloading = true;
-                this.loadCollaborations();
+                this.loaded = false;
             },
-            isInLookup : function Collaborations_isLookup()
+            isLoaded : function Collaborations_isLookup()
             {
-                return this.reloading;
+                return this.loaded;
+            },
+            getLiaisonText: function Collaborations_getLiaisonText(nodeName) {
+            	var collab = this.getCollaboration(nodeName);
+                var content = null;
+                if (collab != null && collab.liaison)
+                {
+                    content = collab.liaison.firstName + ' ' + collab.liaison.lastName;
+                }
+                return content;
             },
             updateLiaison : function Collaborations_updateLiaison(layer, args)
             {
-                var nodeToUpdate;
+                var nodeToUpdate, content;
                 while ((nodeToUpdate = this.nodesToUpdate.pop()))
                 {   
-                    var collab = this.getCollaboration(nodeToUpdate.nodeName);
-                    var content = '';
-                    if (collab.liaison)
-                    {
-                        content = collab.liaison.firstName + ' ' + collab.liaison.lastName;
-                    }
+                    content = this.getLiaisonText(nodeToUpdate.nodeName)
                     var node = YAHOO.util.Dom.get(nodeToUpdate.id);
-                    if (node != null) {
-                        var newNode = new YAHOO.util.Element(content);
+                    if (node != null && content != null) {
+                        node.appendChild(document.createTextNode(content));
+                    }
+                }
+            },
+            getContactsText: function Collaborations_getContactsText(nodeName) {
+            	var collab = this.getCollaboration(nodeName);
+                var content = null;
+                if (collab) {
+                	if (collab.groupContact)
+                	{
+                		var contacts = [];
+                		collab.groupContact.forEach(function(item){ 
+                			contacts.push(item.firstName + ' ' + item.lastName);
+                		});
+                		content = contacts.join(", ");
+                	}
+                }
+                return content;
+            },
+            updateContacts : function Collaborations_updateContacts(layer, args)
+            {
+                var nodeToUpdate, content;
+                while ((nodeToUpdate = this.contactNodesToUpdate.pop()))
+                {   
+                    content = this.getContactsText(nodeToUpdate.nodeName)
+                    var node = YAHOO.util.Dom.get(nodeToUpdate.id);
+                    if (node != null && content != null) {
                         node.appendChild(document.createTextNode(content));
                     }
                 }
@@ -105,7 +133,8 @@ if (typeof Cggh == "undefined" || !Cggh)
             onCollaborationsLoaded : function Collaborations_onCollaborationsLoaded(p_response)
             {
                 this.collaborations = p_response.json.collaborationNodes;
-                this.reloading = false;
+                this.loaded = true;
+                this.loading = false;
                 //Now we can redraw the nodes that were drawn while we were loading
                 YAHOO.Bubbling.fire("collaborationsUpdated");
             },
@@ -113,7 +142,7 @@ if (typeof Cggh == "undefined" || !Cggh)
             {
 
                 var collabs = this.collaborations;
-                var collab;
+                var collab = null;
                 for (i = 0, numItems = collabs.length; i < numItems; i++)
                 {
                     collab = collabs[i];
@@ -126,6 +155,10 @@ if (typeof Cggh == "undefined" || !Cggh)
             },
             setLiaisonRefresh : function Collaborations_setLiaisonRefresh(nodeName, id, label)
             {
+            	if (!this.loading) {
+            		this.loadCollaborations();
+            		this.loading = true;
+            	}
                 var update =
                 {
                     'nodeName' : nodeName,
@@ -134,6 +167,20 @@ if (typeof Cggh == "undefined" || !Cggh)
                 };
                 this.nodesToUpdate.push(update);
             },
+            setContactsRefresh : function Collaborations_setContactsRefresh(nodeName, id, label)
+            {
+            	if (!this.loading) {
+            		this.loadCollaborations();
+            		this.loading = true;
+            	}
+                var update =
+                {
+                    'nodeName' : nodeName,
+                    'id' : id,
+                    'label' : label
+                };
+                this.contactNodesToUpdate.push(update);
+            }
 
         });
 
@@ -148,12 +195,11 @@ if (typeof Cggh == "undefined" || !Cggh)
             var jsNode = record.jsNode, properties = jsNode.properties, id = Alfresco.util.generateDomId(), content = "";
 
             var nodeName = properties['cm:name'];
-            if (!cggh_collab.isInLookup())
+            if (cggh_collab.isLoaded())
             {
-                var collab = cggh_collab.getCollaboration(nodeName);
-                if (collab.liaison)
-                {
-                    content = collab.liaison.firstName + ' ' + collab.liaison.lastName;
+                content = cggh_collab.getLiaisonText(nodeName);
+                if (content == null) {
+                	cggh_collab.setLiaisonRefresh(nodeName, id, label);
                 }
             } else
             {
@@ -171,17 +217,23 @@ if (typeof Cggh == "undefined" || !Cggh)
         {
             var jsNode = record.jsNode, properties = jsNode.properties, id = Alfresco.util.generateDomId(), content = "";
 
-            var nodeValues = properties['cggh_contacts'];
+            var nodeName = properties['cm:name'];
 
-            if (nodeValues)
+            if (cggh_collab.isLoaded())
             {
-                content = nodeValues.join(', ');
+                content = cggh_collab.getContactsText(nodeName);
+                if (content == null) {
+                	cggh_collab.setContactsRefresh(nodeName, id, label);
+                }
+            } else
+            {	
+                cggh_collab.setContactsRefresh(nodeName, id, label);
             }
             return '<span id="' + id + '" class="item">' + label + content + '</span>';
         }
         YAHOO.Bubbling.fire("registerRenderer",
         {
-            propertyName : "cggh_contacts",
+            propertyName : "cggh_groupContact",
             renderer : renderContacts
         });
 
