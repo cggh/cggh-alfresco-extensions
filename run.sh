@@ -1,9 +1,7 @@
 #!/bin/bash
-# Downloads the spring-loaded lib if not existing and runs the full all-in-one
-# (Alfresco + Share + Solr) using the runner project
-springloadedfile=~/.m2/repository/org/springframework/springloaded/1.2.3.RELEASE/springloaded-1.2.3.RELEASE.jar
 
-if [ ! -f $springloadedfile ]; then
-mvn validate -Psetup
+if [ ! -f /etc/tomcat/fastersecurerandom.properties ]
+then
+    sudo echo 'securerandom.source=file:/dev/urandom' > /etc/tomcat/fastersecurerandom.properties 
 fi
-MAVEN_OPTS="-javaagent:$springloadedfile -noverify -Xms256m -Xmx2G" mvn install -Prun
+JAVA_OPTS="-Djava.security.properties=/etc/tomcat/fastersecurerandom.properties" MAVEN_OPTS="-Xms256m -Xmx2G" mvn clean install -DskipTests=true alfresco:run
