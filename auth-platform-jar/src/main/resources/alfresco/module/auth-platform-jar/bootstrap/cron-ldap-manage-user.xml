@@ -1,0 +1,35 @@
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+	      xmlns:cm="http://www.alfresco.org/model/content/1.0" xmlns:app="http://www.alfresco.org/model/application/1.0"
+	      xmlns:sys="http://www.alfresco.org/model/system/1.0"
+	      xmlns:emailserver="http://www.alfresco.org/model/emailserver/1.0">
+	      
+  <cm:folder view:childName="cm:auth">
+    <app:uifacets />
+    <cm:name>auth</cm:name>
+    <app:icon>space-icon-default</app:icon>
+    <cm:title>Auth Scripts</cm:title>
+    <cm:description></cm:description>
+    <view:properties>
+      <sys:node-uuid>custom-auth-scripts</sys:node-uuid>
+    </view:properties>   
+    <cm:contains>
+      <cm:content view:childName="cm:cron-ldap-manage-user.js">
+        <view:aspects>
+          <cm:titled />
+          <cm:author />
+          <app:inlineeditable />
+        </view:aspects>
+        <view:properties>
+          <app:editInline>true</app:editInline>
+          <cm:description>Make sure all site members are in the right groups</cm:description>
+   <cm:content>contentUrl=classpath:alfresco/module/auth-platform-jar/bootstrap/cron-ldap-manage-user.js|mimetype=application/x-javascript|size=|encoding=UTF-8|locale=en_US_</cm:content>
+          <cm:title>Site Discussion notification script</cm:title>
+          <cm:author>admin</cm:author>
+          <cm:name>cron-ldap-manage-user.js</cm:name>
+          <sys:node-uuid>cron-ldap-manage-user</sys:node-uuid>
+        </view:properties>
+        <view:associations></view:associations>
+      </cm:content>
+    </cm:contains>
+  </cm:folder>
+</view:view>      
