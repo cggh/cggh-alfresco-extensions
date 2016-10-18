@@ -16,13 +16,13 @@
 					</sub-components>
 				</component>
 			</components>
-			<evaluator type="cggh.group.component.evaluator">
-				<params>
-					<groups>GROUP_all_site_users,GROUP_ALFRESCO_ADMINISTRATORS</groups>
-					<relation>OR</relation>
-					<negate>true</negate>
-				</params>
-			</evaluator>
+			<evaluator type="group.module.evaluator">
+                <params>
+                    <groups>GROUP_ALL_SITE_USERS,GROUP_ALFRESCO_ADMINISTRATORS</groups>
+                    <groupRelation>OR</groupRelation>
+                    <negate>true</negate>
+                </params>
+            </evaluator>
 		</module>
 		<module>
 			<id>Customize title menu for Hard Luck</id>
@@ -34,25 +34,25 @@
 				</customization>
 			</customizations>
 			<auto-deploy>true</auto-deploy>
-			<evaluator type="cggh.group.component.evaluator">
-				<params>
-					<groups>GROUP_all_site_users,GROUP_ALFRESCO_ADMINISTRATORS</groups>
-					<relation>OR</relation>
-					<negate>true</negate>
-				</params>
-			</evaluator>
+			<evaluator type="group.module.evaluator">
+                <params>
+                    <groups>GROUP_ALL_SITE_USERS,GROUP_ALFRESCO_ADMINISTRATORS</groups>
+                    <groupRelation>OR</groupRelation>
+                    <negate>true</negate>
+                </params>
+            </evaluator>
 		</module>
 		<module>
 			<id>Hide Default Dashlets</id>
 			<version>1.0</version>
 			<auto-deploy>true</auto-deploy>
-			<evaluator type="cggh.group.component.evaluator">
-				<params>
-					<groups>GROUP_all_site_users,GROUP_ALFRESCO_ADMINISTRATORS</groups>
-					<relation>OR</relation>
-					<negate>true</negate>
-				</params>
-			</evaluator>
+			<evaluator type="group.module.evaluator">
+                <params>
+                    <groups>GROUP_ALL_SITE_USERS,GROUP_ALFRESCO_ADMINISTRATORS</groups>
+                    <groupRelation>OR</groupRelation>
+                    <negate>true</negate>
+                </params>
+            </evaluator>
 			<components>
 				<!-- Hide all the default stuff -->
 				<component>

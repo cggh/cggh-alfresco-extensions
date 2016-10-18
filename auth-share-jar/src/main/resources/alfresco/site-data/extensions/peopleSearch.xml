@@ -10,14 +10,13 @@
 				</customization>
 			</customizations>
 			<auto-deploy>true</auto-deploy>
-			<auto-deploy>true</auto-deploy>
-			<evaluator type="cggh.group.component.evaluator">
-				<params>
-					<groups>GROUP_peopleFinders,GROUP_ALFRESCO_ADMINISTRATORS</groups>
-					<relation>OR</relation>
-					<negate>true</negate>
-				</params>
-			</evaluator>
+			<evaluator type="group.module.evaluator">
+                <params>
+                    <groups>GROUP_PEOPLE_FINDERS,GROUP_ALFRESCO_ADMINISTRATORS</groups>
+                    <groupRelation>OR</groupRelation>
+                    <negate>true</negate>
+                </params>
+            </evaluator>
 		</module>
 	</modules>
 </extension>
