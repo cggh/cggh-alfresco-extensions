@@ -35,13 +35,6 @@
  "${country}"
 <#if country_has_next>,</#if>
 </#list>],
-"projects": [
-<#list collab.assocs["cggh:projectsdl"]![] as project>
- {
-    "name": "${jsonUtils.encodeJSONString(project.name)!''}"
-}
-<#if project_has_next>,</#if>
-</#list>],
 "collaborationDoc": [
 <#list collab.assocs["cggh:collaborationDoc"]![] as collaborationDoc>
  {
@@ -53,6 +46,7 @@
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -60,12 +54,14 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 
 "groupData": [
 <#list collab.assocs["cggh:groupData"]![] as data>
 <#list data.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -73,11 +69,13 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 "groupMail": [
 <#list collab.assocs["cggh:groupMail"]![] as mail>
 <#list mail.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -85,11 +83,13 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 "groupPublic": [
 <#list collab.assocs["cggh:groupPublic"]![] as pub>
 <#list pub.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -97,11 +97,13 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 "groupContact": [
 <#list collab.assocs["cggh:groupContact"]![] as contact>
 <#list contact.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -109,11 +111,13 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 "groupNotPublic": [
 <#list collab.assocs["cggh:groupNotPublic"]![] as notPublic>
 <#list notPublic.children as myPerson>
+<#if myPerson.properties["cm:userName"] != "pwmTestUser">
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -121,6 +125,7 @@
     "email": "${jsonUtils.encodeJSONString(myPerson.properties["cm:email"])!''}"
 }
 <#if myPerson_has_next>,</#if>
+</#if>
 </#list>
 </#list>],
 <#if collab.assocs["cggh:webStudy"]??>
