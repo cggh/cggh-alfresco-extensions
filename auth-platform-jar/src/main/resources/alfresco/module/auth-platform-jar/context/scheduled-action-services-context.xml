@@ -24,7 +24,7 @@
                         <value>script-ref</value>
                     </key>
                     <!-- Note that as of Alfresco 4.0, due to a  Spring upgrade, the FreeMarker ${foo} entries must be escaped --> 
-                    <value>\$\{selectSingleNode('workspace://SpacesStore', 'lucene', 'PATH:"/app:company_home/app:dictionary/app:scripts/cm:cron-ldap-manage-user.js"' )\}</value>
+                    <value>\$\{selectSingleNode('workspace://SpacesStore', 'lucene', 'PATH:"/app:company_home/app:dictionary/app:scripts/cm:auth/cm:cron-ldap-manage-user.js"' )\}</value>
                 </entry>
             </map>
         </property>

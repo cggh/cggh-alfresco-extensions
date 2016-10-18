@@ -40,7 +40,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 	private static Log log = LogFactory.getLog(ManageLDAPUserActionExecuter.class);
 
 	private static final String PARAM_ALL_SITE_USERS_GROUP = "usersGroup";
-	private static final String DEFAULT_ALL_SITE_USERS_GROUP = "GROUP_all_site_users";
+	private static final String DEFAULT_ALL_SITE_USERS_GROUP = "GROUP_ALL_SITE_USERS";
 	private static final String PARAM_DN = "dn";
 	private static final String DEFAULT_DN = "cn=siteUsers,ou=alfresco,ou=groups,dc=malariagen,dc=net";
 	private static final String PARAM_MEMBER = "member";
@@ -62,19 +62,16 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 	private AuthorityService authorityService;
 	private PersonService personService;
 
-	@Override
+	private boolean testMode = false;
+	
 	public boolean isTestMode() {
-		// TODO Auto-generated method stub
-		return false;
+		return testMode;
 	}
 
-	@Override
 	public void setTestMode(boolean arg0) {
-		// TODO Auto-generated method stub
-
+		testMode = arg0;
 	}
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
 
 		if (usersGroup == null || usersGroup.length() == 0)
@@ -140,10 +137,11 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 			}
 		}
 
+		String userName = null;
 		try
 		{
 
-			String userName = getUserDn(person.getUserName(), ruleAction);
+			userName = getUserDn(person.getUserName(), ruleAction);
 
 			BasicAttribute memberAttr = new BasicAttribute(member, userName);
 
@@ -215,7 +213,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 
 		} catch (NamingException e)
 		{
-			log.error("Failed to modify ldap", e);
+			log.error("Failed to modify ldap for " + userName, e);
 		}
 
 	}
@@ -239,7 +237,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 			log.debug("search filter:" + searchFilter);
 		}
 		// Search for objects using the filter
-		NamingEnumeration answer = ctx.search(searchBase, searchFilter, searchCtls);
+		NamingEnumeration<SearchResult> answer = ctx.search(searchBase, searchFilter, searchCtls);
 
 		String userDn = null;
 		// Loop through the search results
@@ -262,16 +260,18 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 					try
 					{
 						int totalResults = 0;
-						for (NamingEnumeration ae = attrs.getAll(); ae.hasMore();)
+						for (NamingEnumeration<? extends Attribute> ae = attrs.getAll(); ae.hasMore();)
 						{
 							Attribute attr = (Attribute) ae.next();
 							log.debug("Attribute: " + attr.getID());
-							for (NamingEnumeration e = attr.getAll(); e.hasMore(); totalResults++)
+							if (log.isDebugEnabled()) 
 							{
+								for (NamingEnumeration<?> e = attr.getAll(); e.hasMore(); totalResults++)
+								{
 
-								log.debug(" " + totalResults + ". " + e.next());
+									log.debug(" " + totalResults + ". " + e.next());
+								}
 							}
-
 						}
 
 					} catch (NamingException e)

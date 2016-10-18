@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<!-- ========================== -->
+<!-- Enforcement of permissions -->
+<!-- ========================== -->
+
+<!-- -->
+<!-- This file defines the beans that intercept method calls to the repository 
+	services -->
+<!-- and enforce security based on the currently authenticated user. -->
+<!-- -->
+
+<beans>
+
+	<!-- ======================================== -->
+	<!-- Post method call application of security -->
+	<!-- ======================================== -->
+ 
+	<bean id="siteAcl"
+		class="org.cggh.repo.security.permissions.impl.acegi.CustomACLEntryAfterInvocationProvider"
+		abstract="false" singleton="true" lazy-init="default" autowire="default"
+		dependency-check="default">
+		<property name="authorityService"><ref bean="authorityService"/></property>
+		<property name="personService"><ref bean="personService"/></property>
+	</bean>
+
+	<bean id="afterInvocationManager"
+		class="net.sf.acegisecurity.afterinvocation.AfterInvocationProviderManager">
+		<property name="providers">
+			<list>
+				<ref bean="afterAcl" />
+				<ref bean="afterAclMarking" />
+				<ref local="siteAcl" />
+			</list>
+		</property>
+	</bean>
+
+
+     <bean id="PersonService_security" class="org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityInterceptor">
+        <property name="authenticationManager"><ref bean="authenticationManager"/></property>
+        <property name="accessDecisionManager"><ref bean="accessDecisionManager"/></property>
+        <property name="afterInvocationManager"><ref local="afterInvocationManager"/></property>
+        <property name="objectDefinitionSource">
+            <value>
+                org.alfresco.service.cmr.security.PersonService.getPerson=ACL_ALLOW,AFTER_ACL_NODE.sys:base.ReadProperties,AFTER_ACL_SHARED_SITE.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.getPersonOrNull=ACL_ALLOW,AFTER_ACL_NODE.sys:base.ReadProperties,AFTER_ACL_SHARED_SITE_NULL.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.personExists=ACL_ALLOW,AFTER_ACL_SHARED_SITE.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.isEnabled=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.createMissingPeople=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.setCreateMissingPeople=ACL_METHOD.ROLE_ADMINISTRATOR
+                org.alfresco.service.cmr.security.PersonService.getMutableProperties=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.setPersonProperties=ACL_METHOD.ROLE_ADMINISTRATOR
+                org.alfresco.service.cmr.security.PersonService.isMutable=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.createPerson=ACL_METHOD.ROLE_ADMINISTRATOR
+                org.alfresco.service.cmr.security.PersonService.deletePerson=ACL_METHOD.ROLE_ADMINISTRATOR
+                org.alfresco.service.cmr.security.PersonService.notifyPerson=ACL_METHOD.ROLE_ADMINISTRATOR
+                org.alfresco.service.cmr.security.PersonService.getAllPeople=ACL_ALLOW,AFTER_ACL_SHARED_SITE.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.getPeople=ACL_ALLOW,AFTER_ACL_NODE.sys:base.ReadProperties,AFTER_ACL_SHARED_SITE.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.getPeopleFilteredByProperty=ACL_ALLOW,AFTER_ACL_SHARED_SITE.sys:base.ReadProperties,AFTER_ACL_SHARED_SITE.GROUP_PEOPLE_FINDERS
+                org.alfresco.service.cmr.security.PersonService.getPeopleContainer=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.getUserNamesAreCaseSensitive=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.getUserIdentifier=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.countPeople=ACL_ALLOW
+                org.alfresco.service.cmr.security.PersonService.*=ACL_DENY
+         </value>
+        </property>
+    </bean>
+ 
+
+
+</beans>

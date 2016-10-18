@@ -16,8 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class AssociateGroupActionExecuter extends ActionExecuterAbstractBase
-		implements InitializingBean, TestModeable {
+public class AssociateGroupActionExecuter extends ActionExecuterAbstractBase implements InitializingBean, TestModeable {
 
 	private static final String PARAM_GROUP_NAME = "group";
 	private static final String PARAM_ASSOC_NAME = "association_name";
@@ -25,9 +24,7 @@ public class AssociateGroupActionExecuter extends ActionExecuterAbstractBase
 
 	private static final String DEFAULT_NAMESPACE = "http://alfresco.cggh.org/model/custom/1.0";
 
-	private static Log logger = LogFactory
-			.getLog(AssociateGroupActionExecuter.class);
-
+	private static Log logger = LogFactory.getLog(AssociateGroupActionExecuter.class);
 
 	private NodeService nodeService;
 
@@ -35,24 +32,20 @@ public class AssociateGroupActionExecuter extends ActionExecuterAbstractBase
 
 	private String namespace;
 
+	private boolean testMode = false;
+
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
 	}
 
-
-	@Override
 	public boolean isTestMode() {
-		// TODO Auto-generated method stub
-		return false;
+		return testMode;
 	}
 
-	@Override
 	public void setTestMode(boolean arg0) {
-		// TODO Auto-generated method stub
-
+		testMode = arg0;
 	}
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
 
 		if (namespace == null || namespace.length() == 0) {
@@ -71,26 +64,33 @@ public class AssociateGroupActionExecuter extends ActionExecuterAbstractBase
 			logger.debug(ruleAction.getParameterValues());
 		}
 
-		String groupName = (String) ruleAction
-				.getParameterValue(PARAM_GROUP_NAME);
+		String groupName = (String) ruleAction.getParameterValue(PARAM_GROUP_NAME);
 		NodeRef groupRef = authorityService.getAuthorityNodeRef(groupName);
-		
-		String associationName = (String) ruleAction
-				.getParameterValue(PARAM_ASSOC_NAME);
-		String associationNamespace = (String) ruleAction
-				.getParameterValue(PARAM_ASSOC_NAMESPACE);
+
+		String associationName = (String) ruleAction.getParameterValue(PARAM_ASSOC_NAME);
+		String associationNamespace = (String) ruleAction.getParameterValue(PARAM_ASSOC_NAMESPACE);
 
 		if (associationNamespace == null) {
 			associationNamespace = namespace;
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Creating association:" + actionedOn + "#" + groupName
-					+ "#" + groupRef + "#" + associationNamespace + "#"
-					+ associationName);
+			logger.debug("Creating association:" + actionedOn + "#" + groupName + "#" + groupRef + "#"
+					+ associationNamespace + "#" + associationName);
 		}
-		nodeService.createAssociation(actionedOn, groupRef,
-				QName.createQName(associationNamespace, associationName));
+
+		if (groupRef == null) {
+			logger.error("Unable to find group:" + groupName);
+			throw new RuntimeException("Unable to find group:" + groupName);
+		}
+		
+		try {
+			nodeService.createAssociation(actionedOn, groupRef,
+					QName.createQName(associationNamespace, associationName));
+		} catch (RuntimeException e) {
+			logger.error(e);
+			throw (e);
+		}
 
 	}
 

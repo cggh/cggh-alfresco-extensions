@@ -45,6 +45,8 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 
 	private UserRegistrySynchronizer userRegistrySynchronizer;
 
+	private boolean testMode = false;
+	
 	public void setUserRegistrySynchronizer(
 			UserRegistrySynchronizer userRegistrySynchronizer) {
 		this.userRegistrySynchronizer = userRegistrySynchronizer;
@@ -54,19 +56,14 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 		this.namespace = namespace;
 	}
 
-	@Override
 	public boolean isTestMode() {
-		// TODO Auto-generated method stub
-		return false;
+		return testMode;
 	}
 
-	@Override
 	public void setTestMode(boolean arg0) {
-		// TODO Auto-generated method stub
-
+		testMode = arg0;
 	}
 
-	@Override
 	public void afterPropertiesSet() throws Exception {
 
 		if (namespace == null || namespace.length() == 0) {
