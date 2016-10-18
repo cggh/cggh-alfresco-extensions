@@ -5,15 +5,9 @@
                                   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 
-	<bean id="cggh.evaluator.utility" class="org.cggh.web.extensibility.EvaluatorUtil">
+	<bean id="cggh.type.component.evaluator" class="org.cggh.web.extensibility.TypeSubComponentEvaluator">
+		<property name="slingshotEvaluatorUtil" ref="slingshot.evaluator.utility" />
 	</bean>
-
-	<bean id="cggh.group.component.evaluator" class="org.cggh.web.extensibility.GroupMembershipEvaluator">
-		<!--  <property name="slingshotEvaluatorUtil" ref="slingshot.evaluator.utility" /> -->
-		<property name="cgghEvaluatorUtil" ref="cggh.evaluator.utility" />
-	</bean>
-
-	<bean id="cggh.type.component.evaluator" class="org.cggh.web.extensibility.TypeSubComponentEvaluator"/>
 
 </beans>
 
