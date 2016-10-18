@@ -1,4 +1,7 @@
 target
 *.swp
 alf_data_dev/
-*.log
+*.log*
+.settings/
+.project
+.classpath
