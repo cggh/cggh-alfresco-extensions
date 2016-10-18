@@ -381,7 +381,7 @@
 			<properties>
 			</properties>
 		</type>
-		
+
 		<!-- A Publication study file. -->
 		<type name="cggh:publication">
 			<title>Publication</title>
@@ -714,6 +714,38 @@
 					<mandatory>false</mandatory>
 				</property>
 			</properties>
+		</aspect>
+
+		<!-- Extra metadata to enhance searching, set by behaviour -->
+		<aspect name="cggh:collaborationData">
+			<title>Collaboration Search Data</title>
+			<properties>
+				<property name="cggh:projectsText">
+					<title>Names of projectsDl associations for searching</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+				</property>
+				<property name="cggh:collaborationID">
+					<title>ID (name) of parent collaboration</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:parentCollaborationStatus">
+					<title>Status of parent collaboration</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+				<property name="cggh:liaisonUsername">
+					<title>Username of liaison</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="cggh:collaborationDocument">
+			<title>Collaboration Search Data</title>
 		</aspect>
 
 	</aspects>
