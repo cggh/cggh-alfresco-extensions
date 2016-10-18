@@ -255,17 +255,17 @@ public class CustomACLEntryAfterInvocationProvider implements AfterInvocationPro
 	    boolean returnNull = false;
 	    for (ConfigAttributeDefintion def : supportedDefinitions)
 	    {
-		if (def.typeString.equals(AFTER_ACL_SHARED_SITE_NULL))
-		{
-		    returnNull = true;
-		}
+	    	if (def.typeString.equals(AFTER_ACL_SHARED_SITE_NULL))
+	    	{
+	    		returnNull = true;
+	    	}
 	    }
 	    if (returnNull)
 	    {
-		return null;
+	    	return null;
 	    } else
 	    {
-		throw new AccessDeniedException("Access denied for person");
+	    	throw new AccessDeniedException("Access denied for person:" + currentUser + " " + personUserName);
 	    }
 	}
 
