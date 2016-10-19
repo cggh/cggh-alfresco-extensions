@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view:view xmlns:view="http://www.alfresco.org/view/repository/1.0"
+           xmlns:cm="http://www.alfresco.org/model/content/1.0"
+           xmlns:sys="http://www.alfresco.org/model/system/1.0">
+
+    <view:reference view:pathref="${system.authorities_container.childname}">
+        <view:associations>
+            <sys:children>
+                <cm:authorityContainer view:childName="cm:GROUP_COLLABORATION_MENU">
+                    <view:aspects>
+                        <sys:referenceable />
+                    </view:aspects>
+                    <view:properties>
+                        <sys:node-uuid>Collaboration Menu Viewers</sys:node-uuid>
+                        <cm:name>GROUP_COLLABORATION_MENU</cm:name>
+                        <cm:authorityName>GROUP_COLLABORATION_MENU</cm:authorityName>
+                    </view:properties>
+                </cm:authorityContainer>
+            </sys:children>
+        </view:associations>
+    </view:reference>
+
+    <!-- Each group is also part of the AUTH.ALF and APP.DEFAULT zones -->
+    <view:reference view:pathref="${system.zones_container.childname}/cm:AUTH.ALF">
+        <view:associations>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP_COLLABORATION_MENU"
+                                view:childName="GROUP_COLLABORATION_MENU" />
+            </cm:inZone>
+        </view:associations>
+    </view:reference>
+    <view:reference view:pathref="${system.zones_container.childname}/cm:APP.DEFAULT">
+        <view:associations>
+            <cm:inZone>
+                <view:reference view:pathref="${system.authorities_container.childname}/cm:GROUP_COLLABORATION_MENU"
+                                view:childName="GROUP_COLLABORATION_MENU" />
+            </cm:inZone>
+        </view:associations>
+    </view:reference>
+</view:view>
