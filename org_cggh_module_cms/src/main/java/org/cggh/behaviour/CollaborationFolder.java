@@ -46,7 +46,7 @@ public class CollaborationFolder
 		this.onUpdateProperties = new JavaBehaviour(this, OnUpdatePropertiesPolicy.QNAME.getLocalName(),
 				NotificationFrequency.TRANSACTION_COMMIT);
 
-		this.policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, ContentModel.TYPE_FOLDER,
+		this.policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, CGGHContentModel.TYPE_COLLAB_FOLDER,
 				this.onUpdateProperties);
 
 		this.onCreateAssociation = new JavaBehaviour(this, OnCreateAssociationPolicy.QNAME.getLocalName(),
@@ -56,9 +56,6 @@ public class CollaborationFolder
 
 		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, this, this.onDeleteAssociation);
 		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, this, this.onCreateAssociation);
-		// policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME,
-		// ContentModel.TYPE_FOLDER, CGGHContentModel.ASSOC_PROJECTS,
-		// this.onCreateAssociation);
 	}
 
 	public void updateProjects(NodeRef nodeRef) {
