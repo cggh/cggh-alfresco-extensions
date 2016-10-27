@@ -21,7 +21,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.datatype.DefaultTypeConverter;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cggh.model.CGGHContentModel;
 
 public class CollaborationFolder
@@ -36,7 +37,7 @@ public class CollaborationFolder
 	private Behaviour onDeleteAssociation;
 	private Behaviour onUpdateProperties;
 
-	private Logger logger = Logger.getLogger(CollaborationFolder.class);
+	private static Log logger = LogFactory.getLog(CollaborationFolder.class);
 
 	public void init() {
 		if (logger.isDebugEnabled())

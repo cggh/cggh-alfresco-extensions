@@ -4,26 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.DataListModel;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnDeleteAssociationPolicy;
-import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdatePropertiesPolicy;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cggh.model.CGGHContentModel;
 
 public class Project implements OnUpdatePropertiesPolicy { // OnCreateNodePolicy,
@@ -35,7 +29,7 @@ public class Project implements OnUpdatePropertiesPolicy { // OnCreateNodePolicy
 	// Behaviours
 	private Behaviour onUpdateProperties;
 
-	private Logger logger = Logger.getLogger(Project.class);
+	private static Log logger = LogFactory.getLog(Project.class);
 
 	public void init() {
 		if (logger.isDebugEnabled())
