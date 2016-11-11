@@ -66,7 +66,7 @@
 		<alfresco.aos-module.version>1.1</alfresco.aos-module.version>
 		<google.docs.version>3.0.3</google.docs.version>
 		<!-- -->
-		<discussions.version>0.0.2</discussions.version>
+		<discussions.version>0.0.3-SNAPSHOT</discussions.version>
 
 
 		<!-- Settings for alfresco-global.properties -->
@@ -75,7 +75,7 @@
 		<mail.server.name>alfresco.malariagen.net</mail.server.name>
 		<csrf.token.referer>https://localhost:8080/.*</csrf.token.referer>
 		<csrf.token.origin>https://localhost:8080/.*</csrf.token.origin>
-		<ldap.provider>ldap://192.168.56.32:389</ldap.provider>
+		<ldap.provider>ldap://localhost:389</ldap.provider>
 		<external.authentication.defaultAdministratorUserNames>ian.wright@well.ox.ac.uk</external.authentication.defaultAdministratorUserNames>
 		<ldap.auth.dn>cn\=admin,dc\=malariagen,dc\=net</ldap.auth.dn>
 		<ldap.auth.password>password</ldap.auth.password>
@@ -87,7 +87,9 @@
 		<cas.logout.url>https://www.malariagen.net/sso/logout</cas.logout.url>
 		<change.password.url />
 		<!-- <change.password.url>https://www.malariagen.net/pwm/private/ChangePassword</change.password.url> -->
-		<maven.alfresco.verbose>true</maven.alfresco.verbose>
+        <maven.alfresco.verbose>true</maven.alfresco.verbose>
+
+        <module.log.level>warn</module.log.level>
 	</properties>
 
 	<dependencyManagement>
@@ -325,10 +327,9 @@
 							<type>amp</type>
 						</moduleDependency>
 						<moduleDependency>
-							<!-- <groupId>com.github.jpotts.share-site-creators</groupId> -->
-							<groupId>com.ecmarchitect</groupId>
+							<groupId>com.metaversant</groupId>
 							<artifactId>share-site-creators-repo</artifactId>
-							<version>0.0.4-SNAPSHOT</version>
+							<version>0.0.5</version>
 							<type>amp</type>
 						</moduleDependency>
 						<moduleDependency>
@@ -386,10 +387,9 @@
 							<type>amp</type>
 						</moduleDependency>
 						<moduleDependency>
-							<!-- <groupId>com.github.jpotts.share-site-creators</groupId> -->
-							<groupId>com.ecmarchitect</groupId>
+							<groupId>com.metaversant</groupId>
 							<artifactId>share-site-creators-share</artifactId>
-							<version>0.0.4-SNAPSHOT</version>
+							<version>0.0.5</version>
 							<type>amp</type>
 						</moduleDependency>
 						<!-- too much trouble with installing browser/java extensions <moduleDependency> 
@@ -400,8 +400,12 @@
 							<artifactId>dojoCMIS</artifactId>
 							<version>0.0.2</version>
 						</moduleDependency>
-
-
+						<moduleDependency>
+							<groupId>org.orderofthebee.addons</groupId>
+							<artifactId>ootbee-support-tools-share</artifactId>
+							<version>0.0.1.0-SNAPSHOT</version>
+							<type>amp</type>
+						</moduleDependency>
 					</shareModules>
 				</configuration>
 			</plugin>
