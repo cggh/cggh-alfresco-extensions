@@ -619,7 +619,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
                     }
                     else
                     {
-                        LDAPUserRegistry.logger.warn("Missing GID on " + result.getNameInNamespace());
+                        LDAPUserRegistry.logger.warn("Missing GID1 on " + result.getNameInNamespace());
                     }
                 }
                 else
@@ -707,7 +707,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
                     }
                     else
                     {
-                        LDAPUserRegistry.logger.warn("Missing GID on " + attributes);
+                        LDAPUserRegistry.logger.warn("Missing GID2 on " + result.getNameInNamespace() + " attributes:" + attributes);
                         return;
                     }
                 }
@@ -849,7 +849,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
                                                 }
                                                 else
                                                 {
-                                                    LDAPUserRegistry.logger.warn("Missing GID on " + childAttributes);
+                                                    LDAPUserRegistry.logger.warn("Missing GID3 on " + distinguishedNameForComparison + " attributes:" + childAttributes);
                                                     continue;
                                                 }
                                             }

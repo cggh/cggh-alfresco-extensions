@@ -1,31 +1,23 @@
-package org.cggh.repo.security.sync.ldap;
+package org.cggh.repo.security.person;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.SearchResult;
-
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.rendition.executer.AbstractRenderingEngine;
 import org.alfresco.repo.rendition.executer.ImageRenderingEngine;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.repo.security.sync.NodeDescription;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.rendition.RenditionDefinition;
 import org.alfresco.service.cmr.rendition.RenditionService;
@@ -39,14 +31,16 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
 import org.alfresco.util.PropertyMap;
+import org.alfresco.util.transaction.TransactionListenerAdapter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class CustomLDAPUserRegistry extends LDAPUserRegistry {
+public class AvatarServiceImpl extends TransactionListenerAdapter implements AvatarService {
 
 	/** The logger. */
-	private static Log logger = LogFactory.getLog(CustomLDAPUserRegistry.class);
+	private static Log logger = LogFactory.getLog(AvatarServiceImpl.class);
 
 	protected NodeService nodeService;
 
@@ -54,6 +48,11 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 
 	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
 		this.serviceRegistry = serviceRegistry;
+	}
+
+	public void init() {
+		PropertyCheck.mandatory(this, "nodeService", nodeService);
+		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
 	}
 
 	//
@@ -139,13 +138,17 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 	}
 
 	// share/share-services/src/main/resources/alfresco/templates/webscripts/org/alfresco/slingshot/profile/uploadavatar.post.js
-	protected void createAvatar(final NodeRef person, final byte[] value, final NodeRef avatarRef) {
+	protected void createAvatar(final NodeRef person, String avatarFile, final NodeRef avatarRef)
+			throws FileNotFoundException {
 
 		PropertyMap properties = new PropertyMap(3);
 
 		String nodeName = (String) nodeService.getProperty(person, ContentModel.PROP_USERNAME);
 
-		InputStream is = new ByteArrayInputStream((byte[]) value);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Creating/updating avatar for " + nodeName);
+		}
+		InputStream is = new FileInputStream(avatarFile);
 		// Although the LDAP element is called jpegPhoto it might have a png or
 		// ...
 		String mimetype = serviceRegistry.getMimetypeService().guessMimetype(nodeName, is);
@@ -176,7 +179,7 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 		ContentService contentService = serviceRegistry.getContentService();
 		ContentWriter writer = contentService.getWriter(imageRef, ContentModel.PROP_CONTENT, true);
 		writer.setMimetype(mimetype);
-		is = new ByteArrayInputStream((byte[]) value);
+		is = new FileInputStream(avatarFile);
 		writer.putContent(is);
 		try {
 			is.close();
@@ -206,14 +209,14 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 		return eImages;
 	}
 
-	private boolean hasAvatarChanged(NodeRef nodeRef, byte[] value) {
+	private boolean hasAvatarChanged(NodeRef nodeRef, String avatarFile) throws FileNotFoundException {
 		boolean changed = false;
 		if (nodeService.exists(nodeRef)) {
 			String nodeHashType = hashType;
 			ContentReader reader = serviceRegistry.getContentService().getReader(nodeRef, ContentModel.PROP_CONTENT);
 
 			String oldHash = computeHash(reader.getContentInputStream(), nodeHashType);
-			InputStream is = new ByteArrayInputStream((byte[]) value);
+			InputStream is = new FileInputStream(avatarFile);
 			String newHash = computeHash(is, nodeHashType);
 			try {
 				is.close();
@@ -228,83 +231,11 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 		return changed;
 	}
 
-	protected NodeDescription mapToNode(Map<String, String> attributeMapping, Map<String, String> attributeDefaults,
-			SearchResult result) throws NamingException {
-		NodeDescription nodeDescription = new NodeDescription(result.getNameInNamespace());
-		Attributes ldapAttributes = result.getAttributes();
+	private String updateAvatar(final NodeRef personNode, final HashMap<QName, Serializable> personProperties,
+			final long latestTime) {
 
-		// Parse the timestamp
-		Attribute modifyTimestamp = ldapAttributes.get(this.modifyTimestampAttributeName);
-		Date ldapLastModified = null;
-		if (modifyTimestamp != null) {
-			try {
-				ldapLastModified = this.timestampFormat.parse(modifyTimestamp.get().toString());
-				nodeDescription.setLastModified(ldapLastModified);
-			} catch (ParseException e) {
-				throw new AlfrescoRuntimeException("Failed to parse timestamp.", e);
-			}
-		}
-
-		// Apply the mapped attributes
-		PropertyMap properties = nodeDescription.getProperties();
-		for (String key : attributeMapping.keySet()) {
-			QName keyQName = QName.createQName(key, this.namespaceService);
-
-			// cater for null
-			String attributeName = attributeMapping.get(key);
-			if (attributeName != null) {
-				if (attributeName.equals("jpegPhoto")) {
-
-					Attribute attribute = ldapAttributes.get(attributeName);
-					if (attribute != null) {
-						updateAvatar(nodeDescription, attribute.get(0), ldapLastModified);
-					}
-				} else {
-					Attribute attribute = ldapAttributes.get(attributeName);
-					if (attribute != null) {
-						String value = (String) attribute.get(0);
-						if (value != null) {
-							properties.put(keyQName, value);
-						}
-					} else {
-						String defaultValue = attributeDefaults.get(key);
-						if (defaultValue != null) {
-							properties.put(keyQName, defaultValue);
-						}
-					}
-				}
-			} else {
-				String defaultValue = attributeDefaults.get(key);
-				if (defaultValue != null) {
-					properties.put(keyQName, defaultValue);
-				}
-			}
-		}
-		return nodeDescription;
-	}
-
-	private void updateAvatar(final NodeDescription nodeDescription, final Object value, final Date ldapLastModified)
-			throws NamingException {
-
-		if (value == null) {
-			return;
-		}
-		final String username = (String) nodeDescription.getProperties().get(ContentModel.PROP_USERNAME);
-
-		// Can't set personService directly
-		final PersonService personService = serviceRegistry.getPersonService();
-		final NodeRef personNode = AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
-			public NodeRef doWork() throws Exception {
-				if (personService.personExists(username)) {
-					return personService.getPerson(username, false);
-				} else {
-					return null;
-				}
-			}
-		});
+		String avatarFile = null;
 		if (personNode != null) {
-			//Not set
-			final Date lastModified = (Date) nodeService.getProperty(personNode, ContentModel.PROP_MODIFIED);
 
 			List<AssociationRef> avatorAssocs = nodeService.getTargetAssocs(personNode, ContentModel.ASSOC_AVATAR);
 
@@ -314,45 +245,71 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry {
 				avatar = ref.getTargetRef();
 			}
 			final NodeRef avatarRef = avatar;
-			serviceRegistry.getRetryingTransactionHelper()
-					.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						public NodeRef execute() throws Throwable {
-
-							AuthenticationUtil.runAsSystem(new RunAsWork<NodeRef>() {
-								public NodeRef doWork() throws Exception {
-									// Could check lastModified (null) vs
-									// ldapLastModified but, while more
-									// performant,
-									// leads to unpredictable behaviour
-									if (!(lastModified == null || ldapLastModified == null)) {
-										if (lastModified.before(ldapLastModified)) {
-											logger.debug("LDAP was modified more recently than Alfresco");
-										}
-									}
-									if (avatarRef != null) {
-										if (hasAvatarChanged(avatarRef, (byte[]) value)) {
-											logger.debug("Changing avatar for " + username);
-											createAvatar(personNode, (byte[]) value, avatarRef);
-										}
-									} else {
-										logger.debug("Setting new avatar for " + username);
-										createAvatar(personNode, (byte[]) value, avatarRef);
-									}
-									return null;
-								}
-
-							}
-
-					);
-							return null;
-						}
-					});
+			// Could check lastModified (null) vs
+			// ldapLastModified but, while more
+			// performant,
+			// leads to unpredictable behaviour
+			// Not set on person so checking date on
+			// avatar
+			if (avatarRef != null) {
+				final Date lastModified = (Date) nodeService.getProperty(avatarRef, ContentModel.PROP_MODIFIED);
+				if (lastModified != null) {
+					if (lastModified.getTime() < latestTime) {
+						logger.debug("LDAP was modified more recently than Alfresco");
+					}
+				}
+			}
+			avatarFile = (String) personProperties.get(ContentModel.ASSOC_PREFERENCE_IMAGE);
+			try {
+				if (avatarRef != null) {
+					if (hasAvatarChanged(avatarRef, avatarFile)) {
+						String username = (String) personProperties.get(ContentModel.PROP_USERNAME);
+						logger.debug("Changing avatar" + username);
+						createAvatar(personNode, avatarFile, avatarRef);
+					}
+				} else {
+					String username = (String) personProperties.get(ContentModel.PROP_USERNAME);
+					logger.debug("Setting new avatar for " + username);
+					createAvatar(personNode, avatarFile, avatarRef);
+				}
+			} catch (FileNotFoundException fnfe) {
+				logger.error("could not find Temporary file" + avatarFile);
+			}
 
 		}
+		return (avatarFile);
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.cggh.repo.security.person.AvatarService#setAvatar(java.lang.String,
+	 * java.util.HashMap, long)
+	 */
+	@Override
+	public void setAvatar(final String personName, final HashMap<QName, Serializable> personProperties,
+			final long latestTime) {
+		// Overloading the use of cm:preferenceImage
+		if (!personProperties.containsKey(ContentModel.ASSOC_PREFERENCE_IMAGE)) {
+			return;
+		}
+		NodeRef personNode = getPersonService().getPerson(personName, false);
+
+		String avatarFile = updateAvatar(personNode, personProperties, latestTime);
+
+		if (avatarFile != null) {
+			File af = new File(avatarFile);
+			af.delete();
+		}
+	}
+
+	private PersonService getPersonService() {
+		return serviceRegistry.getPersonService();
 	}
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
-
 }

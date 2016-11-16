@@ -305,6 +305,12 @@
 						</moduleDependency>
 						<moduleDependency>
 							<groupId>${project.groupId}</groupId>
+							<artifactId>cggh-ldap-platform-amp</artifactId>
+							<version>${project.version}</version>
+							<type>amp</type>
+						</moduleDependency>
+						<moduleDependency>
+							<groupId>${project.groupId}</groupId>
 							<artifactId>org_cggh_module_cms</artifactId>
 							<version>${project.version}</version>
 						</moduleDependency>
@@ -530,6 +536,7 @@ mvn jgitflow:release-finish
 
 	<modules>
 		<module>auth-platform-jar</module>
+		<module>cggh-ldap-platform-amp</module>
 		<module>cggh-alfresco-extensions-share-jar</module>
 		<module>auth-share-jar</module>
 		<module>org_cggh_module_cms</module>
