@@ -25,8 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cggh.model.CGGHContentModel;
 
-public class CollaborationFolder
-		implements OnUpdatePropertiesPolicy {
+public class CollaborationFolder implements OnUpdatePropertiesPolicy {
 
 	// Dependencies
 	private NodeService nodeService;
@@ -48,21 +47,20 @@ public class CollaborationFolder
 		this.policyComponent.bindClassBehaviour(OnUpdatePropertiesPolicy.QNAME, CGGHContentModel.TYPE_COLLAB_FOLDER,
 				this.onUpdateProperties);
 
-
 		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_PROJECTS, new JavaBehaviour(this, "onCreateProjectAssociation"));
 		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_LIAISON, new JavaBehaviour(this, "onCreateLiaisonAssociation"));
 		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_COLLABORATION_DOC, new JavaBehaviour(this, "onCreateCollabDocAssociation"));
-		
+
 		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_PROJECTS, new JavaBehaviour(this, "onDeleteProjectAssociation"));
 		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_LIAISON, new JavaBehaviour(this, "onDeleteLiaisonAssociation"));
 		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME, CGGHContentModel.ASPECT_COLLABORATION,
 				CGGHContentModel.ASSOC_COLLABORATION_DOC, new JavaBehaviour(this, "onDeleteCollabDocAssociation"));
-		
+
 	}
 
 	public void updateProjects(NodeRef nodeRef) {
@@ -99,10 +97,10 @@ public class CollaborationFolder
 
 		if (logger.isDebugEnabled() && projects.isEmpty()) {
 			logger.debug("No projects to add");
+			nodeService.removeProperty(nodeRef, CGGHContentModel.PROP_PROJECTS);
+		} else {
+			nodeService.setProperty(nodeRef, CGGHContentModel.PROP_PROJECTS, projects);
 		}
-
-		nodeService.setProperty(nodeRef, CGGHContentModel.PROP_PROJECTS, projects);
-
 		return;
 
 	}
@@ -128,7 +126,7 @@ public class CollaborationFolder
 			nodeService.setProperty(nodeRef, CGGHContentModel.PROP_LIAISON, null);
 		}
 	}
-	
+
 	public void onDeleteCollabDocAssociation(AssociationRef nodeAssocRef) {
 		NodeRef nodeRef = nodeAssocRef.getTargetRef();
 		if (nodeService.exists(nodeRef) && nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DOC)) {
@@ -149,7 +147,7 @@ public class CollaborationFolder
 			updateProjects(nodeRef);
 		}
 	}
-	
+
 	public void onCreateLiaisonAssociation(AssociationRef nodeAssocRef) {
 		NodeRef nodeRef = nodeAssocRef.getSourceRef();
 		if (nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA)) {
@@ -213,6 +211,5 @@ public class CollaborationFolder
 			}
 		}
 	}
-
 
 }
