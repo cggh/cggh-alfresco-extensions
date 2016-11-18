@@ -180,7 +180,7 @@
                     <classpath>
                         <fallback>all</fallback>
                         <resources>
-                            <resource></resource>
+                            <resource />
                         </resources>
                     </classpath>
 
