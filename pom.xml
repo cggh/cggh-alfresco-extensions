@@ -66,7 +66,7 @@
 		<alfresco.aos-module.version>1.1</alfresco.aos-module.version>
 		<google.docs.version>3.0.3</google.docs.version>
 		<!-- -->
-		<discussions.version>0.0.3-SNAPSHOT</discussions.version>
+		<discussions.version>0.0.3</discussions.version>
 
 
 		<!-- Settings for alfresco-global.properties -->
