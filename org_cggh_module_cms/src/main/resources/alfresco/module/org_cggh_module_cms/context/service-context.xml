@@ -40,4 +40,13 @@
 		</property>
 	</bean>
 
+	<bean id="${project.artifactId}.publicationBehavior"
+		class="org.cggh.behaviour.Publication" init-method="init">
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+		<property name="policyComponent">
+			<ref bean="policyComponent" />
+		</property>
+	</bean>
 </beans>
