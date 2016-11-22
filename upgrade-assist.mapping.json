@@ -1,0 +1,11 @@
+{
+    "beans": {
+                "avatarService": {
+					"files": [
+								"/templates/webscripts/org/alfresco/slingshot/profile/avatar.get.js",
+								"/templates/webscripts/org/alfresco/slingshot/profile/uploadavatar.post.js"
+							]
+                }
+    }
+}
+
