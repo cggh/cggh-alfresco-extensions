@@ -21,7 +21,7 @@
 			value="org.cggh.repo.security.sync.ldap.CustomLDAPUserRegistry" />
 		<property name="propertyName" value="personAttributeMapping" /> 
 		<property name="active"
-			value="true" />
-	</bean>	
+			value="${cggh.ldap.synchronization.avatar}" />
+	</bean>
 	
 </beans>

@@ -12,18 +12,6 @@
 	language governing permissions and limitations under the License. -->
 <beans>
 
-	<!-- Inspired by https://gist.github.com/AFaust/b83b405998cb4303e77a -->
-	<bean class="org.cggh.repo.security.sync.ldap.UserRegistryConfig">
-		<property name="targetBeanName" value="userRegistry" />
-		<property name="originalClassName"
-			value="org.alfresco.repo.security.sync.ldap.LDAPUserRegistry" />
-		<property name="replacementClassName"
-			value="org.cggh.repo.security.sync.ldap.CustomLDAPUserRegistry" />
-		<property name="propertyName" value="personAttributeMapping" /> 
-		<property name="active"
-			value="${cggh.ldap.synchronization.avatar}" />
-	</bean>
-	
 	<bean id="avatarService" class="org.cggh.repo.security.person.AvatarServiceImpl" init-method="init">
         <property name="nodeService" ref="nodeService" />
         <property name="serviceRegistry" ref="ServiceRegistry"/>
