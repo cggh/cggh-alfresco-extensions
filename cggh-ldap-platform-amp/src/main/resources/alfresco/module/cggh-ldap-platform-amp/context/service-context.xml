@@ -12,10 +12,7 @@
 	language governing permissions and limitations under the License. -->
 <beans>
 
-	<bean id="avatarService" class="org.cggh.repo.security.person.AvatarServiceImpl" init-method="init">
-        <property name="nodeService" ref="nodeService" />
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
-	</bean>
+
 	
 	
 </beans>
