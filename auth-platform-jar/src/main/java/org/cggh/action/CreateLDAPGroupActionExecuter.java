@@ -43,15 +43,15 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 	private String namespace;
 	private LDAPInitialDirContextFactory ldapInitialContextFactory;
 
-	private UserRegistrySynchronizer userRegistrySynchronizer;
+//	private UserRegistrySynchronizer userRegistrySynchronizer;
 
 	private boolean testMode = false;
-	
+/*	
 	public void setUserRegistrySynchronizer(
 			UserRegistrySynchronizer userRegistrySynchronizer) {
 		this.userRegistrySynchronizer = userRegistrySynchronizer;
 	}
-
+*/
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
 	}
@@ -143,6 +143,7 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 
 			// Sync so that the group appears in Alfresco now
 			//It works without the runAs but puts error messages in the log
+			/*
 			AuthenticationUtil.runAs(new RunAsWork<String>()
 			{
 				public String doWork() throws Exception
@@ -151,7 +152,7 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 					return "";
 				}
 			}, AuthenticationUtil.getSystemUserName());
-
+*/
 		} catch (NamingException e) {
 			logger.error("Naming exception trying to create " + groupName, e);
 		}
