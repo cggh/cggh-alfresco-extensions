@@ -5,9 +5,7 @@
 
     
 	<bean id="cggh-create-ldap-group" class="org.cggh.action.CreateLDAPGroupActionExecuter" parent="action-executer">
-		<property name="LDAPInitialDirContextFactory">
-			<ref bean="myldapInitialDirContextFactory" />
-		</property>
+		<property name="authenticationContextManager" ref="Authentication" />
 		<!-- 
 		<property name="UserRegistrySynchronizer">
 			<ref bean="userRegistrySynchronizer"/>
@@ -16,9 +14,7 @@
 	</bean>
 
 	<bean id="cggh-manage-ldap-user" class="org.cggh.action.ManageLDAPUserActionExecuter" parent="action-executer">
-		<property name="LDAPInitialDirContextFactory">
-			<ref bean="myldapInitialDirContextFactory" />
-		</property>
+		<property name="authenticationContextManager" ref="Authentication" />
 		<property name="namespacePrefixResolver">
 			<ref bean="namespaceService"></ref>
 		</property>
@@ -43,161 +39,5 @@
 		<!-- <property name="personQuery">${ldap.synchronization.personQuery}</property> -->
 	</bean>
 
-   <!--
-
-      This bean is used to support general LDAP authentication. It is also used to provide read only access to users and
-      groups to pull them out of the LDAP reopsitory
-   -->
-
-   <bean id="myldapInitialDirContextFactory" class="org.alfresco.repo.security.authentication.ldap.LDAPInitialDirContextFactoryImpl">
-
-      <property name="trustStorePath">
-         <value>${ldap.authentication.truststore.path}</value>
-      </property>
-      <property name="trustStoreType">
-         <value>${ldap.authentication.truststore.type}</value>
-      </property>
-      <property name="trustStorePassPhrase">
-         <value>${ldap.authentication.truststore.passphrase}</value>
-      </property>
-
-      <property name="initialDirContextEnvironment">
-         <map>
-            <!-- The LDAP provider -->
-            <entry key="java.naming.factory.initial">
-               <value>${ldap.authentication.java.naming.factory.initial}</value>
-            </entry>
-
-            <!-- The url to the LDAP server -->
-            <!-- Note you can use space separated urls - they will be tried in turn until one works -->
-            <!-- This could be used to authenticate against one or more ldap servers (you will not know which one ....) -->
-            <entry key="java.naming.provider.url">
-               <value>${ldap.authentication.java.naming.provider.url}</value>
-            </entry>
-
-            <!-- Custom Socket factory -->
-            <entry key="java.naming.ldap.factory.socket">
-               <value>${ldap.java.naming.ldap.factory.socket:#{null}}</value>
-            </entry>
-            
-
-            <!-- The authentication mechanism to use for password validation -->
-            <!-- Some sasl authentication mechanisms may require a realm to be set -->
-            <!--                java.naming.security.sasl.realm -->
-            <!-- The available options will depend on your LDAP provider -->
-            <entry key="java.naming.security.authentication">
-               <value>${ldap.authentication.java.naming.security.authentication}</value>
-            </entry>
-
-            <!-- Requests timeout, in miliseconds, use 0 for none (default) -->
-            <entry key="com.sun.jndi.ldap.read.timeout">
-               <value>${ldap.authentication.java.naming.read.timeout}</value>
-            </entry>
-
-            <!-- Automatically follow referrals -->
-            <entry key="java.naming.referral">
-               <value>follow</value>
-            </entry>
-
-            <!-- Set to 'ssl' to enable LDAPS configuration via subsystem's properties -->
-            <entry key="java.naming.security.protocol">
-               <value>${ldap.authentication.java.naming.security.protocol}</value>
-            </entry>
-         </map>
-      </property>
-      <property name="defaultIntialDirContextEnvironment">
-         <map>
-            <!-- The LDAP provider -->
-            <entry key="java.naming.factory.initial">
-               <value>${ldap.authentication.java.naming.factory.initial}</value>
-            </entry>
-
-            <!-- The url to the LDAP server -->
-            <!-- Note you can use space separated urls - they will be tried in turn until one works -->
-            <!-- This could be used to authenticate against one or more ldap servers (you will not know which one ....) -->
-            <entry key="java.naming.provider.url">
-               <value>${ldap.authentication.java.naming.provider.url}</value>
-            </entry>
-
-
-            <!-- Custom Socket factory -->
-            <entry key="java.naming.ldap.factory.socket">
-               <value>${ldap.java.naming.ldap.factory.socket:#{null}}</value>
-            </entry>
-
-
-            <!-- The authentication mechanism to use for SYNCHRONIZATION -->
-            <!-- Some sasl authentication mechanisms may require a realm to be set -->
-            <!--                java.naming.security.sasl.realm -->
-            <!-- The available options will depend on your LDAP provider -->
-            <entry key="java.naming.security.authentication">
-               <value>${ldap.synchronization.java.naming.security.authentication}</value>
-            </entry>
-
-            <!-- The id of a user who can read group and user information -->
-            <!-- This does not go through the pattern substitution defined above and is used "as is" -->
-            <entry key="java.naming.security.principal">
-               <value>${ldap.synchronization.java.naming.security.principal}</value>
-            </entry>
-
-            <!-- The password for the user defined above -->
-            <entry key="java.naming.security.credentials">
-               <value>${ldap.synchronization.java.naming.security.credentials}</value>
-            </entry>
-
-            <!-- Allow the 'underlying mechanism' to obtain credentials (e.g. Kerberos) -->
-            <entry key="javax.security.auth.useSubjectCredsOnly">
-               <value>false</value>
-            </entry>
-
-            <!-- Requests timeout, in miliseconds, use 0 for none (default) -->
-            <entry key="com.sun.jndi.ldap.read.timeout">
-               <value>${ldap.authentication.java.naming.read.timeout}</value>
-            </entry>
-
-            <!-- Automatically follow referrals -->
-            <entry key="java.naming.referral">
-               <value>follow</value>
-            </entry>
-
-           <!-- Set to 'ssl' to enable LDAPS configuration via subsystem's properties -->
-            <entry key="java.naming.security.protocol">
-               <value>${ldap.authentication.java.naming.security.protocol}</value>
-            </entry>
-	    
-            <!-- Connection pool configuration -->
-            <entry key="com.sun.jndi.ldap.connect.pool">
-               <value>${ldap.synchronization.com.sun.jndi.ldap.connect.pool}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.timeout">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.timeout}</value>
-            </entry>
-         </map>
-      </property>
-      <property name="poolSystemProperties">
-         <map>
-            <entry key="com.sun.jndi.ldap.connect.pool.authentication">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.authentication}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.debug">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.debug}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.initsize">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.initsize}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.maxsize">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.maxsize}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.prefsize">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.prefsize}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.protocol">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.protocol}</value>
-            </entry>
-            <entry key="com.sun.jndi.ldap.connect.pool.timeout">
-               <value>${ldap.pooling.com.sun.jndi.ldap.connect.pool.timeout}</value>
-            </entry>
-         </map>
-      </property>
-   </bean>
+ 
 </beans>
