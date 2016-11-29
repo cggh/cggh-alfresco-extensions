@@ -66,11 +66,13 @@ public class CollaborationFolder implements OnUpdatePropertiesPolicy {
 	public void updateProjects(NodeRef nodeRef) {
 
 		// check the parent to make sure it has the right aspect
-		if (nodeService.exists(nodeRef) && nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION)
-				&& nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA)) {
-
+		if (nodeService.exists(nodeRef) && nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION)) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Collaboration Folder behaviour for:" + nodeRef);
+			}
+			if (!nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA)) {
+				PropertyMap properties = new PropertyMap();
+				nodeService.addAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA, properties);
 			}
 		} else {
 
@@ -150,10 +152,15 @@ public class CollaborationFolder implements OnUpdatePropertiesPolicy {
 
 	public void onCreateLiaisonAssociation(AssociationRef nodeAssocRef) {
 		NodeRef nodeRef = nodeAssocRef.getSourceRef();
+		String id = DefaultTypeConverter.INSTANCE.convert(String.class,
+				nodeService.getProperty(nodeAssocRef.getTargetRef(), ContentModel.PROP_USERNAME));
 		if (nodeService.hasAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA)) {
-			String id = DefaultTypeConverter.INSTANCE.convert(String.class,
-					nodeService.getProperty(nodeAssocRef.getTargetRef(), ContentModel.PROP_USERNAME));
 			nodeService.setProperty(nodeRef, CGGHContentModel.PROP_LIAISON, id);
+		} else {
+			PropertyMap properties = new PropertyMap();
+			properties.put(CGGHContentModel.PROP_LIAISON, id);
+			nodeService.addAspect(nodeRef, CGGHContentModel.ASPECT_COLLABORATION_DATA, properties);
+			
 		}
 
 	}
