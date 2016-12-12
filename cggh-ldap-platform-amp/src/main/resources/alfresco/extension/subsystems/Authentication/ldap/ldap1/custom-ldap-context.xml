@@ -13,15 +13,35 @@
 <beans>
 
 	<!-- Inspired by https://gist.github.com/AFaust/b83b405998cb4303e77a -->
-	<bean class="org.cggh.repo.security.sync.ldap.UserRegistryConfig">
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
 		<property name="targetBeanName" value="userRegistry" />
 		<property name="originalClassName"
 			value="org.alfresco.repo.security.sync.ldap.LDAPUserRegistry" />
 		<property name="replacementClassName"
 			value="org.cggh.repo.security.sync.ldap.CustomLDAPUserRegistry" />
-		<property name="propertyName" value="personAttributeMapping" /> 
-		<property name="active"
-			value="${cggh.ldap.synchronization.avatar}" />
+		<property name="appendedProperties">
+			<map>
+				<entry key="personAttributeMapping">
+					<map>
+						<entry key="cm:preferenceImage" value="jpegPhoto" />
+					</map>
+				</entry>
+			</map>
+		</property>
+		<property name="active" value="${cggh.ldap.synchronization.avatar}" />
+		<property name="injectableProperties">
+			<map>
+				<entry key="lookupAttributeName" value="${cggh.ldap.authentication.lookupAttributeName}" />
+			</map>
+		</property>
 	</bean>
-	
+
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="authenticationComponent" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.security.authentication.ldap.LDAPAuthenticationComponentImpl" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.security.authentication.ldap.CustomLDAPAuthenticationComponentImpl" />
+		<property name="active" value="${cggh.ldap.authentication.indirect}" />
+	</bean>
 </beans>

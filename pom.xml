@@ -65,7 +65,7 @@
         <alfresco.aos-module.version>1.1.3</alfresco.aos-module.version>
         <google.docs.version>3.0.3</google.docs.version>
         <!-- -->
-        <discussions.version>0.0.3</discussions.version>
+        <discussions.version>0.0.4-SNAPSHOT</discussions.version>
 
 
         <!-- Settings for alfresco-global.properties -->
@@ -84,7 +84,7 @@
             casServerUrlPrefix=https://www.malariagen.net/sso -->
         <cas.logout.dest.url>http://www.malariagen.net</cas.logout.dest.url>
         <cas.logout.url>https://www.malariagen.net/sso/logout</cas.logout.url>
-        <change.password.url />
+        <change.password.url/>
         <!-- <change.password.url>https://www.malariagen.net/pwm/private/ChangePassword</change.password.url> -->
         <maven.alfresco.verbose>true</maven.alfresco.verbose>
 
@@ -567,7 +567,8 @@ mvn jgitflow:release-finish
         <module>org_cggh_module_cms</module>
         <module>cas-share-amp</module>
         <module>cas-platform-amp</module>
-    </modules>
+    <module>cggh-alfresco-util</module>
+  </modules>
 
     <scm>
         <connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
