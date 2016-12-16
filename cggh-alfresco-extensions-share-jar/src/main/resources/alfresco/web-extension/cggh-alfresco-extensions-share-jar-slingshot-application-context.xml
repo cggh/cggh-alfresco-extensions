@@ -32,6 +32,14 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="evaluator.doclib.metadata.hasPublicationDataAspect"
+        parent="evaluator.doclib.action.hasAspect">
+        <property name="aspects">
+            <list>
+                <value>cggh:publicationData</value>
+            </list>
+        </property>
+    </bean>
 	<bean id="evaluator.doclib.metadata.isNotCollaborationAspect"
 		parent="evaluator.doclib.action.hasAspect">
 		<property name="aspects">

@@ -162,7 +162,14 @@
 					cggh.metadata.collaborationID}
 				</line>
 			</template>
-
+            <template id="publicationData">
+                <evaluator>evaluator.doclib.metadata.hasPublicationDataAspect</evaluator>
+                <line index="55" id="pubdetails" view="detailed">
+                    {cggh_citationText}
+                    {cggh_PMID cggh.metadata.PMID} 
+                    {cggh_DOI cggh.metadata.DOI}
+                </line>
+            </template>
 		</metadata-templates>
 
 	</config>
