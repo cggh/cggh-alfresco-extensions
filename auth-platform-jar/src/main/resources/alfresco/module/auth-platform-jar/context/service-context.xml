@@ -54,4 +54,64 @@
 		
 		<property name="active" value="true" />
 	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.posts.forum-post.get" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumPostGet" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumPostGet" />
+		
+		<property name="active" value="true" />
+	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.posts.forum-post.put" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumPostPut" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumPostPut" />
+		
+		<property name="active" value="true" />
+	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.posts.forum-post-replies.get" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumPostRepliesGet" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumPostRepliesGet" />
+		
+		<property name="active" value="true" />
+	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.posts.forum-post-replies.post" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumPostRepliesPost" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumPostRepliesPost" />
+		
+		<property name="active" value="true" />
+	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.forum.forum-posts.post" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumTopicPost" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumTopicPost" />
+		
+		<property name="active" value="true" />
+	</bean>
+	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.repository.discussions.forum.forum-posts.get" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.discussion.ForumTopicsGet" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.discussion.CustomForumTopicsGet" />
+		
+		<property name="active" value="true" />
+	</bean>
 </beans>
