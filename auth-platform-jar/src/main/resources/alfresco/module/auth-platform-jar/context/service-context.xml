@@ -45,5 +45,13 @@
 		<property name="authorityService" ref="authorityService" />
 	</bean>
 
-	
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
+		<property name="targetBeanName" value="webscript.org.alfresco.slingshot.wiki.pagelist.get" />
+		<property name="originalClassName"
+			value="org.alfresco.repo.web.scripts.wiki.WikiPageListGet" />
+		<property name="replacementClassName"
+			value="org.cggh.repo.web.scripts.wiki.CustomWikiPageListGet" />
+		
+		<property name="active" value="true" />
+	</bean>
 </beans>
