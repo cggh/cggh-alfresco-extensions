@@ -426,6 +426,12 @@
                             <artifactId>contentreich-eml-share</artifactId>
                             <version>1.0-SNAPSHOT</version>
                         </moduleDependency>
+                        <moduleDependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>share-patch-module</artifactId>
+                            <version>${project.version}</version>
+                            <type>amp</type>
+                        </moduleDependency>
                     </shareModules>
                 </configuration>
             </plugin>
@@ -578,7 +584,8 @@ mvn jgitflow:release-finish
         <module>org_cggh_module_cms</module>
         <module>cas-share-amp</module>
         <module>cas-platform-amp</module>
-    <module>cggh-alfresco-util</module>
+        <module>cggh-alfresco-util</module>
+        <module>share-patch-module</module>
   </modules>
 
     <scm>
