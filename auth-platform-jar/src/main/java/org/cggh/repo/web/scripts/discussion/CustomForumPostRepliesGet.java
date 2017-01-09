@@ -6,7 +6,8 @@ public class CustomForumPostRepliesGet extends ForumPostRepliesGet {
 
     protected Object buildPerson(String username)
     {
-       return CustomForumTopicsGet.buildPersonObject(personService, username);
+    	return super.buildPerson(username);
     }
+
     
 }
