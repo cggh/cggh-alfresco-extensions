@@ -56,8 +56,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
             </plugin>
-            
-                        <plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <version>1.7</version>
@@ -78,16 +78,9 @@
                     <target>1.7</target>
                     <outxml>true</outxml>
                     <XterminateAfterCompilation>true</XterminateAfterCompilation>
-<!-- 
-                    <weaveDependencies>
-                        <weaveDependency>
-                            <groupId>${alfresco.groupId}</groupId>
-                            <artifactId>alfresco-share-services</artifactId>
-                            <version>${alfresco.share.version}</version>
-                            <classifier>classes</classifier>
-                        </weaveDependency>
-                    </weaveDependencies>
-                     -->
+                    <!-- Also see src/main/resources/META-INF/aop.xml
+                     Needs to load time aspect weaving, see context.xml in platform-patch-module
+                    -->
                 </configuration>
             </plugin>
         </plugins>

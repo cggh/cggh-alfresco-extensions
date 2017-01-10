@@ -1,0 +1,6 @@
+<aspectj>
+	<weaver options="-verbose">
+		<include within="org.alfresco.repo.web.scripts.discussion.*" />
+		<include within="org.alfresco.repo.web.scripts.wiki.*" />
+	</weaver>
+</aspectj>

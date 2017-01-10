@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.cggh</groupId>
     <artifactId>cggh-alfresco-extensions</artifactId>
@@ -84,10 +85,10 @@
             casServerUrlPrefix=https://www.malariagen.net/sso -->
         <cas.logout.dest.url>http://www.malariagen.net</cas.logout.dest.url>
         <cas.logout.url>https://www.malariagen.net/sso/logout</cas.logout.url>
-        <change.password.url/>
+        <change.password.url />
         <!-- <change.password.url>https://www.malariagen.net/pwm/private/ChangePassword</change.password.url> -->
         <maven.alfresco.verbose>true</maven.alfresco.verbose>
-
+        
         <module.log.level>warn</module.log.level>
     </properties>
 
@@ -229,7 +230,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
                 <inherited>false</inherited>
                 <!-- Run only for the AIO parent Project -->
                 <executions>
@@ -275,6 +275,29 @@
                     <useCustomShareLog4jConfig>true</useCustomShareLog4jConfig>
                     <!-- Enable the REST API Explorer -->
                     <enableApiExplorer>true</enableApiExplorer>
+
+                    <tomcatSystemProperties>
+                        <javaagent>${settings.localRepository}/org/aspectj/aspectjweaver/1.6.11/aspectjweaver-1.6.11.jar,${settings.localRepository}/org/springframework/spring-instrument/3.2.14.RELEASE/spring-instrument-3.2.14.RELEASE.jar</javaagent>
+                    </tomcatSystemProperties>
+
+                    <tomcatDependencies>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjweaver</artifactId>
+                            <version>1.6.11</version>
+                        </dependency>
+                        <!-- All these seem to do is to make sure that the jars are available -->
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-instrument-tomcat</artifactId>
+                            <version>3.2.14.RELEASE</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-instrument</artifactId>
+                            <version>3.2.14.RELEASE</version>
+                        </dependency>
+                    </tomcatDependencies>
 
                     <!-- JARs and AMPs that should be overlayed/applied to the Platform/Repository 
                         WAR (i.e. alfresco.war) -->
@@ -326,7 +349,7 @@
                         </moduleDependency>
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>cas-platform-amp</artifactId> 
+                            <artifactId>cas-platform-amp</artifactId>
                             <version>${project.version}</version>
                             <type>amp</type>
                         </moduleDependency>
@@ -352,6 +375,12 @@
                             <groupId>de.contentreich</groupId>
                             <artifactId>contentreich-eml-repo</artifactId>
                             <version>1.0-SNAPSHOT</version>
+                        </moduleDependency>
+                        <moduleDependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>platform-patch-module</artifactId>
+                            <version>${project.version}</version>
+                            <type>amp</type>
                         </moduleDependency>
                     </platformModules>
 
@@ -469,53 +498,39 @@
                     <alwaysGenerate>true</alwaysGenerate>
                 </configuration>
             </plugin>
-            
-            <!-- 
-mvn jgitflow:release-start
-mvn jgitflow:release-finish
--->
+
+            <!-- mvn jgitflow:release-start mvn jgitflow:release-finish -->
             <plugin>
-              <groupId>com.atlassian.maven.plugins</groupId>
-              <artifactId>maven-jgitflow-plugin</artifactId>
-              <version>1.0-alpha20</version>
-              <configuration>
-                <!-- Enable this to push to origin using SSH keys -->
-                <enableSshAgent>true</enableSshAgent>
-                <!-- Keep your maven submodules at the same version as the parent POM -->
-                <autoVersionSubmodules>true</autoVersionSubmodules>
-                <!--
-                  Pusing in-development features to origin allows all devs to see what each other
-                  are working on
-                -->
-                <pushFeatures>true</pushFeatures>
-                <!--
-                  This allows the CI server (e.g. Jenkins) to automatically push new releases to
-                  origin; you can then either manually deploy them or, if you are doing Continuous
-                  Deployments, auto-deploy them to prod
-                -->
-                <pushReleases>true</pushReleases>
-                <!--
-                  Hot Fixes should be pushed to origin as well so that any dev can pick them up
-                -->
-                <pushHotfixes>true</pushHotfixes>
-                <!--
-                  Prevents deployments from dev workstations so that they can be done by a CI
-                  server
-                -->
-                <noDeploy>true</noDeploy>
-                <flowInitContext>
-                  <!--
-                    You can customize your development branch name. Why? Because it's faster to type
-                    'git push origin dvlp'
-                    than
-                    'git push origin develop'
-                    ;-)
-                  -->
-                  <developBranchName>dvlp</developBranchName>
-                </flowInitContext>
-              </configuration>
-            </plugin> 
-    
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jgitflow-plugin</artifactId>
+                <version>1.0-alpha20</version>
+                <configuration>
+                    <!-- Enable this to push to origin using SSH keys -->
+                    <enableSshAgent>true</enableSshAgent>
+                    <!-- Keep your maven submodules at the same version as the parent POM -->
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!-- Pusing in-development features to origin allows all devs to see 
+                        what each other are working on -->
+                    <pushFeatures>true</pushFeatures>
+                    <!-- This allows the CI server (e.g. Jenkins) to automatically push 
+                        new releases to origin; you can then either manually deploy them or, if you 
+                        are doing Continuous Deployments, auto-deploy them to prod -->
+                    <pushReleases>true</pushReleases>
+                    <!-- Hot Fixes should be pushed to origin as well so that any dev can 
+                        pick them up -->
+                    <pushHotfixes>true</pushHotfixes>
+                    <!-- Prevents deployments from dev workstations so that they can be 
+                        done by a CI server -->
+                    <noDeploy>true</noDeploy>
+                    <flowInitContext>
+                        <!-- You can customize your development branch name. Why? Because it's 
+                            faster to type 'git push origin dvlp' than 'git push origin develop' ;-) -->
+                        <developBranchName>dvlp</developBranchName>
+                    </flowInitContext>
+                </configuration>
+            </plugin>
+
+
         </plugins>
 
     </build>
@@ -541,7 +556,7 @@ mvn jgitflow:release-finish
             </build>
         </profile>
     </profiles>
-        
+
     <!-- Alfresco Maven Repositories -->
     <repositories>
         <repository>
@@ -586,7 +601,8 @@ mvn jgitflow:release-finish
         <module>cas-platform-amp</module>
         <module>cggh-alfresco-util</module>
         <module>share-patch-module</module>
-  </modules>
+        <module>platform-patch-module</module>
+    </modules>
 
     <scm>
         <connection>scm:git:git@github.com:malariagen/cggh-alfresco-extensions.git</connection>
