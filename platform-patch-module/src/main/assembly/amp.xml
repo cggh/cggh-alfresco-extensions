@@ -50,6 +50,12 @@
                 <exclude>README.md</exclude>
             </excludes>
         </fileSet>
+       <!-- Anything in the assembly/config directory will end up in the /config directory in the AMP -->
+        <fileSet>
+            <directory>src/main/assembly/config</directory>
+            <outputDirectory>config</outputDirectory>
+            <filtered>false</filtered>
+        </fileSet>
     </fileSets>
 
     <!-- Include the project artifact (JAR) in the /lib directory in the AMP -->
