@@ -2,5 +2,8 @@
 	<weaver options="-verbose">
 		<include within="org.alfresco.repo.web.scripts.discussion.*" />
 		<include within="org.alfresco.repo.web.scripts.wiki.*" />
+		<include within="org.alfresco.repo.activities.*" />
+		<include within="org.alfresco.service.cmr.security.*" />
+		<include within="org.alfresco.repo.security.person.*" />
 	</weaver>
 </aspectj>
