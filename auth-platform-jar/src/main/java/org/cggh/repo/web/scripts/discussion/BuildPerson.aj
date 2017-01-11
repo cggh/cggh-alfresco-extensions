@@ -17,7 +17,7 @@ privileged aspect BuildPerson {
 		Object noSuchPersonResponse = "";
 		if (logger.isDebugEnabled()) {
 			Object[] args = thisJoinPoint.getArgs();
-			System.out.println("BuildPerson aspect:" + thisJoinPoint.getSignature() + " " + args[0]);
+			logger.debug("BuildPerson aspect:" + thisJoinPoint.getSignature() + " " + args[0]);
 		}
 		Object ret = null;
 		try {

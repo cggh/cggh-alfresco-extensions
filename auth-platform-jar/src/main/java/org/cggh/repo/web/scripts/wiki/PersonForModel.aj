@@ -18,7 +18,7 @@ privileged aspect PersonForModel {
 		NodeRef noSuchPersonResponse = null;
 		if (logger.isDebugEnabled()) {
 			Object[] args = thisJoinPoint.getArgs();
-			System.out.println("personForModel aspect:" + thisJoinPoint.getSignature() + " " + args[0]);
+			logger.debug("personForModel aspect:" + thisJoinPoint.getSignature() + " " + args[0]);
 		}
 		NodeRef ret = null;
 		try {
