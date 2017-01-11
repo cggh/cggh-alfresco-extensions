@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.alfresco.repo.jscript.app.UsernamePropertyDecorator;
 import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.namespace.QName;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
@@ -21,7 +22,7 @@ public class CustomUsernamePropertyDecorator extends UsernamePropertyDecorator {
     	try 
     	{
     		map = (JSONObject) super.decorate(propertyName, nodeRef, value);
-    	} catch (AccessDeniedException ade) {
+    	} catch (NoSuchPersonException | AccessDeniedException ade) {
     		map = new JSONObject();
     		String firstName = null;
   	        String lastName = null;
