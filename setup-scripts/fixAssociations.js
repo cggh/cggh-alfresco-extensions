@@ -14,7 +14,7 @@ for each (var node in folder.children) {
         "cggh:groupPublic",
         "cggh:groupNotPublic"];
 
-        var assocToCreate = ["PI", "Contact", "Mail", "Data", "Public", "notPublic"];
+        var assocToCreate = ["PI", "Contact", "Mail", "Data", "Public", "NotPublic"];
         
         var nodeid = node.name.substr(0,4);
         logger.log(node.name + " (" + node.typeShort + "): " + node.nodeRef);
@@ -24,7 +24,7 @@ for each (var node in folder.children) {
         for each (create in assocToCreate) {
             assoc_action.parameters.association_name = "group" + create;
           if (node.assocs["cggh:" + assoc_action.parameters.association_name] == null) {
-            assoc_action.parameters.group = "GROUP_" + nodeid + "_" + create.toLowerCase();
+            assoc_action.parameters.group = "GROUP_" + nodeid + "_" + create.toLowerCase().substr(0, 2) + create.substr(2);
             logger.log("Adding " + assoc_action.parameters.association_name + " " + assoc_action.parameters.group);
           
             try{
