@@ -46,7 +46,7 @@
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || pi.children?size gt 1 >
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -75,7 +75,7 @@
 "groupMail": [
 <#list collab.assocs["cggh:groupMail"]![] as mail>
 <#list mail.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || mail.children?size gt 1 >
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -89,7 +89,7 @@
 "groupPublic": [
 <#list collab.assocs["cggh:groupPublic"]![] as pub>
 <#list pub.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || pub.children?size gt 1 >
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -103,7 +103,7 @@
 "groupContact": [
 <#list collab.assocs["cggh:groupContact"]![] as contact>
 <#list contact.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || contact.children?size gt 1 >
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
@@ -117,7 +117,7 @@
 "groupNotPublic": [
 <#list collab.assocs["cggh:groupNotPublic"]![] as notPublic>
 <#list notPublic.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || notPublic.children?size gt 1 >
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
