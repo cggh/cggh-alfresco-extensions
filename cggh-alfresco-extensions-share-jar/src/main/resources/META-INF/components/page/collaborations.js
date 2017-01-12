@@ -408,7 +408,7 @@
        * Retrieve user preferences after collaborations data has loaded
        *
        * @method onCollaborationsLoaded
-       * @param p_response {object} Response from "api/people/{userId}/collaborations" query
+       * @param p_response {object} Response from "cggh/collaborations" query
        */
       onCollaborationsLoaded: function Collaborations_onCollaborationsLoaded(p_response)
       {
@@ -416,17 +416,19 @@
 	      
 	      if (p_response.json) {
 	    	  items = p_response.json.collaborationNodes;
+	      
+	    	  this.services.preferences.request(PREFERENCES_COLLABORATIONS,
+	    			  {
+	    		  successCallback:
+	    		  {
+	    			  fn: this.onPreferencesLoaded,
+	    			  scope: this,
+	    			  obj: items
+	    		  }
+	    			  });
+	      } else {
+	    	  console.log("No valid json response from cggh/collaborations")
 	      }
-          this.services.preferences.request(PREFERENCES_COLLABORATIONS,
-        	         {
-        	            successCallback:
-        	            {
-        	               fn: this.onPreferencesLoaded,
-        	               scope: this,
-        	               obj: items
-        	            }
-        	         });
-
       },
 
       /**
