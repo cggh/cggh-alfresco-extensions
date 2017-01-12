@@ -61,7 +61,7 @@
 "groupData": [
 <#list collab.assocs["cggh:groupData"]![] as data>
 <#list data.children as myPerson>
-<#if myPerson.properties["cm:userName"] != "pwmTestUser">
+<#if myPerson.properties["cm:userName"] != "pwmTestUser" || data.children?size gt 1>
 {
     "malariagenUID": "${jsonUtils.encodeJSONString(myPerson.properties["cm:userName"])!''}",
     "firstName": "${jsonUtils.encodeJSONString(myPerson.properties["cm:firstName"])!''}",
