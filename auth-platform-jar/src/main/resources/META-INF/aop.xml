@@ -5,5 +5,6 @@
 		<include within="org.alfresco.repo.activities.*" />
 		<include within="org.alfresco.service.cmr.security.*" />
 		<include within="org.alfresco.repo.security.person.*" />
+		<include within="org.cggh.alfresco.repo.activities.*" />
 	</weaver>
 </aspectj>

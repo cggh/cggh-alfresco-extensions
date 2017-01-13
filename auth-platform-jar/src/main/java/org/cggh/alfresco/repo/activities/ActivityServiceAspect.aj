@@ -15,29 +15,44 @@ public aspect ActivityServiceAspect {
 	private static Log logger = LogFactory.getLog(ActivityServiceAspect.class);
 	
 	/**
-	 * This doesn't work but might be a basis for something in future
+	 * This doesn't work because it is called too soon
+	 * left here because it's interesting...
+	 * 
 	 * See also src/main/resources/aop.xml
 	 */
-	pointcut personService(String userId) : 
-	    call(NodeRef PersonServiceImpl+.getPerson(String))
-	    && within(org.alfresco.repo.activities.ActivityServiceAspect)
-	    && args(userId);
+	pointcut activityServiceMethods():
+		execution(* org.alfresco.repo.activities.ActivityServiceImpl.*(..));
+		
+	pointcut personService(String userId) :
+		execution(* org.alfresco.service.cmr.security.PersonService+.getPerson(String))
+		&& (cflowbelow(execution(* org.alfresco.repo.activities.ActivityServiceImpl.getUserFeedEntries(..)) ||
+				execution(* org.alfresco.repo.activities.ActivityServiceImpl.getSiteFeedEntries(..)) ||
+				execution(* org.alfresco.repo.activities.ActivityServiceImpl.getUserAvatarNodeRef(..)) ))
+		&& !within(ActivityServiceAspect)
+		&& args(userId);
 
 	NodeRef around(String userId): personService(userId) {
 		// Empty string needed if the user can't be found
 		NodeRef noSuchPersonResponse = null;
+		Object[] args = thisJoinPoint.getArgs();
+//		final String userId = (String) args[0];
 		if (logger.isDebugEnabled()) {
-			Object[] args = thisJoinPoint.getArgs();
+			
 			logger.debug("personService aspect:" + thisJoinPoint.getSignature() + " " + args[0]);
 		}
-		System.out.println("personService aspect:" + thisJoinPoint.getSignature() + " " + userId);
+//		System.out.println("personService aspect:" + thisJoinPoint.getSignature() + " " + userId);
+//		System.out.println("static part:" + thisEnclosingJoinPointStaticPart.getSignature().getDeclaringType());
+
 		NodeRef ret = null;
 		try {
 			ret = proceed(userId);
-		} catch (AccessDeniedException ade) {
+		} catch (net.sf.acegisecurity.AccessDeniedException ade) {
+			
+//			System.out.println("Caught Exception");
 			// If the person is no longer a member of the same sites
 			return noSuchPersonResponse;
-		}
+		} 
+//		System.out.println("NodeRef:" + ret);
 		return ret;
 	}
 	
