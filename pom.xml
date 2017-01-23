@@ -382,6 +382,18 @@
                             <version>${project.version}</version>
                             <type>amp</type>
                         </moduleDependency>
+						<!-- https://mvnrepository.com/artifact/com.lowagie/itext for java melody-->
+						<moduleDependency>
+							<groupId>com.lowagie</groupId>
+							<artifactId>itext</artifactId>
+							<version>2.1.7</version>
+						</moduleDependency>
+						<moduleDependency>
+							<groupId>net.bull.javamelody</groupId>
+							<artifactId>alfresco-javamelody-addon</artifactId>
+							<version>1.63.0</version>
+                            <type>amp</type>
+						</moduleDependency>
                     </platformModules>
 
                     <!-- JARs and AMPs that should be overlayed/applied to the Share WAR 
