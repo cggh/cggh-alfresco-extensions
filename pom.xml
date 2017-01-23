@@ -366,8 +366,8 @@
                             <type>amp</type>
                         </moduleDependency>
                         <moduleDependency>
-                            <groupId>org.orderofthebee.addons</groupId>
-                            <artifactId>ootbee-support-tools-repo</artifactId>
+                            <groupId>org.orderofthebee.support-tools</groupId>
+                            <artifactId>support-tools-repo</artifactId>
                             <version>0.0.1.0-SNAPSHOT</version>
                             <type>amp</type>
                         </moduleDependency>
@@ -445,8 +445,8 @@
                             <version>0.0.2</version>
                         </moduleDependency>
                         <moduleDependency>
-                            <groupId>org.orderofthebee.addons</groupId>
-                            <artifactId>ootbee-support-tools-share</artifactId>
+                            <groupId>org.orderofthebee.support-tools</groupId>
+                            <artifactId>support-tools-share</artifactId>
                             <version>0.0.1.0-SNAPSHOT</version>
                             <type>amp</type>
                         </moduleDependency>
