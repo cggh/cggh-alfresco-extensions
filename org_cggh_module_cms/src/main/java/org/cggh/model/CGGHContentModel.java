@@ -18,6 +18,11 @@ public interface CGGHContentModel {
 	
 	static final QName PROP_SAMPLES_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "samplesExpected");
 	static final QName PROP_SAMPLES_PROCESSED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "samplesProcessed");
+	static final QName PROP_SAMPLE_COUNTRIES = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "sampleCountry");
+	static final QName PROP_FIRST_SAMPLE_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "firstSample");
+	static final QName PROP_LAST_SAMPLE_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "lastSample");
+	static final QName CONSTRAINT_COUNTRIES = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI,"countryList");
+	
 	static final QName PROP_PROJECTS = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "projectsText");
 	static final QName PROP_LIAISON = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "liaisonUsername");
 	static final QName PROP_COLLAB_ID = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "collaborationID");
@@ -27,4 +32,5 @@ public interface CGGHContentModel {
 	static final QName PROP_DOI = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "DOI");
 	static final QName PROP_PMID = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "PMID");
 	static final QName PROP_CITATION = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "citationText");
+	
 }
