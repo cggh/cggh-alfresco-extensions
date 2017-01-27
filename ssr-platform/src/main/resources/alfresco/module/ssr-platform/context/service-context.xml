@@ -17,7 +17,7 @@
 	limitations under the License.
 -->
 <beans>
-   <bean id="${project.artifactId}.process_report" class="org.cggh.action.SampleStatusReportReader"
+   <bean id="${project.artifactId}.process_report" class="org.cggh.alfresco.ssr.action.SampleStatusReportReader"
         parent="action-executer">
         <property name="nodeService">
             <ref bean="NodeService" />

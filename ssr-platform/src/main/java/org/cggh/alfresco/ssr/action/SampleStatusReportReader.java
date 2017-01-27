@@ -1,4 +1,4 @@
-package org.cggh.action;
+package org.cggh.alfresco.ssr.action;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,6 +59,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.cggh.alfresco.ssr.model.SSRWorkflowModel;
 import org.cggh.model.CGGHContentModel;
 import org.cggh.model.CGGHNamespaceService;
 
@@ -68,9 +69,11 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 
 	private static final String DEFAULT_NAMECHECK_GROUP = "GROUP_COLLABORATION_MANAGERS";
 	private static final String DEFAULT_NAMECHECK_TASK = "activiti$nameMismatch:2:204";
+	private static final String DEFAULT_COUNTCHECK_TASK = "activiti$sampleCountExceeded:1:904";
 	private static final Boolean DEFAULT_TRANSFORM = true;
 	private static final String PARAM_TRANSFORM = "transform";
 	private static final String PARAM_NAMECHECKTASK = "nameCheckTask";
+	private static final String PARAM_COUNTCHECKTASK = "countCheckTask";
 	private static final String PARAM_NAMECHECKGROUP = "nameCheckGroup";
 	private static final int COUNTRY_COLUMN = 4;
 	private static final int DATE_COLUMN = 12;
@@ -90,6 +93,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private String nameCheckGroup;
 	private String collabReportName = "SampleStatusReport";
 	private DictionaryService dictionaryService;
+	private String countCheckTask;
 
 	protected Date getFirstExpected(NodeRef collabNode) {
 		Date expected = DefaultTypeConverter.INSTANCE.convert(Date.class,
@@ -215,6 +219,32 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
 	}
 
+	public void startCountWorkflowTask(NodeRef collabNode, int count) {
+		// Create workflow parameters
+		Map<QName, Serializable> params = new HashMap<QName, Serializable>();
+		NodeRef wfPackage = workflowService.createPackage(null);
+
+		params.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+
+		NodeRef group = authorityService.getAuthorityNodeRef(nameCheckGroup);
+		params.put(WorkflowModel.ASSOC_GROUP_ASSIGNEE, group);
+
+		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, "Too many samples");
+		
+		params.put(SSRWorkflowModel.PROP_REPORT_SAMPLES_COUNT, count);
+		
+		// params.put(WorkflowModel.ASSOC_PACKAGE_CONTAINS, collabNode);
+
+		WorkflowPath path = workflowService.startWorkflow(countCheckTask, params);
+		String instanceId = path.getInstance().getId();
+
+		@SuppressWarnings("unused")
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+
+		nodeService.addChild(wfPackage, collabNode, ContentModel.ASSOC_CONTAINS,
+				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
+	}
+	
 	private static void copyRow(HashMap<Integer, HSSFCellStyle> styleCache, HSSFWorkbook xlswb, HSSFSheet resultSheet,
 			HSSFRow sourceRow, int rownum) {
 		/*
@@ -326,7 +356,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 								String nodeName = DefaultTypeConverter.INSTANCE.convert(String.class,
 										nodeService.getProperty(collabNode, ContentModel.PROP_NAME));
 								logger.debug("Collaboration name mismatch:" + nodeName + ":" + alfrescoCode);
-								if (!isTaskActive(collabNode)) {
+								if (!isTaskActive(collabNode, nameCheckTask)) {
 									startWorkflowTask(collabNode, alfrescoCode);
 								}
 							}
@@ -343,18 +373,22 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 					//Only do something if the number processed has changed
 					if (processed != sangerSystemTotal) {
 						setProcessed(collabNode, sangerSystemTotal);
-
-						if (sangerSystemTotal > expected) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("More samples than expected:" + alfrescoCode + " expected:" + expected
-										+ " processed:" + sangerSystemTotal);
-							}
-						}
 						if (logger.isDebugEnabled()) {
 							logger.debug("Updated samples for:" + alfrescoCode + " expected:" + expected + " processed:"
 									+ sangerSystemTotal);
 						}
 					}
+
+					if (sangerSystemTotal > expected) {
+						if (logger.isDebugEnabled()) {
+							logger.debug("More samples than expected:" + alfrescoCode + " expected:" + expected
+									+ " processed:" + sangerSystemTotal);
+						}
+						if (!isTaskActive(collabNode, countCheckTask)) {
+							startCountWorkflowTask(collabNode, sangerSystemTotal);
+						}
+					}
+					
 					Hyperlink report = row.getCell(1).getHyperlink();
 					String addr = report.getAddress();
 					if (addr != null) {
@@ -558,13 +592,13 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 
 	}
 
-	private boolean isTaskActive(NodeRef collabNode) {
+	private boolean isTaskActive(NodeRef collabNode, String taskName) {
 		boolean active = true;
 		List<WorkflowInstance> nodeTasks = workflowService.getWorkflowsForContent(collabNode, active);
 		boolean found = false;
 		for (WorkflowInstance wfi : nodeTasks) {
 			WorkflowDefinition defn = wfi.getDefinition();
-			if (defn.getId().equals(nameCheckTask)) {
+			if (defn.getId().equals(taskName)) {
 				found = true;
 			}
 		}
@@ -618,7 +652,8 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		setTransform(action);
 		setNameCheckGroup(action);
 		setNameCheckTask(action);
-
+		setCountCheckTask(action);
+		
 		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
 		File tmpFile = null;
 		try {
@@ -655,6 +690,9 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		paramList.add(new ParameterDefinitionImpl(PARAM_NAMECHECKTASK, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_NAMECHECKTASK)));
 
+		paramList.add(new ParameterDefinitionImpl(PARAM_COUNTCHECKTASK, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_COUNTCHECKTASK)));
+		
 		paramList.add(new ParameterDefinitionImpl(PARAM_RESULT, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_RESULT)));
 
@@ -679,6 +717,15 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 			nameCheckTask = DEFAULT_NAMECHECK_TASK;
 		} else {
 			nameCheckTask = t;
+		}
+	}
+	
+	public void setCountCheckTask(Action action) {
+		String t = (String) action.getParameterValue(PARAM_COUNTCHECKTASK);
+		if (t == null) {
+			countCheckTask = DEFAULT_COUNTCHECK_TASK;
+		} else {
+			countCheckTask = t;
 		}
 	}
 

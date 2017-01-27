@@ -1,26 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="acmew:workflowModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <!-- Optional meta-data about the model -->
-    <description>Sample Workflow Model</description>
-    <author>My Name</author>
-    <version>1.0</version>
+<model name="ssrwf:workflowModel" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<!-- Optional meta-data about the model -->
+	<description>Sample Status Reporting Workflow Model</description>
+	<author>Ian Wright</author>
+	<version>1.0</version>
 
-    <imports>
-        <!-- Import Alfresco Dictionary Definitions -->
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <!-- Import Alfresco Content Domain Model Definitions -->
-        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-        <!-- Import Alfresco Workflow Model Definitions -->
-        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
-    </imports>
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0"
+			prefix="d" />
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
+		<!-- Import Alfresco Workflow Model Definitions -->
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm" />
+	</imports>
 
-    <!-- Custom namespace for your domain -->
-    <namespaces>
-        <namespace uri="http://www.acme.org/model/workflow/1.0" prefix="acmew"/>
-    </namespaces>
+	<!-- Custom namespace for your domain -->
+	<namespaces>
+		<namespace uri="http://www.cggh.org/ssr/model/workflow/1.0"
+			prefix="ssrwf" />
+	</namespaces>
 
-    <!-- ===============================================================================================================
-        Constraints, Types, and Aspects go here...
-        -->
+	<!-- =============================================================================================================== 
+		Constraints, Types, and Aspects go here... -->
+
+	<types>
+		<type name="ssrwf:submitSampleCountTask">
+			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="ssrwf:reportCount">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:collabCount">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</type>
+
+		<type name="ssrwf:activitiReviewTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="ssrwf:reviewOutcome">
+					<type>d:text</type>
+					<default>Reject</default>
+					<constraints>
+						<constraint name="ssrwf:reviewOutcome" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>Approve</value>
+									<value>Reject</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+			<overrides>
+				<property name="bpm:packageItemActionGroup">
+					<default>edit_package_item_actions</default>
+				</property>
+				<property name="bpm:outcomePropertyName">
+					<default>{http://www.cggh.org/ssr/model/workflow/1.0}reviewOutcome</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="ssrwf:activitiCountReview">
+			<parent>ssrwf:activitiReviewTask</parent>
+		</type>
+
+		<type name="ssrwf:approvedTask">
+			<parent>bpm:workflowTask</parent>
+		</type>
+
+		<type name="ssrwf:rejectedTask">
+			<parent>bpm:workflowTask</parent>
+		</type>
+
+	</types>
 </model>
 

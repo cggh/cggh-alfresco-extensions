@@ -7,7 +7,9 @@
     <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
 		 workflow, and loading custom content models.  -->
 
-    <bean id="${project.artifactId}.org.cggh.sampleprocess.workflowBootstrap" parent="workflowDeployer">
+    <!-- Registration of new models -->
+
+    <bean id="${project.artifactId}.org.cggh.ssr.workflowBootstrap" parent="workflowDeployer">
         <property name="workflowDefinitions">
             <list>
                 <props>
@@ -15,6 +17,23 @@
                     <prop key="location">alfresco/module/${project.artifactId}/workflow/nameMismatch.bpmn</prop>
                     <prop key="mimetype">text/xml</prop>
                 </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/sampleCountExceeded.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${project.artifactId}/model/workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <!-- Bootstrap Resource Bundles for the content model types, aspects, properties etc -->
+                <value>alfresco/module/${project.artifactId}/messages/ssrWorkflow</value>
+                <value>alfresco/module/${project.artifactId}/messages/content-model</value>
             </list>
         </property>
     </bean>
