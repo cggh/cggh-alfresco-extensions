@@ -219,7 +219,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
 	}
 
-	public void startCountWorkflowTask(NodeRef collabNode, int count) {
+	public void startCountWorkflowTask(NodeRef collabNode, String description, int expected, int count) {
 		// Create workflow parameters
 		Map<QName, Serializable> params = new HashMap<QName, Serializable>();
 		NodeRef wfPackage = workflowService.createPackage(null);
@@ -229,10 +229,10 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		NodeRef group = authorityService.getAuthorityNodeRef(nameCheckGroup);
 		params.put(WorkflowModel.ASSOC_GROUP_ASSIGNEE, group);
 
-		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, "Too many samples");
+		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, description);
 		
 		params.put(SSRWorkflowModel.PROP_REPORT_SAMPLES_COUNT, count);
-		
+		params.put(SSRWorkflowModel.PROP_EXPECTED_SAMPLES_COUNT, expected);
 		// params.put(WorkflowModel.ASSOC_PACKAGE_CONTAINS, collabNode);
 
 		WorkflowPath path = workflowService.startWorkflow(countCheckTask, params);
@@ -243,6 +243,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 
 		nodeService.addChild(wfPackage, collabNode, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
+		
 	}
 	
 	private static void copyRow(HashMap<Integer, HSSFCellStyle> styleCache, HSSFWorkbook xlswb, HSSFSheet resultSheet,
@@ -380,12 +381,13 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 					}
 
 					if (sangerSystemTotal > expected) {
+						String description = "More samples than expected:" + alfrescoCode + " expected:" + expected
+								+ " processed:" + sangerSystemTotal;
 						if (logger.isDebugEnabled()) {
-							logger.debug("More samples than expected:" + alfrescoCode + " expected:" + expected
-									+ " processed:" + sangerSystemTotal);
+							logger.debug(description);
 						}
 						if (!isTaskActive(collabNode, countCheckTask)) {
-							startCountWorkflowTask(collabNode, sangerSystemTotal);
+							startCountWorkflowTask(collabNode, description, expected, sangerSystemTotal);
 						}
 					}
 					

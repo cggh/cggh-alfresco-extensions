@@ -442,6 +442,12 @@
                             <version>${discussions.version}</version>
                         </moduleDependency>
                         <moduleDependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>ssr-share</artifactId>
+                            <version>${project.version}</version>
+                            <type>amp</type>
+                        </moduleDependency>
+                        <moduleDependency>
                             <groupId>de.fmaul</groupId>
                             <artifactId>javascript-console-share</artifactId>
                             <version>0.6</version>
@@ -620,6 +626,7 @@
         <module>share-patch-module</module>
         <module>platform-patch-module</module>
         <module>ssr-platform</module>
+        <module>ssr-share</module>
   </modules>
 
     <scm>

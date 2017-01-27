@@ -27,18 +27,6 @@
 	<types>
 		<type name="ssrwf:submitSampleCountTask">
 			<parent>bpm:startTask</parent>
-			<properties>
-				<property name="ssrwf:reportCount">
-					<type>d:int</type>
-					<mandatory>true</mandatory>
-					<multiple>false</multiple>
-				</property>
-				<property name="ssrwf:collabCount">
-					<type>d:int</type>
-					<mandatory>true</mandatory>
-					<multiple>false</multiple>
-				</property>
-			</properties>
 		</type>
 
 		<type name="ssrwf:activitiReviewTask">
@@ -57,6 +45,16 @@
 							</parameter>
 						</constraint>
 					</constraints>
+				</property>
+				<property name="ssrwf:reportCount">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:collabCount">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
 				</property>
 			</properties>
 			<overrides>

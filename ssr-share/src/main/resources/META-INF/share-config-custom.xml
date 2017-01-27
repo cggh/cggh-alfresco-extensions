@@ -1,0 +1,48 @@
+<!-- Share configuration related to this particular Share module extension, 
+	such as: - Doclib action config - Form config - Aspect and Type config - 
+	Advanced Search Note. Any configuration related to the whole Share.war webapp 
+	(i.e. not specific to this share extension) should be placed in the environment 
+	specific config file: alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml -->
+<alfresco-config>
+	<!--================================================================================================================ 
+		Make custom types and aspects visible in "Change Type" and "Manage Aspects" 
+		actions. This will also make them visible when creating rules. (will be merged 
+		with out-of-the-box configured types and aspects) ============================================================================================================= -->
+
+
+	<config evaluator="task-type" condition="ssrwf:activitiReviewTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDescription" />
+					<show id="packageItems" />
+					<show id="ssrwf:reviewOutcome" />
+					<show id="transitions" />
+					<show id="ssrwf:collabCount" />
+					<show id="ssrwf:reportCount" readonly="true"/>
+				</field-visibility>
+				<appearance>
+					<set id="" appearance="title" label-id="workflow.set.general" />
+					<set id="info" appearance=""
+						template="/org/alfresco/components/form/2-column-set.ftl" />
+					<set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+					<set id="items" appearance="title" label-id="workflow.set.items" />
+					<set id="progress" appearance="title" label-id="workflow.set.task.progress" />
+					<set id="response" appearance="title" label-id="workflow.set.response" />
+
+					<field id="bpm:workflowDescription" label-id="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+					<field id="packageItems" set="items" />
+					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+					<field id="ssrwf:collabCount" label-id="ssrwf_collabCount" set="response" />
+					<field id="ssrwf:reportCount" label-id="ssrwf_reportCount" set="response" />
+					<field id="transitions" set="response" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+</alfresco-config>
