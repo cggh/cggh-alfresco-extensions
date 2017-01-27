@@ -2,7 +2,7 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/bpmn20" id="review-definitions">
   <process id="sampleCountExceeded" name="Review And Approve Activiti Process" isExecutable="true">
     <startEvent id="start" activiti:formKey="ssrwf:submitSampleCountTask"></startEvent>
-    <userTask id="reviewTask" name="Review Task" activiti:assignee="${initiator.properties.userName}" activiti:formKey="ssrwf:activitiReviewTask">
+    <userTask id="reviewTask" name="Review Task" activiti:candidateGroups="${bpm_groupAssignee.properties.authorityName}" activiti:formKey="ssrwf:activitiReviewTask">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">
