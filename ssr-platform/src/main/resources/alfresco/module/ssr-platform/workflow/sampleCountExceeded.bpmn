@@ -10,7 +10,7 @@
          	task.setVariableLocal('ssrwf_collabCount', ssrwf_collabCount);
          	
          	 var mail = actions.create("mail");
-                        mail.parameters.to = initiator.properties.email;
+                        mail.parameters.to_many = bpm_groupAssignee.properties.authorityName;
                         mail.parameters.subject = bpm_workflowDescription;
                         mail.parameters.text = "Please check your Alfresco Tasks";
                         mail.execute(bpm_package);]]></activiti:string>
