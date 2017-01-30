@@ -70,13 +70,20 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private static final String DEFAULT_NAMECHECK_GROUP = "GROUP_COLLABORATION_MANAGERS";
 	private static final String DEFAULT_NAMECHECK_TASK = "activiti$nameMismatch:2:204";
 	private static final String DEFAULT_COUNTCHECK_TASK = "activiti$sampleCountExceeded:1:904";
+	private static final String DEFAULT_STATUSCHECKTASK = "activiti$statusCheck:2:204";
+	private static final String DEFAULT_COUNTRYCHECKTASK = "activiti$countryCheck:2:204";
+	private static final String DEFAULT_DATECHECKTASK = "activiti$dateCheck:2:204";
+
 	private static final Boolean DEFAULT_TRANSFORM = true;
 	private static final String PARAM_TRANSFORM = "transform";
 	private static final String PARAM_NAMECHECKTASK = "nameCheckTask";
 	private static final String PARAM_COUNTCHECKTASK = "countCheckTask";
-	private static final String PARAM_NAMECHECKGROUP = "nameCheckGroup";
+	private static final String PARAM_TASK_GROUP = "nameCheckGroup";
 	private static final int COUNTRY_COLUMN = 4;
 	private static final int DATE_COLUMN = 12;
+	private static final String PARAM_STATUSCHECKTASK = "statusCheckTask";
+	private static final String PARAM_COUNTRYCHECKTASK = "countryCheckTask";
+	private static final String PARAM_DATECHECKTASK = "dateCheckTask";
 
 	private static Log logger = LogFactory.getLog(SampleStatusReportReader.class);
 
@@ -94,6 +101,10 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private String collabReportName = "SampleStatusReport";
 	private DictionaryService dictionaryService;
 	private String countCheckTask;
+	private boolean autoUpdateCountries = false;
+	private String statusCheckTask;
+	private String dateCheckTask;
+	private String countryCheckTask;
 
 	protected Date getFirstExpected(NodeRef collabNode) {
 		Date expected = DefaultTypeConverter.INSTANCE.convert(Date.class,
@@ -102,7 +113,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		if (expected == null) {
 			expected = new Date(0);
 		}
-		
+
 		return expected;
 	}
 
@@ -120,10 +131,9 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 				nodeService.getProperty(collabNode, CGGHContentModel.PROP_SAMPLES_EXPECTED));
 
 		/*
-		if (logger.isDebugEnabled()) {
-			logger.debug("found expected: " + expected);
-		}
-		*/
+		 * if (logger.isDebugEnabled()) { logger.debug("found expected: " +
+		 * expected); }
+		 */
 		if (expected == null) {
 			return 0;
 		}
@@ -135,10 +145,9 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 				nodeService.getProperty(collabNode, CGGHContentModel.PROP_SAMPLES_PROCESSED));
 
 		/*
-		if (logger.isDebugEnabled()) {
-			logger.debug("found processed: " + processed);
-		}
-		*/
+		 * if (logger.isDebugEnabled()) { logger.debug("found processed: " +
+		 * processed); }
+		 */
 		if (processed == null) {
 			return 0;
 		}
@@ -146,19 +155,20 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	}
 
 	protected List<String> getCountries(NodeRef collabNode) {
-		List<String> countries = 
-				(List<String>) nodeService.getProperty(collabNode, CGGHContentModel.PROP_SAMPLE_COUNTRIES);
+		@SuppressWarnings("unchecked")
+		List<String> countries = (List<String>) nodeService.getProperty(collabNode,
+				CGGHContentModel.PROP_SAMPLE_COUNTRIES);
 
 		if (countries == null) {
 			countries = new ArrayList<String>();
 		}
 		return countries;
 	}
-	
+
 	protected void setCountries(NodeRef collabNode, List<String> countries) {
 		nodeService.setProperty(collabNode, CGGHContentModel.PROP_SAMPLE_COUNTRIES, (Serializable) countries);
 	}
-	
+
 	protected NodeRef getCollaboration(String alfrescoCode, boolean partialMatch) {
 		StoreRef storeRef = new StoreRef(StoreRef.PROTOCOL_WORKSPACE, "SpacesStore");
 		// String query = "TYPE:cm\\:person +@cm\\:email:\"" + from + "\"";
@@ -197,43 +207,25 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	}
 
 	public void startWorkflowTask(NodeRef collabNode, String otherName) {
-		// Create workflow parameters
-		Map<QName, Serializable> params = new HashMap<QName, Serializable>();
-		NodeRef wfPackage = workflowService.createPackage(null);
 
-		params.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+		String description = "Collaboration ID mismatch:" + otherName;
 
-		NodeRef group = authorityService.getAuthorityNodeRef(nameCheckGroup);
-		params.put(WorkflowModel.ASSOC_GROUP_ASSIGNEE, group);
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode, description);
 
-		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, "Collaboration ID mismatch:" + otherName);
-		// params.put(WorkflowModel.ASSOC_PACKAGE_CONTAINS, collabNode);
-
+		params.put(SSRWorkflowModel.PROP_REPORT_NAME, otherName);
 		WorkflowPath path = workflowService.startWorkflow(nameCheckTask, params);
 		String instanceId = path.getInstance().getId();
 
 		@SuppressWarnings("unused")
 		WorkflowTask startTask = workflowService.getStartTask(instanceId);
 
-		nodeService.addChild(wfPackage, collabNode, ContentModel.ASSOC_CONTAINS,
-				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
 	}
 
 	public void startCountWorkflowTask(NodeRef collabNode, String description, int expected, int count) {
-		// Create workflow parameters
-		Map<QName, Serializable> params = new HashMap<QName, Serializable>();
-		NodeRef wfPackage = workflowService.createPackage(null);
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode, description);
 
-		params.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
-
-		NodeRef group = authorityService.getAuthorityNodeRef(nameCheckGroup);
-		params.put(WorkflowModel.ASSOC_GROUP_ASSIGNEE, group);
-
-		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, description);
-		
 		params.put(SSRWorkflowModel.PROP_REPORT_SAMPLES_COUNT, count);
 		params.put(SSRWorkflowModel.PROP_EXPECTED_SAMPLES_COUNT, expected);
-		// params.put(WorkflowModel.ASSOC_PACKAGE_CONTAINS, collabNode);
 
 		WorkflowPath path = workflowService.startWorkflow(countCheckTask, params);
 		String instanceId = path.getInstance().getId();
@@ -241,11 +233,28 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		@SuppressWarnings("unused")
 		WorkflowTask startTask = workflowService.getStartTask(instanceId);
 
+	}
+
+	Map<QName, Serializable> createCommonWorkflowParams(NodeRef collabNode, String description) {
+		String nodeName = DefaultTypeConverter.INSTANCE.convert(String.class,
+				nodeService.getProperty(collabNode, ContentModel.PROP_NAME));
+		// Create workflow parameters
+		Map<QName, Serializable> params = new HashMap<QName, Serializable>();
+		NodeRef wfPackage = workflowService.createPackage(null);
+
+		params.put(WorkflowModel.ASSOC_PACKAGE, wfPackage);
+
+		NodeRef group = authorityService.getAuthorityNodeRef(nameCheckGroup);
+		params.put(WorkflowModel.ASSOC_GROUP_ASSIGNEE, group);
+
+		params.put(WorkflowModel.PROP_WORKFLOW_DESCRIPTION, nodeName + ":" + description);
+
 		nodeService.addChild(wfPackage, collabNode, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NamespaceService.CONTENT_MODEL_PREFIX, "samplestatus"));
-		
+
+		return params;
 	}
-	
+
 	private static void copyRow(HashMap<Integer, HSSFCellStyle> styleCache, HSSFWorkbook xlswb, HSSFSheet resultSheet,
 			HSSFRow sourceRow, int rownum) {
 		/*
@@ -357,45 +366,68 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 								String nodeName = DefaultTypeConverter.INSTANCE.convert(String.class,
 										nodeService.getProperty(collabNode, ContentModel.PROP_NAME));
 								logger.debug("Collaboration name mismatch:" + nodeName + ":" + alfrescoCode);
-								if (!isTaskActive(collabNode, nameCheckTask)) {
-									startWorkflowTask(collabNode, alfrescoCode);
-								}
+							}
+							if (!isTaskActive(collabNode, nameCheckTask)) {
+								startWorkflowTask(collabNode, alfrescoCode);
 							}
 						} else {
 							continue;
 						}
+					} else {
+						String nodeName = DefaultTypeConverter.INSTANCE.convert(String.class,
+								nodeService.getProperty(collabNode, ContentModel.PROP_NAME));
+						if (!nodeName.equals(alfrescoCode)) {
+							logger.debug("Collaboration name mismatch:" + nodeName + ":" + alfrescoCode);
+							if (!isTaskActive(collabNode, nameCheckTask)) {
+								startWorkflowTask(collabNode, alfrescoCode);
+							}
+						}
 					}
 					int expected = getExpected(collabNode);
 					int processed = getProcessed(collabNode);
+					boolean newSamples = false;
 
 					double sangerYes = row.getCell(5).getNumericCellValue();
 					double sangerNo = row.getCell(4).getNumericCellValue();
 					int sangerSystemTotal = (int) (sangerNo + sangerYes);
-					//Only do something if the number processed has changed
+					// Only do something if the number processed has changed
 					if (processed != sangerSystemTotal) {
+
+						newSamples = true;
+
 						setProcessed(collabNode, sangerSystemTotal);
 						if (logger.isDebugEnabled()) {
 							logger.debug("Updated samples for:" + alfrescoCode + " expected:" + expected + " processed:"
 									+ sangerSystemTotal);
 						}
+
+						if (sangerSystemTotal > expected) {
+							String description = "More samples than expected:" + expected + " processed:"
+									+ sangerSystemTotal;
+							if (logger.isDebugEnabled()) {
+								logger.debug(description);
+							}
+							if (!isTaskActive(collabNode, countCheckTask)) {
+								startCountWorkflowTask(collabNode, description, expected, sangerSystemTotal);
+							}
+						}
+
+						String status = getCollaborationStatus(collabNode);
+
+						if (!status.equals("active")) {
+							if (!isTaskActive(collabNode, statusCheckTask)) {
+								startStatusWorkflowTask(collabNode);
+							}
+						}
 					}
 
-					if (sangerSystemTotal > expected) {
-						String description = "More samples than expected:" + alfrescoCode + " expected:" + expected
-								+ " processed:" + sangerSystemTotal;
-						if (logger.isDebugEnabled()) {
-							logger.debug(description);
-						}
-						if (!isTaskActive(collabNode, countCheckTask)) {
-							startCountWorkflowTask(collabNode, description, expected, sangerSystemTotal);
-						}
-					}
-					
 					Hyperlink report = row.getCell(1).getHyperlink();
 					String addr = report.getAddress();
 					if (addr != null) {
 						String[] parts = addr.split("!");
-						studyReports.put(parts[0], collabNode);
+						if (newSamples) {
+							studyReports.put(parts[0], collabNode);
+						}
 					}
 				} catch (NumberFormatException nfe) {
 					// ignored
@@ -406,6 +438,15 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		for (String key : studyReports.keySet()) {
 			processStudy(workbook, key, studyReports.get(key));
 		}
+	}
+
+	private String getCollaborationStatus(NodeRef collabNode) {
+		String status = (String) nodeService.getProperty(collabNode, CGGHContentModel.PROP_COLLAB_STATUS);
+
+		if (status == null) {
+			status = "";
+		}
+		return status;
 	}
 
 	private void processStudy(HSSFWorkbook workbook, String sheetName, NodeRef collabNode) throws IOException {
@@ -440,29 +481,29 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 				}
 				if (sourceRow != null) {
 					if (countries) {
-					Cell dateCell = sourceRow.getCell(DATE_COLUMN);
-					if (dateCell != null && dateCell.getCellType() == Cell.CELL_TYPE_STRING) {
-						String value = dateCell.getStringCellValue();
-						SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-						try {
-							Date cDate = format.parse(value);
-							if (firstDate == null) {
-								firstDate = cDate;
-							} else if (cDate.before(firstDate)) {
-								firstDate = cDate;
+						Cell dateCell = sourceRow.getCell(DATE_COLUMN);
+						if (dateCell != null && dateCell.getCellType() == Cell.CELL_TYPE_STRING) {
+							String value = dateCell.getStringCellValue();
+							SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+							try {
+								Date cDate = format.parse(value);
+								if (firstDate == null) {
+									firstDate = cDate;
+								} else if (cDate.before(firstDate)) {
+									firstDate = cDate;
+								}
+								if (lastDate == null) {
+									lastDate = cDate;
+								} else if (cDate.after(lastDate)) {
+									lastDate = cDate;
+								}
+							} catch (ParseException e) {
+								if (logger.isDebugEnabled()) {
+									logger.debug("", e);
+								}
 							}
-							if (lastDate == null) {
-								lastDate = cDate;
-							} else if (cDate.after(lastDate)) {
-								lastDate = cDate;
-							}
-						} catch (ParseException e) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("", e);
-							}
+
 						}
-						
-					}
 					}
 					Cell countryCell = sourceRow.getCell(COUNTRY_COLUMN);
 					if (countryCell != null && countryCell.getCellType() == Cell.CELL_TYPE_STRING) {
@@ -489,7 +530,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 								mappedCountry = "IRAN (ISLAMIC REPUBLIC OF)";
 							} else if (country.equals("China, People's Republic of")) {
 								mappedCountry = "CHINA";
-							} 
+							}
 							if (!sampleCountries.contains(mappedCountry)) {
 								sampleCountries.add(mappedCountry);
 							}
@@ -497,20 +538,27 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 						if (countryCell.getStringCellValue().equals("Country of Origin")) {
 							countries = true;
 						}
-						
+
 					}
 				}
 			}
-			
+
+			boolean countryTaskRequired = false;
+			ArrayList<String> noSampleCountries = new ArrayList<String>();
 			for (String cntry : countryProps) {
 				if (!sampleCountries.contains(cntry)) {
 					if (logger.isInfoEnabled()) {
 						logger.info("No samples from:" + cntry + " in " + sheetName);
 					}
+					noSampleCountries.add(cntry);
+					countryTaskRequired = true;
 				}
 			}
-			ListOfValuesConstraint allowedCountries = (ListOfValuesConstraint) dictionaryService.getConstraint(CGGHContentModel.CONSTRAINT_COUNTRIES).getConstraint();
-			
+			ListOfValuesConstraint allowedCountries = (ListOfValuesConstraint) dictionaryService
+					.getConstraint(CGGHContentModel.CONSTRAINT_COUNTRIES).getConstraint();
+
+			ArrayList<String> missingCountries = new ArrayList<String>();
+			ArrayList<String> invalidCountries = new ArrayList<String>();
 			for (String cntry : sampleCountries) {
 				if (!countryProps.contains(cntry)) {
 					if (logger.isDebugEnabled()) {
@@ -518,39 +566,56 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 					}
 					if (allowedCountries.getAllowedValues().contains(cntry)) {
 						countryProps.add(cntry);
+						countryTaskRequired = true;
+						missingCountries.add(cntry);
 					} else {
 						if (logger.isInfoEnabled()) {
 							logger.info("Invalid country:" + cntry + " in " + sheetName);
-						}	
+						}
+						countryTaskRequired = true;
+						invalidCountries.add(cntry);
 					}
 					addedCountry = true;
+
 				}
 			}
-			
-			if (addedCountry) {
+
+			if (addedCountry && autoUpdateCountries) {
 				setCountries(collabNode, countryProps);
 			}
-			
+
+			if (countryTaskRequired && !isTaskActive(collabNode, countryCheckTask)) {
+				startCountryWorkflowTask(collabNode, missingCountries, noSampleCountries, invalidCountries);
+			}
+
+			boolean dateTaskRequired = false;
 			if (firstDate != null && firstDate.before(getFirstExpected(collabNode))) {
 				if (logger.isInfoEnabled()) {
-					logger.info("First date earlier than expected:" + firstDate + " not expected until " + getFirstExpected(collabNode) +" in " + sheetName);
-				}	
+					logger.info("First date earlier than expected:" + firstDate + " not expected until "
+							+ getFirstExpected(collabNode) + " in " + sheetName);
+				}
+				dateTaskRequired = true;
 			}
-			
+
 			if (lastDate != null && lastDate.after(getLastExpected(collabNode))) {
 				if (logger.isInfoEnabled()) {
-					logger.info("last date later than expected:" + lastDate + " not expected after " + getLastExpected(collabNode) +" in " + sheetName);
-				}	
+					logger.info("last date later than expected:" + lastDate + " not expected after "
+							+ getLastExpected(collabNode) + " in " + sheetName);
+				}
+				dateTaskRequired = true;
 			}
-			
+
+			if (dateTaskRequired && !isTaskActive(collabNode, dateCheckTask)) {
+				startDateWorkflowTask(collabNode, firstDate, lastDate);
+			}
+
 			for (int i = 0; i < reportSheet.getNumMergedRegions(); i++) {
 				CellRangeAddress region = reportSheet.getMergedRegion(i);
 				resultSheet.addMergedRegion(region);
 				/*
-				if (logger.isDebugEnabled()) {
-					logger.debug("Merged Region:" + region.formatAsString());
-				}
-				*/
+				 * if (logger.isDebugEnabled()) { logger.debug("Merged Region:"
+				 * + region.formatAsString()); }
+				 */
 			}
 
 			for (short column = 0; column < maxCols; column++) {
@@ -591,6 +656,53 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 			}
 
 		}
+
+	}
+
+	private void startStatusWorkflowTask(NodeRef collabNode) {
+
+		String description = "Collaboration is not yet active.";
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode, description);
+
+		WorkflowPath path = workflowService.startWorkflow(statusCheckTask, params);
+		String instanceId = path.getInstance().getId();
+
+		@SuppressWarnings("unused")
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+
+	}
+
+	private void startDateWorkflowTask(NodeRef collabNode, Date firstDate, Date lastDate) {
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode,
+				"Samples processed outside expected date range");
+
+		if (firstDate != null) {
+			params.put(SSRWorkflowModel.PROP_DATE_FIRST_SAMPLE, firstDate);
+		}
+		if (lastDate != null) {
+			params.put(SSRWorkflowModel.PROP_DATE_LAST_SAMPLE, lastDate);
+		}
+
+		WorkflowPath path = workflowService.startWorkflow(dateCheckTask, params);
+		String instanceId = path.getInstance().getId();
+
+		@SuppressWarnings("unused")
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+	}
+
+	private void startCountryWorkflowTask(NodeRef collabNode, ArrayList<String> missingCountries,
+			ArrayList<String> noSampleCountries, ArrayList<String> invalidCountries) {
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode, "Countries mismatch");
+
+		params.put(SSRWorkflowModel.PROP_COUNTRIES_MISSING, missingCountries);
+		params.put(SSRWorkflowModel.PROP_COUNTRIES_NO_SAMPLES, noSampleCountries);
+		params.put(SSRWorkflowModel.PROP_COUNTRIES_INVALID, noSampleCountries);
+
+		WorkflowPath path = workflowService.startWorkflow(countryCheckTask, params);
+		String instanceId = path.getInstance().getId();
+
+		@SuppressWarnings("unused")
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
 
 	}
 
@@ -635,7 +747,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	public void setDictionaryService(DictionaryService dictService) {
 		this.dictionaryService = dictService;
 	}
-	
+
 	protected File resave(ContentReader reader) throws Exception {
 		reader.setMimetype(MimetypeMap.MIMETYPE_EXCEL);
 
@@ -655,7 +767,10 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		setNameCheckGroup(action);
 		setNameCheckTask(action);
 		setCountCheckTask(action);
-		
+		setStatusCheckTask(action);
+		setCountryCheckTask(action);
+		setDateCheckTask(action);
+
 		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
 		File tmpFile = null;
 		try {
@@ -687,14 +802,23 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		// Add definitions for action parameters
 		paramList.add(new ParameterDefinitionImpl(PARAM_TRANSFORM, DataTypeDefinition.BOOLEAN, false,
 				getParamDisplayLabel(PARAM_TRANSFORM)));
-		paramList.add(new ParameterDefinitionImpl(PARAM_NAMECHECKGROUP, DataTypeDefinition.TEXT, false,
-				getParamDisplayLabel(PARAM_NAMECHECKGROUP)));
+		paramList.add(new ParameterDefinitionImpl(PARAM_TASK_GROUP, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_TASK_GROUP)));
 		paramList.add(new ParameterDefinitionImpl(PARAM_NAMECHECKTASK, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_NAMECHECKTASK)));
 
 		paramList.add(new ParameterDefinitionImpl(PARAM_COUNTCHECKTASK, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_COUNTCHECKTASK)));
-		
+
+		paramList.add(new ParameterDefinitionImpl(PARAM_STATUSCHECKTASK, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_STATUSCHECKTASK)));
+
+		paramList.add(new ParameterDefinitionImpl(PARAM_COUNTRYCHECKTASK, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_COUNTRYCHECKTASK)));
+
+		paramList.add(new ParameterDefinitionImpl(PARAM_DATECHECKTASK, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_DATECHECKTASK)));
+
 		paramList.add(new ParameterDefinitionImpl(PARAM_RESULT, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_RESULT)));
 
@@ -721,7 +845,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 			nameCheckTask = t;
 		}
 	}
-	
+
 	public void setCountCheckTask(Action action) {
 		String t = (String) action.getParameterValue(PARAM_COUNTCHECKTASK);
 		if (t == null) {
@@ -731,8 +855,35 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		}
 	}
 
+	public void setDateCheckTask(Action action) {
+		String t = (String) action.getParameterValue(PARAM_DATECHECKTASK);
+		if (t == null) {
+			dateCheckTask = DEFAULT_DATECHECKTASK;
+		} else {
+			dateCheckTask = t;
+		}
+	}
+
+	public void setCountryCheckTask(Action action) {
+		String t = (String) action.getParameterValue(PARAM_COUNTRYCHECKTASK);
+		if (t == null) {
+			countryCheckTask = DEFAULT_COUNTRYCHECKTASK;
+		} else {
+			countryCheckTask = t;
+		}
+	}
+
+	public void setStatusCheckTask(Action action) {
+		String t = (String) action.getParameterValue(PARAM_STATUSCHECKTASK);
+		if (t == null) {
+			statusCheckTask = DEFAULT_STATUSCHECKTASK;
+		} else {
+			statusCheckTask = t;
+		}
+	}
+
 	public void setNameCheckGroup(Action action) {
-		String t = (String) action.getParameterValue(PARAM_NAMECHECKGROUP);
+		String t = (String) action.getParameterValue(PARAM_TASK_GROUP);
 		if (t == null) {
 			nameCheckGroup = DEFAULT_NAMECHECK_GROUP;
 		} else {

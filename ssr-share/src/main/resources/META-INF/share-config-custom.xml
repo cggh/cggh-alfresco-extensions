@@ -10,7 +10,7 @@
 		with out-of-the-box configured types and aspects) ============================================================================================================= -->
 
 
-	<config evaluator="task-type" condition="ssrwf:activitiReviewTask">
+	<config evaluator="task-type" condition="ssrwf:activitiCountReview">
 		<forms>
 			<form>
 				<field-visibility>
@@ -45,6 +45,177 @@
 					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
 					<field id="ssrwf:collabCount" label-id="ssrwf_collabCount" set="collab" />
 					<field id="ssrwf:reportCount" label-id="ssrwf_reportCount" set="report" read-only="true"/>
+					<field id="transitions" set="response" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+
+
+	<config evaluator="task-type" condition="ssrwf:activitiCountryReview">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDescription" />
+					<show id="packageItems" />
+					<show id="ssrwf:reviewOutcome" />
+					<show id="transitions" />
+					<show id="ssrwf:collabSampleCountry" />
+					<show id="ssrwf:countriesMissing"/>
+					<show id="ssrwf:countriesNoSamples"/>
+					<show id="ssrwf:countriesInvalid"/>
+					<show id="bpm:startDate" />
+				</field-visibility>
+				<appearance>
+					<set id="" appearance="title" label-id="workflow.set.general" />
+					<set id="info" appearance=""
+						template="/org/alfresco/components/form/2-column-set.ftl" />
+					<set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+					<set id="items" appearance="title" label-id="workflow.set.items" />
+					<set id="report" appearance="title" label-id="ssrwf_reportValues" />
+					<set id="collab" appearance="title" label-id="ssrwf_collaborationValues" />
+					<set id="response" appearance="title" label-id="workflow.set.response" />
+
+					<field id="bpm:workflowDescription" label-id="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+					<field id="bpm:startDate" label-id="ssrwf_reportRun">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+               		</field>
+					
+					<field id="packageItems" set="items" />
+					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+					<field id="ssrwf:collabSampleCountry" label-id="ssrwf_collabSampleCountries" set="collab" />
+					<field id="ssrwf:countriesMissing" label-id="ssrwf_countriesMissing" set="report" read-only="true"/>
+					<field id="ssrwf:countriesNoSamples" label-id="ssrwf_countriesNoSamples" set="report" read-only="true"/>
+					<field id="ssrwf:countriesInvalid" label-id="ssrwf_countriesInvalid" set="report" read-only="true"/>
+					<field id="transitions" set="response" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="ssrwf:activitiDateReview">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDescription" />
+					<show id="packageItems" />
+					<show id="ssrwf:reviewOutcome" />
+					<show id="transitions" />
+					<show id="ssrwf:collabFirstSampleDate" />
+					<show id="ssrwf:collabLastSampleDate" />
+					<show id="ssrwf:firstSampleDate"/>
+					<show id="ssrwf:lastSampleDate"/>
+					<show id="bpm:startDate" />
+				</field-visibility>
+				<appearance>
+					<set id="" appearance="title" label-id="workflow.set.general" />
+					<set id="info" appearance=""
+						template="/org/alfresco/components/form/2-column-set.ftl" />
+					<set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+					<set id="items" appearance="title" label-id="workflow.set.items" />
+					<set id="report" appearance="title" label-id="ssrwf_reportValues" />
+					<set id="collab" appearance="title" label-id="ssrwf_collaborationValues" />
+					<set id="response" appearance="title" label-id="workflow.set.response" />
+
+					<field id="bpm:workflowDescription" label-id="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+					<field id="bpm:startDate" label-id="ssrwf_reportRun">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+               		</field>
+					
+					<field id="packageItems" set="items" />
+					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+					<field id="ssrwf:collabFirstSampleDate" label-id="collabFirstSampleDate" set="collab" />
+					<field id="ssrwf:collabLastSampleDate" label-id="ssrwf_collabLastSampleDate" set="collab" />
+					<field id="ssrwf:firstSampleDate" label-id="ssrwf_firstSampleDate" set="report" read-only="true"/>
+					<field id="ssrwf:lastSampleDate" label-id="ssrwf_lastSampleDate" set="report" read-only="true"/>
+					<field id="transitions" set="response" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="ssrwf:activitiNameReview">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDescription" />
+					<show id="packageItems" />
+					<show id="ssrwf:reviewOutcome" />
+					<show id="transitions" />
+					<show id="ssrwf:collabName" />
+					<show id="ssrwf:reportName"/>
+					<show id="bpm:startDate" />
+				</field-visibility>
+				<appearance>
+					<set id="" appearance="title" label-id="workflow.set.general" />
+					<set id="info" appearance=""
+						template="/org/alfresco/components/form/2-column-set.ftl" />
+					<set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+					<set id="items" appearance="title" label-id="workflow.set.items" />
+					<set id="report" appearance="title" label-id="ssrwf_reportValues" />
+					<set id="collab" appearance="title" label-id="ssrwf_collaborationValues" />
+					<set id="response" appearance="title" label-id="workflow.set.response" />
+
+					<field id="bpm:workflowDescription" label-id="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+					<field id="bpm:startDate" label-id="ssrwf_reportRun">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+               		</field>
+					
+					<field id="packageItems" set="items" />
+					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+					<field id="ssrwf:collabName" label-id="ssrwf_collabName" set="collab" />
+					<field id="ssrwf:reportName" label-id="ssrwf_reportName" set="report" read-only="true"/>
+					<field id="transitions" set="response" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="ssrwf:activitiStatusReview">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="bpm:workflowDescription" />
+					<show id="packageItems" />
+					<show id="ssrwf:reviewOutcome" />
+					<show id="transitions" />
+					<show id="ssrwf:collabStatus" />
+					<show id="bpm:startDate" />
+				</field-visibility>
+				<appearance>
+					<set id="" appearance="title" label-id="workflow.set.general" />
+					<set id="info" appearance=""
+						template="/org/alfresco/components/form/2-column-set.ftl" />
+					<set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+					<set id="items" appearance="title" label-id="workflow.set.items" />
+					<set id="collab" appearance="title" label-id="ssrwf_collaborationValues" />
+					<set id="response" appearance="title" label-id="workflow.set.response" />
+
+					<field id="bpm:workflowDescription" label-id="workflow.field.message">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="style">width: 95%</control-param>
+						</control>
+					</field>
+					<field id="bpm:startDate" label-id="ssrwf_reportRun">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+               		</field>
+					
+					<field id="packageItems" set="items" />
+					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+					<field id="ssrwf:collabStatus" label-id="ssrwf_collabStatus" set="collab" />
 					<field id="transitions" set="response" />
 				</appearance>
 			</form>

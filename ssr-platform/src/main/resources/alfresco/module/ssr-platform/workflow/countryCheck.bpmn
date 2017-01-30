@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/bpmn20" id="review-definitions">
-  <process id="sampleCountExceeded" name="Review And Approve Activiti Process" isExecutable="true">
-    <startEvent id="start" activiti:formKey="ssrwf:submitSampleCountTask"></startEvent>
-    <userTask id="reviewTask" name="Review Task" activiti:candidateGroups="${bpm_groupAssignee.properties.authorityName}" activiti:formKey="ssrwf:activitiCountReview">
+  <process id="countryCheck" name="Check Sample Countries Activiti Process" isExecutable="true">
+    <startEvent id="start" activiti:formKey="ssrwf:startCountryCheckTask"></startEvent>
+    <userTask id="reviewTask" name="Review Task" activiti:candidateGroups="${bpm_groupAssignee.properties.authorityName}" activiti:formKey="ssrwf:activitiCountryReview">
       <extensionElements>
         <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">
             <activiti:string><![CDATA[
-            task.setVariableLocal('ssrwf_reportCount', ssrwf_reportCount);
-         	task.setVariableLocal('ssrwf_collabCount', ssrwf_collabCount);
+            task.setVariableLocal('ssrwf_countriesMissing', ssrwf_countriesMissing);
+         	task.setVariableLocal('ssrwf_countriesNoSamples', ssrwf_countriesNoSamples);
+         	task.setVariableLocal('ssrwf_countriesInvalid', ssrwf_countriesInvalid);
          	
          	for(var j=0; j < bpm_package.children.length; j++) {
          		if (bpm_package.children[j].assocs["cggh:liaison"] != null) {
          			task.setAssignee(bpm_package.children[j].assocs["cggh:liaison"][0].properties["cm:userName"]);
+         		}
+         		var countries = bpm_package.children[j].properties["cggh:sampleCountry"];
+         		if (countries != null) {
+         			var jArr = java.lang.reflect.Array.newInstance(java.lang.String, countries.length);
+         			for (var i = 0; i < countries.length; i++) {
+         				jArr[i] = countries[i];
+         			}
+         			task.setVariableLocal('ssrwf_collabSampleCountry', countries.toString());
          		}
          	}
                     
@@ -27,11 +36,11 @@
         <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
           <activiti:field name="script">
             <activiti:string><![CDATA[execution.setVariable('ssrwf_reviewOutcome', task.getVariable('ssrwf_reviewOutcome'));
-execution.setVariable('ssrwf_collabCount', task.getVariableLocal('ssrwf_collabCount'));
+execution.setVariable('ssrwf_collabSampleCountry', task.getVariableLocal('ssrwf_collabSampleCountry'));
 
 if (task.getVariable('ssrwf_reviewOutcome') == "Approve") {
              for(var j=0; j < bpm_package.children.length; j++) {
-            	bpm_package.children[j].properties["cggh:samplesExpected"] = task.getVariable('ssrwf_collabCount');
+            	bpm_package.children[j].properties["cggh:sampleCountry"] = task.getVariable('ssrwf_collabSampleCountry');
             	bpm_package.children[j].save();
          	}
             }]]></activiti:string>
@@ -43,8 +52,8 @@ if (task.getVariable('ssrwf_reviewOutcome') == "Approve") {
     <sequenceFlow id="flow7" sourceRef="start" targetRef="reviewTask"></sequenceFlow>
     <sequenceFlow id="flow8" sourceRef="reviewTask" targetRef="end"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_sampleCountExceeded">
-    <bpmndi:BPMNPlane bpmnElement="sampleCountExceeded" id="BPMNPlane_sampleCountExceeded">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_countryCheck">
+    <bpmndi:BPMNPlane bpmnElement="countryCheck" id="BPMNPlane_countryCheck">
       <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
         <omgdc:Bounds height="35.0" width="35.0" x="90.0" y="202.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

@@ -16,11 +16,31 @@
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${project.artifactId}/workflow/nameMismatch.bpmn</prop>
                     <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">true</prop>
                 </props>
                 <props>
                     <prop key="engineId">activiti</prop>
                     <prop key="location">alfresco/module/${project.artifactId}/workflow/sampleCountExceeded.bpmn</prop>
                     <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/countryCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/dateCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">true</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/statusCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">true</prop>
                 </props>
             </list>
         </property>

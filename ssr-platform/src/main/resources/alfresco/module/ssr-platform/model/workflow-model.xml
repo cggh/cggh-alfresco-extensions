@@ -13,6 +13,7 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm" />
 		<!-- Import Alfresco Workflow Model Definitions -->
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm" />
+		<import uri="http://alfresco.cggh.org/model/custom/1.0" prefix="cggh" />
 	</imports>
 
 	<!-- Custom namespace for your domain -->
@@ -24,8 +25,27 @@
 	<!-- =============================================================================================================== 
 		Constraints, Types, and Aspects go here... -->
 
+	<constraints>
+		<constraint name="ssrwf:reviewOutcome" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Approve</value>
+					<value>Reject</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="ssrwf:submitSampleCountTask">
+			<parent>bpm:startTask</parent>
+		</type>
+
+		<type name="ssrwf:startCountryCheckTask">
+			<parent>bpm:startTask</parent>
+		</type>
+
+		<type name="ssrwf:startDateCheckTask">
 			<parent>bpm:startTask</parent>
 		</type>
 
@@ -36,16 +56,25 @@
 					<type>d:text</type>
 					<default>Reject</default>
 					<constraints>
-						<constraint name="ssrwf:reviewOutcome" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>Approve</value>
-									<value>Reject</value>
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="ssrwf:reviewOutcome" />
 					</constraints>
 				</property>
+
+			</properties>
+			<overrides>
+				<property name="bpm:packageItemActionGroup">
+					<default>edit_package_item_actions</default>
+				</property>
+				<property name="bpm:outcomePropertyName">
+					<default>{http://www.cggh.org/ssr/model/workflow/1.0}reviewOutcome
+					</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="ssrwf:activitiCountReview">
+			<parent>ssrwf:activitiReviewTask</parent>
+			<properties>
 				<property name="ssrwf:reportCount">
 					<type>d:int</type>
 					<mandatory>true</mandatory>
@@ -57,28 +86,92 @@
 					<multiple>false</multiple>
 				</property>
 			</properties>
-			<overrides>
-				<property name="bpm:packageItemActionGroup">
-					<default>edit_package_item_actions</default>
-				</property>
-				<property name="bpm:outcomePropertyName">
-					<default>{http://www.cggh.org/ssr/model/workflow/1.0}reviewOutcome</default>
-				</property>
-			</overrides>
 		</type>
 
-		<type name="ssrwf:activitiCountReview">
+		<type name="ssrwf:activitiDateReview">
 			<parent>ssrwf:activitiReviewTask</parent>
+			<properties>
+				<property name="ssrwf:firstSampleDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:lastSampleDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:collabFirstSampleDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:collabLastSampleDate">
+					<type>d:date</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
 		</type>
 
-		<type name="ssrwf:approvedTask">
-			<parent>bpm:workflowTask</parent>
+		<type name="ssrwf:activitiCountryReview">
+			<parent>ssrwf:activitiReviewTask</parent>
+			<properties>
+				<property name="ssrwf:countriesMissing">
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+				<property name="ssrwf:countriesNoSamples">
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+				<property name="ssrwf:countriesInvalid">
+					<type>d:text</type>
+					<multiple>true</multiple>
+				</property>
+				<property name="ssrwf:collabSampleCountry">
+					<title>Country of Sample Collection</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<multiple>true</multiple>
+					<constraints>
+						<constraint ref="cggh:countryList" />
+					</constraints>
+				</property>
+			</properties>
 		</type>
 
-		<type name="ssrwf:rejectedTask">
-			<parent>bpm:workflowTask</parent>
+		<type name="ssrwf:activitiStatusReview">
+			<parent>ssrwf:activitiReviewTask</parent>
+			<properties>
+				<property name="ssrwf:collabStatus">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+					<default>enquiry</default>
+					<constraints>
+						<constraint ref="cggh:collaborationStatusList" />
+					</constraints>
+				</property>
+
+			</properties>
 		</type>
 
+		<type name="ssrwf:activitiNameReview">
+			<parent>ssrwf:activitiReviewTask</parent>
+			<properties>
+				<property name="ssrwf:reportName">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+				<property name="ssrwf:collabName">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<multiple>false</multiple>
+				</property>
+			</properties>
+		</type>
 	</types>
 </model>
 
