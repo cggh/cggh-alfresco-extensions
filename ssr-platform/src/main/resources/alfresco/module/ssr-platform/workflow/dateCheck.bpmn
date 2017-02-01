@@ -21,10 +21,10 @@
          		}
          		var first = bpm_package.children[j].properties["cggh:firstSample"];
          		var last = bpm_package.children[j].properties["cggh:lastSample"];
-         		if (typeof first != 'undefined') {
+         		if (first != null && typeof first != 'undefined') {
          			task.setVariableLocal('ssrwf_collabFirstSampleDate', utils.toISO8601(first));
          		}
-         		if (typeof last != 'undefined') {
+         		if (last != null && typeof last != 'undefined') {
          			task.setVariableLocal('ssrwf_collabLastSampleDate', utils.toISO8601(last));
          		}
          	}
@@ -48,12 +48,12 @@ if (task.getVariable('ssrwf_reviewOutcome') == "Approve") {
              //This seems unnecessarily complicated - down to difference in date handling....
              	var first = task.getVariable('ssrwf_collabFirstSampleDate');
              	var last = task.getVariable('ssrwf_collabLastSampleDate');
-             	if (typeof first != 'undefined') {
+             	if (first != null && typeof first != 'undefined') {
              		if (utils.toISO8601(first) != utils.toISO8601(bpm_package.children[j].properties["cggh:firstSample"])) { 
             			bpm_package.children[j].properties["cggh:firstSample"] = new Date(first);
             		}
             	}
-            	if (typeof last != 'undefined') {
+            	if (last != null && typeof last != 'undefined') {
              		if (utils.toISO8601(last) != utils.toISO8601(bpm_package.children[j].properties["cggh:lastSample"])) { 
             			bpm_package.children[j].properties["cggh:lastSample"] = new Date(last);
             		}
