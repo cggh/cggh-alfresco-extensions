@@ -133,7 +133,7 @@
 					
 					<field id="packageItems" set="items" />
 					<field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
-					<field id="ssrwf:collabFirstSampleDate" label-id="collabFirstSampleDate" set="collab" />
+					<field id="ssrwf:collabFirstSampleDate" label-id="ssrwf_collabFirstSampleDate" set="collab" />
 					<field id="ssrwf:collabLastSampleDate" label-id="ssrwf_collabLastSampleDate" set="collab" />
 					<field id="ssrwf:firstSampleDate" label-id="ssrwf_firstSampleDate" set="report" read-only="true"/>
 					<field id="ssrwf:lastSampleDate" label-id="ssrwf_lastSampleDate" set="report" read-only="true"/>
