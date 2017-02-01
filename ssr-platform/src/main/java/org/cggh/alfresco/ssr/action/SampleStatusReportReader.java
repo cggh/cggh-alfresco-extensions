@@ -415,8 +415,13 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 						String status = getCollaborationStatus(collabNode);
 
 						if (!status.equals("active")) {
-							if (!isTaskActive(collabNode, statusCheckTask)) {
-								startStatusWorkflowTask(collabNode);
+							//This bit is to avoid too many tasks being generated on first run
+							Date last = getLastExpected(collabNode);
+							Date cutoff = new GregorianCalendar(2014, 11, 1).getTime();
+							if (!(status.equals("closed") && last != null && last.before(cutoff))) {
+								if (!isTaskActive(collabNode, statusCheckTask)) {
+									startStatusWorkflowTask(collabNode);
+								}
 							}
 						}
 					}
