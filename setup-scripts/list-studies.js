@@ -11,6 +11,7 @@ if (folder != null && folder.children != null) {
           
             logger.log("var collab = folder.createNode(\"" + node.properties["cm:name"] +"\", \"cggh:collaborationFolder\");");
             logger.log("collab.addAspect(\"{http://alfresco.cggh.org/model/custom/1.0}collaborationData\");");
+            logger.log('collab.properties["cggh:collaborationStatus"]="' + node.properties["cggh:collaborationStatus"] + '";');
             logger.log('collab.properties["cggh:samplesExpected"]=' + node.properties["cggh:samplesExpected"] + ";");
             logger.log('collab.properties["cggh:samplesProcessed"]=' + node.properties["cggh:samplesProcessed"] + ";");
           if (node.properties["cggh:firstSample"] != null) {
