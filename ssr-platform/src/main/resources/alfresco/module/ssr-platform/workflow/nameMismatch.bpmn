@@ -13,17 +13,8 @@
          	}
          	
          	for(var j=0; j < bpm_package.children.length; j++) {
-         		if (bpm_package.children[j].assocs["cggh:liaison"] != null) {
-         			task.setAssignee(bpm_package.children[j].assocs["cggh:liaison"][0].properties["cm:userName"]);
-         		}
          		task.setVariableLocal('ssrwf_collabName',bpm_package.children[j].properties["cm:name"]);
-         	}
-                    
-         	 var mail = actions.create("mail");
-             mail.parameters.to_many = bpm_groupAssignee.properties.authorityName;
-             mail.parameters.subject = bpm_workflowDescription;
-             mail.parameters.text = "Please check your Alfresco Tasks";
-             mail.execute(bpm_package);
+         	}       
              ]]></activiti:string>
           </activiti:field>
         </activiti:taskListener>
