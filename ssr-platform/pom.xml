@@ -26,6 +26,9 @@
 
     </dependencies>
 
+    <properties>
+        <ssr.deploy.tasks>false</ssr.deploy.tasks>
+    </properties>
     <build>
         <plugins>
 
