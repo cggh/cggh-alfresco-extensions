@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>cggh-alfresco-extensions</artifactId>
 		<groupId>org.cggh</groupId>
-		<version>1.6.1-SNAPSHOT</version>
+		<version>1.6.1</version>
 	</parent>
 	<artifactId>cas-share-amp</artifactId>
 	<name>cas-share-amp Share Jar Module - SDK 3</name>

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.cggh</groupId>
     <artifactId>cggh-alfresco-extensions</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
+    <version>1.6.1</version>
     <name>AIO - SDK 3.0 Beta</name>
     <description>All-In-One (AIO) project for SDK 3.0</description>
     <packaging>pom</packaging>
@@ -84,7 +84,7 @@
             casServerUrlPrefix=https://www.malariagen.net/sso -->
         <cas.logout.dest.url>http://www.malariagen.net</cas.logout.dest.url>
         <cas.logout.url>https://www.malariagen.net/sso/logout</cas.logout.url>
-        <change.password.url/>
+        <change.password.url />
         <!-- <change.password.url>https://www.malariagen.net/pwm/private/ChangePassword</change.password.url> -->
         <maven.alfresco.verbose>true</maven.alfresco.verbose>
         
