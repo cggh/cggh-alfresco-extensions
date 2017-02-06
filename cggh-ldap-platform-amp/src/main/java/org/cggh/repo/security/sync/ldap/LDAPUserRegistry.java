@@ -104,7 +104,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
     private String groupDifferentialQuery = "(&(objectclass=groupOfNames)(!(modifyTimestamp<={0})))";
 
     /** The person query. */
-    private String personQuery = "(objectclass=inetOrgPerson)";
+    protected String personQuery = "(objectclass=inetOrgPerson)";
 
     /** The person differential query. */
     private String personDifferentialQuery = "(&(objectclass=inetOrgPerson)(!(modifyTimestamp<={0})))";
@@ -113,13 +113,13 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
     private String groupSearchBase;
 
     /** The user search base. */
-    private String userSearchBase;
+    protected String userSearchBase;
 
     /** The group id attribute name. */
     private String groupIdAttributeName = "cn";
 
     /** The user id attribute name. */
-    private String userIdAttributeName = "uid";
+    protected String userIdAttributeName = "uid";
 
     /** The member attribute name. */
     private String memberAttributeName = "member";
@@ -134,7 +134,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
     private String personType = "inetOrgPerson";
 
     /** The ldap initial context factory. */
-    private LDAPInitialDirContextFactory ldapInitialContextFactory;
+    protected LDAPInitialDirContextFactory ldapInitialContextFactory;
 
     /** The namespace service. */
     protected NamespaceService namespaceService;
@@ -174,7 +174,7 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
     private boolean errorOnMissingGID = false;
 
     /** Should we error on missing user IDs?. */
-    private boolean errorOnMissingUID = false;
+    protected boolean errorOnMissingUID = false;
 
     /** An array of all LDAP attributes to be queried from users plus a set of property QNames. */
     private Pair<String[], Set<QName>> userKeys;

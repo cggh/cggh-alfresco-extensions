@@ -162,7 +162,14 @@
 					cggh.metadata.collaborationID}
 				</line>
 			</template>
-
+            <template id="publicationData">
+                <evaluator>evaluator.doclib.metadata.hasPublicationDataAspect</evaluator>
+                <line index="55" id="pubdetails" view="detailed">
+                    {cggh_citationText}
+                    {cggh_PMID cggh.metadata.PMID} 
+                    {cggh_DOI cggh.metadata.DOI}
+                </line>
+            </template>
 		</metadata-templates>
 
 	</config>
@@ -521,7 +528,7 @@
 	</config>
  -->
  
-	<config evaluator="node-type" condition="cggh:publication">
+	<config evaluator="aspect" condition="cggh:publicationData">
 		<forms>
 			<form>
 				<field-visibility>
@@ -533,6 +540,7 @@
 
 					<show id="cggh:citationText" />
 					<show id="cggh:DOI" />
+					<show id="cggh:citationStyle" />
 				</field-visibility>
 				<appearance>
 					<set id="cgghMetadata" appearance="bordered-panel"
@@ -552,7 +560,7 @@
 								null </control-param> -->
 						</control>
 					</field>
-
+					<field id="cggh:citationStyle" label-id="cggh.metadata.citationStyle" set="cgghMetadata" />
 				</appearance>
 			</form>
 		</forms>

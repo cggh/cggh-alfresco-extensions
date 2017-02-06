@@ -44,6 +44,5 @@
 		</property>
 		<property name="authorityService" ref="authorityService" />
 	</bean>
-
 	
 </beans>

@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.cggh</groupId>
         <artifactId>cggh-alfresco-extensions</artifactId>
-        <version>1.6.0</version>
+        <version>1.6.1</version>
     </parent>
 
     <properties>
@@ -20,9 +20,38 @@
         <dependency>
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>alfresco-repository</artifactId>
-
         </dependency>
 
+        <dependency>
+            <groupId>org.cggh</groupId>
+            <artifactId>cggh-alfresco-util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${alfresco.groupId}</groupId>
+            <artifactId>alfresco-share-services</artifactId>
+            <version>${alfresco.share.version}</version>
+            <classifier>classes</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>${alfresco.groupId}</groupId>
+            <artifactId>alfresco-remote-api</artifactId>
+            <version>${alfresco.platform.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-aspects</artifactId>
+        	<version>3.2.18.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,6 +59,33 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <!-- phase>process-sources</phase -->
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <complianceLevel>1.7</complianceLevel>
+                    <verbose>true</verbose>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <outxml>true</outxml>
+                    <XterminateAfterCompilation>true</XterminateAfterCompilation>
+                    <!-- Also see src/main/resources/META-INF/aop.xml
+                     Needs to load time aspect weaving, see context.xml in platform-patch-module
+                    -->
+                </configuration>
             </plugin>
         </plugins>
     </build>

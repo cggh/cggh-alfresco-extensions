@@ -18,9 +18,7 @@ import javax.naming.directory.SearchResult;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
-import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.action.executer.TestModeable;
-import org.alfresco.repo.security.authentication.ldap.LDAPInitialDirContextFactory;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
@@ -35,7 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase implements InitializingBean, TestModeable {
+public class ManageLDAPUserActionExecuter extends BaseLDAPAction implements InitializingBean, TestModeable {
 
 	private static Log log = LogFactory.getLog(ManageLDAPUserActionExecuter.class);
 
@@ -56,7 +54,6 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 	private String userId;
 	private String searchBase;
 
-	private LDAPInitialDirContextFactory ldapInitialContextFactory;
 	private NamespacePrefixResolver nspr;
 	private NodeService nodeService;
 	private AuthorityService authorityService;
@@ -74,6 +71,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 
 	public void afterPropertiesSet() throws Exception {
 
+		super.afterPropertiesSet();
 		if (usersGroup == null || usersGroup.length() == 0)
 		{
 			usersGroup = DEFAULT_ALL_SITE_USERS_GROUP;
@@ -162,7 +160,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 				{
 					log.debug("Removing from group");
 					// remove from group
-					DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+					DirContext ctx = getLdapInitialDirContextFactory().getDefaultIntialDirContext();
 
 					// Create a LDAP add attribute for the member attribute
 					ModificationItem mods[] = new ModificationItem[1];
@@ -193,7 +191,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 				{
 					log.debug("Adding to group");
 					// add to group
-					DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+					DirContext ctx = getLdapInitialDirContextFactory().getDefaultIntialDirContext();
 
 					// Create a LDAP add attribute for the member attribute
 					ModificationItem mods[] = new ModificationItem[1];
@@ -221,7 +219,7 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 	private String getUserDn(String userName, Action ruleAction) throws NamingException {
 		String idAttr = userId;
 
-		DirContext ctx = ldapInitialContextFactory.getDefaultIntialDirContext();
+		DirContext ctx = getLdapInitialDirContextFactory().getDefaultIntialDirContext();
 
 		// Create the search controls
 		SearchControls searchCtls = new SearchControls();
@@ -346,16 +344,6 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 		// display label
 	}
 
-	/**
-	 * Sets the LDAP initial dir context factory.
-	 * 
-	 * @param ldapInitialDirContextFactory
-	 *            the new LDAP initial dir context factory
-	 */
-	public void setLDAPInitialDirContextFactory(LDAPInitialDirContextFactory ldapInitialDirContextFactory) {
-		this.ldapInitialContextFactory = ldapInitialDirContextFactory;
-	}
-
 	public void setUsersGroup(String usersGroup) {
 		this.usersGroup = usersGroup;
 	}
@@ -374,10 +362,6 @@ public class ManageLDAPUserActionExecuter extends ActionExecuterAbstractBase imp
 
 	public void setSearchBase(String searchBase) {
 		this.searchBase = searchBase;
-	}
-
-	public void setLdapInitialContextFactory(LDAPInitialDirContextFactory ldapInitialContextFactory) {
-		this.ldapInitialContextFactory = ldapInitialContextFactory;
 	}
 
 	public void setNodeService(NodeService nodeService) {

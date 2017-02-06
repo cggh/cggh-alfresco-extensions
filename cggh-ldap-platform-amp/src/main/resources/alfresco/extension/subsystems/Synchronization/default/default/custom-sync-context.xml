@@ -12,9 +12,12 @@
 	language governing permissions and limitations under the License. -->
 <beans>
 
-
+	<bean id="avatarService" class="org.cggh.repo.security.person.AvatarServiceImpl" init-method="init">
+        <property name="nodeService" ref="nodeService" />
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+	</bean>
 	
-	<bean class="org.cggh.repo.security.sync.UserSync">
+	<bean class="org.cggh.alfresco.util.config.ConfigurationOverride">
 		<property name="targetBeanName" value="userRegistrySynchronizer" />
 		<property name="originalClassName"
 			value="org.alfresco.repo.security.sync.ChainingUserRegistrySynchronizer" />

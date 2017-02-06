@@ -106,6 +106,22 @@ http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 	<!-- End of X509 -->
 	
 
+    <!-- For javamelody -->
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/monitoring/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/monitoring/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/monitoring/*</url-pattern>
+    </filter-mapping>
+
 	<!-- Used for http://localhost:8080/alfresco/s/admin/admin-workflowconsole -->
 	<filter-mapping>
 		<filter-name>CAS Authentication Filter</filter-name>

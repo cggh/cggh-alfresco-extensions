@@ -3,22 +3,18 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-
-	<import resource="classpath:alfresco/subsystems/Authentication/common-ldap-context.xml"/>
-	
+    
 	<bean id="cggh-create-ldap-group" class="org.cggh.action.CreateLDAPGroupActionExecuter" parent="action-executer">
-		<property name="LDAPInitialDirContextFactory">
-			<ref bean="ldapInitialDirContextFactory" />
-		</property>
+		<property name="authenticationContextManager" ref="Authentication" />
+		<!-- 
 		<property name="UserRegistrySynchronizer">
 			<ref bean="userRegistrySynchronizer"/>
 		</property>
+		 -->
 	</bean>
 
 	<bean id="cggh-manage-ldap-user" class="org.cggh.action.ManageLDAPUserActionExecuter" parent="action-executer">
-		<property name="LDAPInitialDirContextFactory">
-			<ref bean="ldapInitialDirContextFactory" />
-		</property>
+		<property name="authenticationContextManager" ref="Authentication" />
 		<property name="namespacePrefixResolver">
 			<ref bean="namespaceService"></ref>
 		</property>
@@ -42,4 +38,6 @@
 		</property>
 		<!-- <property name="personQuery">${ldap.synchronization.personQuery}</property> -->
 	</bean>
+
+ 
 </beans>

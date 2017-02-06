@@ -11,12 +11,9 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 
 import org.alfresco.repo.action.ParameterDefinitionImpl;
-import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.action.executer.TestModeable;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
-import org.alfresco.repo.security.authentication.ldap.LDAPInitialDirContextFactory;
-import org.alfresco.repo.security.sync.UserRegistrySynchronizer;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
@@ -25,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
+public class CreateLDAPGroupActionExecuter extends BaseLDAPAction
 		implements InitializingBean, TestModeable {
 
 	private static final String PARAM_GROUP_NAME = "group";
@@ -41,16 +38,9 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 			.getLog(CreateLDAPGroupActionExecuter.class);
 
 	private String namespace;
-	private LDAPInitialDirContextFactory ldapInitialContextFactory;
 
-	private UserRegistrySynchronizer userRegistrySynchronizer;
 
 	private boolean testMode = false;
-	
-	public void setUserRegistrySynchronizer(
-			UserRegistrySynchronizer userRegistrySynchronizer) {
-		this.userRegistrySynchronizer = userRegistrySynchronizer;
-	}
 
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
@@ -66,6 +56,8 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 
 	public void afterPropertiesSet() throws Exception {
 
+		super.afterPropertiesSet();
+		
 		if (namespace == null || namespace.length() == 0) {
 			namespace = DEFAULT_NAMESPACE;
 		}
@@ -85,8 +77,7 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 				.getParameterValue(PARAM_OU));
 		try {
 
-			DirContext ctx = ldapInitialContextFactory
-					.getDefaultIntialDirContext();
+			DirContext ctx = getLdapInitialDirContextFactory().getDefaultIntialDirContext();
 			Context result = null;
 			if (!ou) {
 				Attributes attrs = new BasicAttributes(true);
@@ -147,7 +138,7 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 			{
 				public String doWork() throws Exception
 				{
-					userRegistrySynchronizer.synchronize(false, false);
+					getUserRegistrySynchronizer().synchronize(false, false);
 					return "";
 				}
 			}, AuthenticationUtil.getSystemUserName());
@@ -204,17 +195,6 @@ public class CreateLDAPGroupActionExecuter extends ActionExecuterAbstractBase
 				false, // Indicates whether the parameter is mandatory
 				getParamDisplayLabel(PARAM_MEMBER))); // The parameters
 		// display label
-	}
-
-	/**
-	 * Sets the LDAP initial dir context factory.
-	 * 
-	 * @param ldapInitialDirContextFactory
-	 *            the new LDAP initial dir context factory
-	 */
-	public void setLDAPInitialDirContextFactory(
-			LDAPInitialDirContextFactory ldapInitialDirContextFactory) {
-		this.ldapInitialContextFactory = ldapInitialDirContextFactory;
 	}
 
 }

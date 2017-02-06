@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
+		 workflow, and loading custom content models.  -->
+
+    <!-- Registration of new models -->
+
+    <bean id="${project.artifactId}.org.cggh.ssr.workflowBootstrap" parent="workflowDeployer">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/nameMismatch.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/sampleCountExceeded.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/countryCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/dateCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/statusCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                	<prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${project.artifactId}/model/workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <!-- Bootstrap Resource Bundles for the content model types, aspects, properties etc -->
+                <value>alfresco/module/${project.artifactId}/messages/ssrWorkflow</value>
+                <value>alfresco/module/${project.artifactId}/messages/content-model</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="${project.artifactId}.groupsLoader"
+        class="org.alfresco.repo.admin.patch.impl.GenericBootstrapPatch"
+        parent="basePatch">
+        <property name="id">
+            <value>${project.artifactId}.groupsLoader</value>
+        </property>
+        <property name="description">
+            <value>${project.artifactId}.groupsLoader.description</value>
+        </property>
+        <property name="fixesFromSchema">
+            <value>0</value>
+        </property>
+        <property name="fixesToSchema">
+            <value>${version.schema}</value>
+        </property>
+        <property name="targetSchema">
+            <value>15000</value>
+        </property>
+        <property name="importerBootstrap">
+            <ref bean="spacesBootstrap" />
+        </property>
+        <property name="bootstrapView">
+            <props>
+                <prop key="path">/${alfresco_user_store.system_container.childname}</prop>
+                <prop key="location">alfresco/module/${project.artifactId}/bootstrap/create-collaboration-managers-group.xml</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

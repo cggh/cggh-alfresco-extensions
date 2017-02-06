@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>cggh-alfresco-extensions</artifactId>
 		<groupId>org.cggh</groupId>
-		<version>1.6.0</version>
+		<version>1.6.1</version>
 	</parent>
 	<artifactId>cas-share-amp</artifactId>
 	<name>cas-share-amp Share Jar Module - SDK 3</name>
@@ -180,7 +180,10 @@
 			<!-- Filter the resource files in this project and do property substitutions -->
 			<resource>
 				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>META-INF/share-config-custom.xml</exclude>
+                </excludes>
 			</resource>
 		</resources>
 		<testResources>
@@ -229,6 +232,21 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+            <id>local</id>
+            <build>
+               <resources>
+                    <!-- Filter the resource files in this project and do property substitutions -->
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <includes>
+                            <include>META-INF/share-config-custom.xml</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
 		</profile>
 	</profiles>
 	<!-- Alfresco Maven Repositories -->

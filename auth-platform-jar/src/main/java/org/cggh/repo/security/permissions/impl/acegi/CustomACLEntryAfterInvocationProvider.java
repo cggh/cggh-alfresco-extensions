@@ -19,6 +19,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.permissions.impl.acegi.ACLEntryVoterException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthorityService;
+import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.security.PersonService.PersonInfo;
 import org.aopalliance.intercept.MethodInvocation;
@@ -265,7 +266,8 @@ public class CustomACLEntryAfterInvocationProvider implements AfterInvocationPro
 	    	return null;
 	    } else
 	    {
-	    	throw new AccessDeniedException("Access denied for person:" + currentUser + " " + personUserName);
+	    	log.info("Access denied for person:" + currentUser + " " + personUserName);
+	    	throw new NoSuchPersonException("");
 	    }
 	}
 

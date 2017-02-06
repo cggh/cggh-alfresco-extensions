@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/bpmn20" id="review-definitions">
+  <process id="dateCheck" name="Check Sample dates Activiti Process" isExecutable="true">
+    <startEvent id="start" activiti:formKey="ssrwf:submitSampleCountTask"></startEvent>
+    <userTask id="reviewTask" name="Review Task" activiti:candidateGroups="${bpm_groupAssignee.properties.authorityName}" activiti:formKey="ssrwf:activitiDateReview">
+      <extensionElements>
+        <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[
+            
+            if (typeof ssrwf_firstSampleDate != 'undefined') {
+            	task.setVariableLocal('ssrwf_firstSampleDate', utils.toISO8601(ssrwf_firstSampleDate));
+            }
+            if (typeof ssrwf_lastSampleDate != 'undefined') {
+         		task.setVariableLocal('ssrwf_lastSampleDate', utils.toISO8601(ssrwf_lastSampleDate));
+         	}
+         	
+         	for(var j=0; j < bpm_package.children.length; j++) {
+         		var first = bpm_package.children[j].properties["cggh:firstSample"];
+         		var last = bpm_package.children[j].properties["cggh:lastSample"];
+         		if (first != null && typeof first != 'undefined') {
+         			task.setVariableLocal('ssrwf_collabFirstSampleDate', utils.toISO8601(first));
+         		}
+         		if (last != null && typeof last != 'undefined') {
+         			task.setVariableLocal('ssrwf_collabLastSampleDate', utils.toISO8601(last));
+         		}
+         	}
+             ]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+        <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+          <activiti:field name="script">
+            <activiti:string><![CDATA[execution.setVariable('ssrwf_reviewOutcome', task.getVariable('ssrwf_reviewOutcome'));
+execution.setVariable('ssrwf_collabFirstSampleDate', task.getVariableLocal('ssrwf_collabFirstSampleDate'));
+execution.setVariable('ssrwf_collabLastSampleDate', task.getVariableLocal('ssrwf_collabLastSampleDate'));
+
+if (task.getVariable('ssrwf_reviewOutcome') == "Approve") {
+             for(var j=0; j < bpm_package.children.length; j++) {
+             //This seems unnecessarily complicated - down to difference in date handling....
+             	var first = task.getVariable('ssrwf_collabFirstSampleDate');
+             	var last = task.getVariable('ssrwf_collabLastSampleDate');
+             	if (first != null && typeof first != 'undefined') {
+             		if (utils.toISO8601(first) != utils.toISO8601(bpm_package.children[j].properties["cggh:firstSample"])) { 
+            			bpm_package.children[j].properties["cggh:firstSample"] = new Date(first);
+            		}
+            	}
+            	if (last != null && typeof last != 'undefined') {
+             		if (utils.toISO8601(last) != utils.toISO8601(bpm_package.children[j].properties["cggh:lastSample"])) { 
+            			bpm_package.children[j].properties["cggh:lastSample"] = new Date(last);
+            		}
+            	}
+            	bpm_package.children[j].save();
+         	}
+            }]]></activiti:string>
+          </activiti:field>
+        </activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <endEvent id="end"></endEvent>
+    <sequenceFlow id="flow7" sourceRef="start" targetRef="reviewTask"></sequenceFlow>
+    <sequenceFlow id="flow8" sourceRef="reviewTask" targetRef="end"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_dateCheck">
+    <bpmndi:BPMNPlane bpmnElement="dateCheck" id="BPMNPlane_dateCheck">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="35.0" width="35.0" x="90.0" y="202.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="reviewTask" id="BPMNShape_reviewTask">
+        <omgdc:Bounds height="55.0" width="105.0" x="246.0" y="192.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="35.0" width="35.0" x="420.0" y="202.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="125.0" y="219.0"></omgdi:waypoint>
+        <omgdi:waypoint x="246.0" y="219.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="351.0" y="219.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="219.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
