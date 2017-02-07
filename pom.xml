@@ -89,6 +89,7 @@
         <maven.alfresco.verbose>true</maven.alfresco.verbose>
         
         <module.log.level>warn</module.log.level>
+        <org.orderofthebee.support-tools.version>0.0.1.0</org.orderofthebee.support-tools.version>
     </properties>
 
     <dependencyManagement>
@@ -373,7 +374,7 @@
                         <moduleDependency>
                             <groupId>org.orderofthebee.support-tools</groupId>
                             <artifactId>support-tools-repo</artifactId>
-                            <version>0.0.1.0-SNAPSHOT</version>
+                            <version>${org.orderofthebee.support-tools.version}</version>
                             <type>amp</type>
                         </moduleDependency>
                         <moduleDependency>
@@ -470,7 +471,7 @@
                         <moduleDependency>
                             <groupId>org.orderofthebee.support-tools</groupId>
                             <artifactId>support-tools-share</artifactId>
-                            <version>0.0.1.0-SNAPSHOT</version>
+                            <version>${org.orderofthebee.support-tools.version}</version>
                             <type>amp</type>
                         </moduleDependency>
                         <moduleDependency>
