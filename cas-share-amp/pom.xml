@@ -12,7 +12,8 @@
 	<packaging>jar</packaging>
 
 	<properties>
-	<!-- Settings for share-config-custom.xml -->
+        <!-- Settings for share-config-custom.xml -->
+        <noauth.endpoint>http://localhost:8080/alfresco/service</noauth.endpoint>
 		<useraccess.endpoint>http://localhost:8080/alfresco/wcs</useraccess.endpoint>
 		<feed.endpoint>http://localhost:8080/alfresco/wcs</feed.endpoint>
 		<api.endpoint>http://localhost:8080/alfresco/api</api.endpoint>

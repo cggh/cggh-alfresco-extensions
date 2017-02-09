@@ -52,6 +52,8 @@
         <!-- Compile with Java 7, default is 5 -->
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+
+        <module.log.level>warn</module.log.level>
     </properties>
 
     <!-- This will import the dependencyManagement for all artifacts in the selected Alfresco platform.

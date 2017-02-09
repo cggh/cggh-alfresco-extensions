@@ -105,6 +105,11 @@ http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 
 	<!-- End of X509 -->
 	
+	<!-- Used by the share feature -->
+	<filter-mapping>
+		<filter-name>Ignore Filter</filter-name>
+		<url-pattern>/s/api/internal/shared/node/*</url-pattern>
+	</filter-mapping>
 
     <!-- For javamelody -->
 	<filter-mapping>
@@ -138,6 +143,7 @@ http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 		<url-pattern>/s/*</url-pattern>
 	</filter-mapping>
 
+<!-- As the s / service endpoint isn't really meant to be authenticated it's necessary to provide an alternative 
 	<filter-mapping>
 		<filter-name>CAS Authentication Filter</filter-name>
 		<url-pattern>/service/*</url-pattern>
@@ -150,7 +156,8 @@ http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
 		<url-pattern>/service/*</url-pattern>
 	</filter-mapping>
-
+ -->
+ 
 <!-- Although the wcs endpoint is covered by the Global Authentication Filter
 things don't work if you include these mappings -->
 <!-- 
