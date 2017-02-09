@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>cggh-alfresco-extensions</artifactId>
 		<groupId>org.cggh</groupId>
-		<version>1.6.1</version>
+		<version>1.6.2</version>
 	</parent>
 	<artifactId>cas-share-amp</artifactId>
 	<name>cas-share-amp Share Jar Module - SDK 3</name>
@@ -12,7 +12,8 @@
 	<packaging>jar</packaging>
 
 	<properties>
-	<!-- Settings for share-config-custom.xml -->
+        <!-- Settings for share-config-custom.xml -->
+        <noauth.endpoint>http://localhost:8080/alfresco/service</noauth.endpoint>
 		<useraccess.endpoint>http://localhost:8080/alfresco/wcs</useraccess.endpoint>
 		<feed.endpoint>http://localhost:8080/alfresco/wcs</feed.endpoint>
 		<api.endpoint>http://localhost:8080/alfresco/api</api.endpoint>

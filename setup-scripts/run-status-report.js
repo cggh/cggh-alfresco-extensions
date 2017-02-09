@@ -7,11 +7,11 @@
 // create reportAction action
     var reportAction = actions.create("ssr-platform.process_report");
    
-	reportAction.parameters.nameCheckTask = "activiti$nameMismatch:1:104";
-	reportAction.parameters.countCheckTask = "activiti$sampleCountExceeded:1:904";
-	reportAction.parameters.countryCheckTask = "activiti$countryCheck:4:57712";
-	reportAction.parameters.dateCheckTask = "activiti$dateCheck:8:58816";
-	reportAction.parameters.statusCheckTask = "activiti$statusCheck:4:57720";
+	reportAction.parameters.nameCheckTask = "activiti$nameMismatch:1:120578";
+	reportAction.parameters.countCheckTask = "activiti$sampleCountExceeded:1:120582";
+	reportAction.parameters.countryCheckTask = "activiti$countryCheck:1:120586";
+	reportAction.parameters.dateCheckTask = "activiti$dateCheck:1:120590";
+	reportAction.parameters.statusCheckTask = "activiti$statusCheck:1:120594";
 	reportAction.parameters.transform = true;	  
 
 
