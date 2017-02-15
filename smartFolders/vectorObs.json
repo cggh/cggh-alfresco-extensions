@@ -3,6 +3,7 @@
 	"nodes" : [
         { "id": "1",
             "name": "Partner Studies",
+            "description": "Partner Study details for the Vector Observatory Project",
             "nodes": [
                 {
                         "id" : "11",
@@ -20,7 +21,7 @@
                 {
                         "id" : "12",
                         "name" : "Pending",
-                        "description" : "All unapproved studies in Vector Observatory",
+                        "description" : "All unapproved studies in Vector Observatory - no upload",
                         "search" : {
                             "language" : "fts-alfresco",
                             "query" : "+TYPE:'cggh:collaborationFolder' AND @cggh:projectsText:'Vector Observatory' AND @cggh:collaborationStatus:'enquiry'"
@@ -30,11 +31,20 @@
                 },
                 {
                         "id" : "13",
-                        "name" : "Collaboration Agreements",
-                        "description" : "All studies in Vector Observatory - no upload",
+                        "name" : "Approved Collaboration Agreements",
+                        "description" : "Collaboration Agreements for all active studies in Vector Observatory - no upload",
                         "search" : {
                             "language" : "fts-alfresco",
-                            "query" : "+ASPECT:'cggh:collaborationDocument' AND @cggh:projectsText:'Vector Observatory'"
+                            "query" : "+ASPECT:'cggh:collaborationDocument' AND @cggh:projectsText:'Vector Observatory' AND @cggh:parentCollaborationStatus:'active'"
+                        }                   
+                 },
+                 {
+                        "id" : "14",
+                        "name" : "Pending Collaboration Agreements",
+                        "description" : "Collaboration Agreements for all pending studies in Vector Observatory - no upload",
+                        "search" : {
+                            "language" : "fts-alfresco",
+                            "query" : "+ASPECT:'cggh:collaborationDocument' AND @cggh:projectsText:'Vector Observatory' AND @cggh:parentCollaborationStatus:'enquiry'"
                         }                   
                  }
             ]
