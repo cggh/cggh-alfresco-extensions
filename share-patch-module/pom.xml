@@ -4,7 +4,7 @@
     <parent>
         <artifactId>cggh-alfresco-extensions</artifactId>
         <groupId>org.cggh</groupId>
-        <version>1.6.2</version>
+        <version>1.6.3</version>
     </parent>
     <artifactId>share-patch-module</artifactId>
     <name>share-patch-module Share Amp Module</name>

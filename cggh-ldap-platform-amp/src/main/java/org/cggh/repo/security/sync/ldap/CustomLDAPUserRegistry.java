@@ -32,8 +32,6 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 	/** The logger. */
 	private static Log logger = LogFactory.getLog(CustomLDAPUserRegistry.class);
 
-	private String alfUserId;
-	
 	private String lookupAttributeName;
 
 	public void setLookupAttributeName(String lookupAttributeName) {
@@ -121,14 +119,17 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 			}
 		}
 	}
-
-    /*
-     * (non-Javadoc)
-     * @see org.alfresco.repo.security.sync.ldap.LDAPNameResolver#resolveDistinguishedName(java.lang.String)
-     */
-	@Override
-    public String resolveDistinguishedName(String userId, AuthenticationDiagnostic diagnostic) throws AuthenticationException
-    {
+	
+	/**
+	 * 
+	 * This is very similar to:
+	 * @see org.alfresco.repo.security.sync.ldap.LDAPNameResolver#resolveDistinguishedName(java.lang.String)
+	 */
+	public LDAPResolvedUser getResolvedUser(String userId, AuthenticationDiagnostic diagnostic) throws AuthenticationException
+	{
+		LDAPResolvedUser resolvedUser = new LDAPResolvedUser();
+		resolvedUser.setUserName(userId);
+		
         if(logger.isDebugEnabled())
         {
             logger.debug("resolveDistinguishedName userId:" + userId);
@@ -206,8 +207,9 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
                         context.close();
                     }
                     result = null;
-                    alfUserId = (String) uidAttribute.get(0);
-                    return name;
+                    resolvedUser.setUserName((String) uidAttribute.get(0));
+                    resolvedUser.setDn(name);
+                    return resolvedUser;
                 }
 
                 // Close the contexts, see ALF-20682
@@ -276,9 +278,4 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
             }
         }
     }
-
-	public String getAlfUserId() {
-		return alfUserId;
-	}
-
 }
