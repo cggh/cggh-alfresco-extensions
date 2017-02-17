@@ -389,12 +389,14 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 
 					double sangerYes = row.getCell(5).getNumericCellValue();
 					double sangerNo = row.getCell(4).getNumericCellValue();
+					double sangerSequenced = row.getCell(6).getNumericCellValue();
 					int sangerSystemTotal = (int) (sangerNo + sangerYes);
 					// Only do something if the number processed has changed
 					if (processed != sangerSystemTotal) {
 
 						newSamples = true;
 
+						setSequenced(collabNode, (int) sangerSequenced);
 						setProcessed(collabNode, sangerSystemTotal);
 						if (logger.isDebugEnabled()) {
 							logger.debug("Updated samples for:" + alfrescoCode + " expected:" + expected + " processed:"
@@ -402,6 +404,8 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 						}
 
 						if (sangerSystemTotal > expected) {
+							//Could/Should be part of CollaborationFolder behaviour
+							//but here because the other tasks can't/shouldn't be
 							String description = "More samples than expected:" + expected + " processed:"
 									+ sangerSystemTotal;
 							if (logger.isDebugEnabled()) {
@@ -724,8 +728,12 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		return (found);
 	}
 
-	private void setProcessed(NodeRef collabNode, double sangerYes) {
-		nodeService.setProperty(collabNode, CGGHContentModel.PROP_SAMPLES_PROCESSED, sangerYes);
+	private void setSequenced(NodeRef collabNode, int sangerYes) {
+		nodeService.setProperty(collabNode, CGGHContentModel.PROP_SAMPLES_SEQUENCED, sangerYes);
+
+	}
+	private void setProcessed(NodeRef collabNode, int sangerTotal) {
+		nodeService.setProperty(collabNode, CGGHContentModel.PROP_SAMPLES_PROCESSED, sangerTotal);
 
 	}
 

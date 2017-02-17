@@ -18,6 +18,7 @@ public interface CGGHContentModel {
 	
 	static final QName PROP_SAMPLES_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "samplesExpected");
 	static final QName PROP_SAMPLES_PROCESSED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "samplesProcessed");
+	static final QName PROP_SAMPLES_SEQUENCED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "samplesSequenced");
 	static final QName PROP_SAMPLE_COUNTRIES = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "sampleCountry");
 	static final QName PROP_FIRST_SAMPLE_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "firstSample");
 	static final QName PROP_LAST_SAMPLE_EXPECTED = QName.createQName(CGGHNamespaceService.COLLAB_MODEL_1_0_URI, "lastSample");

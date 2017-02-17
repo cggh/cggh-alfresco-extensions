@@ -493,6 +493,11 @@
 					<type>d:int</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="cggh:samplesSequenced">
+                    <title>Samples successfully Processed</title>
+                    <type>d:int</type>
+                    <mandatory>false</mandatory>
+                </property>
 				<property name="cggh:firstSample">
 					<title>Date of first sample expected</title>
 					<type>d:date</type>

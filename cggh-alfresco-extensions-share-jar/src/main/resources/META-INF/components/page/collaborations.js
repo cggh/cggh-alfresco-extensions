@@ -209,6 +209,7 @@
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
             { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
             { key: "samplesProcessed", label: this.msg("cggh.metadata.samplesProcessed"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSamplesProcessed) },
+            { key: "samplesProcessed", label: this.msg("cggh.metadata.samplesSequenced"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSamplesSequenced) },
             { key: "firstSample", label: this.msg("cggh.metadata.firstSample"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortFirstSampleExpected},formatter: this.bind(this.renderCellFirstSampleExpected) },
             { key: "lastSample", label: this.msg("cggh.metadata.lastSample"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortLastSampleExpected},formatter: this.bind(this.renderCellLastSampleExpected) },
             { key: "collaborationDoc", label: this.msg("cggh.metadata.collabDoc"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellCollaborationDoc) },
@@ -1009,6 +1010,19 @@
          }
          elCell.innerHTML = render;
       },
+      renderCellSamplesSequenced: function Collaborations_renderCellSamplesSequenced(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+         var collaboration = oRecord.getData();
+         var render = '';
+         if (collaboration.samplesSequenced) {
+        	 render = collaboration.samplesSequenced;
+         }
+         elCell.innerHTML = render;
+      },
+
       renderCellStrategicNature: function Collaborations_renderCellStrategicNature(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");

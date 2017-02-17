@@ -252,6 +252,7 @@
 					<show id="cggh:sampleCountry" />
 					<show id="cggh:samplesExpected" />
 					<show id="cggh:samplesProcessed" />
+					<show id="cggh:samplesSequenced" />
 					<show id="cggh:firstSample" />
 					<show id="cggh:lastSample" />
 					<show id="cggh:nextReview" />
@@ -400,6 +401,12 @@
 							<control-param name="style">width: 8em;</control-param>
 						</control>
 					</field>
+					<field id="cggh:samplesSequenced" label-id="cggh.metadata.samplesSequenced"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/number.ftl">
+                            <control-param name="style">width: 8em;</control-param>
+                        </control>
+                    </field>
 					<field id="cggh:firstSample" label-id="cggh.metadata.firstSample"
 						set="cgghMetadata" />
 					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"
