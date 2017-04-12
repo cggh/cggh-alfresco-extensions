@@ -100,3 +100,7 @@ div.my-sites .yui-dt-data tr.yui-dt-highlighted
 {
    visibility: visible;
 }
+
+.collaborations .yui-dt th div .yui-dt-liner {
+    white-space: normal;
+}

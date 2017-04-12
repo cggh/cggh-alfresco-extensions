@@ -49,6 +49,10 @@
 			<parent>bpm:startTask</parent>
 		</type>
 
+        <type name="ssrwf:startDocumentCheckTask">
+            <parent>bpm:startTask</parent>
+        </type>
+        
 		<type name="ssrwf:activitiReviewTask">
 			<parent>bpm:activitiOutcomeTask</parent>
 			<properties>
@@ -172,6 +176,11 @@
 				</property>
 			</properties>
 		</type>
+		
+		<type name="ssrwf:activitiCollabDocReview">
+            <parent>ssrwf:activitiReviewTask</parent>
+        </type>
+		
 	</types>
 </model>
 

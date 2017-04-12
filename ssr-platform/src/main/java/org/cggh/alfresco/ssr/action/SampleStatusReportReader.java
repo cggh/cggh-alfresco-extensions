@@ -28,6 +28,7 @@ import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ContentIOException;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -73,7 +74,8 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private static final String DEFAULT_STATUSCHECKTASK = "activiti$statusCheck:2:204";
 	private static final String DEFAULT_COUNTRYCHECKTASK = "activiti$countryCheck:2:204";
 	private static final String DEFAULT_DATECHECKTASK = "activiti$dateCheck:2:204";
-
+	private static final String DEFAULT_COLLABDOCTASK = "activiti$collabDocCheck:2:204";
+	
 	private static final Boolean DEFAULT_TRANSFORM = true;
 	private static final String PARAM_TRANSFORM = "transform";
 	private static final String PARAM_NAMECHECKTASK = "nameCheckTask";
@@ -84,6 +86,8 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private static final String PARAM_STATUSCHECKTASK = "statusCheckTask";
 	private static final String PARAM_COUNTRYCHECKTASK = "countryCheckTask";
 	private static final String PARAM_DATECHECKTASK = "dateCheckTask";
+	private static final String PARAM_COLLABDOCTASK = "collabDocTask";
+	
 
 	private static Log logger = LogFactory.getLog(SampleStatusReportReader.class);
 
@@ -105,7 +109,8 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private String statusCheckTask;
 	private String dateCheckTask;
 	private String countryCheckTask;
-
+	private String collabDocTask;
+	
 	protected Date getFirstExpected(NodeRef collabNode) {
 		Date expected = DefaultTypeConverter.INSTANCE.convert(Date.class,
 				nodeService.getProperty(collabNode, CGGHContentModel.PROP_FIRST_SAMPLE_EXPECTED));
@@ -235,6 +240,18 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 
 	}
 
+	public void startCollabDocWorkflowTask(NodeRef collabNode) {
+		String description = "No collaboration document";
+		Map<QName, Serializable> params = createCommonWorkflowParams(collabNode, description);
+
+		WorkflowPath path = workflowService.startWorkflow(collabDocTask, params);
+		String instanceId = path.getInstance().getId();
+
+		@SuppressWarnings("unused")
+		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+
+	}
+	
 	Map<QName, Serializable> createCommonWorkflowParams(NodeRef collabNode, String description) {
 		String nodeName = DefaultTypeConverter.INSTANCE.convert(String.class,
 				nodeService.getProperty(collabNode, ContentModel.PROP_NAME));
@@ -388,31 +405,32 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 					boolean newSamples = false;
 
 					double sangerYes = row.getCell(5).getNumericCellValue();
-					double sangerNo = row.getCell(4).getNumericCellValue();
+					//double sangerNo = row.getCell(4).getNumericCellValue();
 					double sangerSequenced = row.getCell(6).getNumericCellValue();
-					int sangerSystemTotal = (int) (sangerNo + sangerYes);
+					//int sangerSystemTotal = (int) (sangerNo + sangerYes);
 					// Only do something if the number processed has changed
-					if (processed != sangerSystemTotal) {
+					if (processed != sangerYes) {
 
 						newSamples = true;
 
 						setSequenced(collabNode, (int) sangerSequenced);
-						setProcessed(collabNode, sangerSystemTotal);
+						//Processed is really submitted to sequencing
+						setProcessed(collabNode, (int) sangerYes);
 						if (logger.isDebugEnabled()) {
 							logger.debug("Updated samples for:" + alfrescoCode + " expected:" + expected + " processed:"
-									+ sangerSystemTotal);
+									+ sangerYes);
 						}
 
-						if (sangerSystemTotal > expected) {
+						if (sangerYes > expected) {
 							//Could/Should be part of CollaborationFolder behaviour
 							//but here because the other tasks can't/shouldn't be
 							String description = "More samples than expected:" + expected + " processed:"
-									+ sangerSystemTotal;
+									+ sangerYes;
 							if (logger.isDebugEnabled()) {
 								logger.debug(description);
 							}
 							if (!isTaskActive(collabNode, countCheckTask)) {
-								startCountWorkflowTask(collabNode, description, expected, sangerSystemTotal);
+								startCountWorkflowTask(collabNode, description, expected, (int) sangerYes);
 							}
 						}
 
@@ -426,6 +444,12 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 								if (!isTaskActive(collabNode, statusCheckTask)) {
 									startStatusWorkflowTask(collabNode);
 								}
+							}
+						}
+						
+						if(!hasCollaborationDocument(collabNode)) {
+							if (!isTaskActive(collabNode, collabDocTask)) {
+								startCollabDocWorkflowTask(collabNode);
 							}
 						}
 					}
@@ -447,6 +471,12 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		for (String key : studyReports.keySet()) {
 			processStudy(workbook, key, studyReports.get(key));
 		}
+	}
+
+	private boolean hasCollaborationDocument(NodeRef collabNode) {
+		List<AssociationRef> docNodes = nodeService.getTargetAssocs(collabNode, CGGHContentModel.ASSOC_COLLABORATION_DOC);
+		
+		return !docNodes.isEmpty();
 	}
 
 	private String getCollaborationStatus(NodeRef collabNode) {
@@ -782,6 +812,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		setCountCheckTask(action);
 		setStatusCheckTask(action);
 		setCountryCheckTask(action);
+		setCollabDocTask(action);
 		setDateCheckTask(action);
 
 		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
@@ -832,6 +863,9 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		paramList.add(new ParameterDefinitionImpl(PARAM_DATECHECKTASK, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_DATECHECKTASK)));
 
+		paramList.add(new ParameterDefinitionImpl(PARAM_COLLABDOCTASK, DataTypeDefinition.TEXT, false,
+				getParamDisplayLabel(PARAM_COLLABDOCTASK)));
+		
 		paramList.add(new ParameterDefinitionImpl(PARAM_RESULT, DataTypeDefinition.TEXT, false,
 				getParamDisplayLabel(PARAM_RESULT)));
 
@@ -895,6 +929,15 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 		}
 	}
 
+	public void setCollabDocTask(Action action) {
+		String t = (String) action.getParameterValue(PARAM_COLLABDOCTASK);
+		if (t == null) {
+			collabDocTask = DEFAULT_COLLABDOCTASK;
+		} else {
+			collabDocTask = t;
+		}
+	}
+	
 	public void setNameCheckGroup(Action action) {
 		String t = (String) action.getParameterValue(PARAM_TASK_GROUP);
 		if (t == null) {
