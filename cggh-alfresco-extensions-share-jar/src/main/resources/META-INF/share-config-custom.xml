@@ -252,6 +252,7 @@
 					<show id="cggh:sampleCountry" />
 					<show id="cggh:samplesExpected" />
 					<show id="cggh:samplesProcessed" />
+					<show id="cggh:samplesSequenced" />
 					<show id="cggh:firstSample" />
 					<show id="cggh:lastSample" />
 					<show id="cggh:nextReview" />
@@ -354,17 +355,18 @@
 					</field>
 					<field id="cggh:publications" label-id="cggh.metadata.publications"
 						set="cgghMetadata">
-						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:documentLibrary/smf:Publications
-							</control-param>
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:documentLibrary/cm:Publication_x0020_Files</control-param>
+                            <!-- xpath to smart folders doesn't work
+                            <control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:documentLibrary/smf:Publications</control-param>
+                            -->
 						</control>
 					</field>
 
 					<field id="cggh:projectsdl" label-id="cggh.metadata.projects"
 						set="cgghMetadata">
 						<control template="/org/alfresco/components/form/controls/association.ftl">
-							<control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:dataLists/cm:sequencingProjects
-							</control-param>
+							<control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:dataLists/cm:sequencingProjects</control-param>
 						</control>
 					</field>
 					<!-- Linking to sites doesn't work brilliantly because not all projects 
@@ -400,6 +402,12 @@
 							<control-param name="style">width: 8em;</control-param>
 						</control>
 					</field>
+					<field id="cggh:samplesSequenced" label-id="cggh.metadata.samplesSequenced"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/number.ftl">
+                            <control-param name="style">width: 8em;</control-param>
+                        </control>
+                    </field>
 					<field id="cggh:firstSample" label-id="cggh.metadata.firstSample"
 						set="cgghMetadata" />
 					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"

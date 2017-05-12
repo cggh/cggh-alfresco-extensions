@@ -174,7 +174,8 @@
 </#if>
 "notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
 "samplesExpected": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesExpected"])!''}",
-"samplesProcessed": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesProcessed"])!''}",
+"samplesSubmitted": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesProcessed"])!''}",
+"samplesSequenced": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesSequenced"])!''}",
 <#if collab.properties["cggh:firstSample"]??>
 "firstSampleDate": "${jsonUtils.encodeJSONString(collab.properties["cggh:firstSample"]?string("MM-yyyy"))!''}",
 </#if>
