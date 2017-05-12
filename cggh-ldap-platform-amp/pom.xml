@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.cggh</groupId>
         <artifactId>cggh-alfresco-extensions</artifactId>
-        <version>1.6.4-SNAPSHOT</version>
+        <version>1.6.4</version>
     </parent>
 
     <properties>
