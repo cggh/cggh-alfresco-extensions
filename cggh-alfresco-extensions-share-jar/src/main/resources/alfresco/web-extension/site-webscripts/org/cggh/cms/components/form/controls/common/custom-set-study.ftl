@@ -10,6 +10,7 @@
         <@formLib.renderField field=form.fields["prop_cggh_species"] />
         <@formLib.renderField field=form.fields["prop_cggh_samplesExpected"] />
         <@formLib.renderField field=form.fields["prop_cggh_samplesProcessed"] />
+        <@formLib.renderField field=form.fields["prop_cggh_samplesSequenced"] />
         <@formLib.renderField field=form.fields["prop_cggh_webTitleApproved"] />
         <@formLib.renderField field=form.fields["prop_cggh_descriptionApproved"] />
         <@formLib.renderField field=form.fields["prop_cggh_firstSample"] />
@@ -52,18 +53,30 @@
         </div>
         <div class="yui-gd">
             <div class="yui-u first">
-                    <@formLib.renderField field=form.fields["assoc_cggh_publications"] />
+                    <@formLib.renderField field=form.fields["assoc_cggh_projectsdl"] />
             </div>
             <div class="yui-g">
                 <div class="yui-u first">
-                    <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
+                    <@formLib.renderField field=form.fields["assoc_cggh_publications"] />
                 </div>
                 <div class="yui-u">
                     <@formLib.renderField field=form.fields["assoc_cggh_webStudy"] />
                 </div>
             </div>
         </div>        
-                
+        <div class="yui-gd">
+            <div class="yui-u first">
+                <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
+            </div>
+            <div class="yui-g">
+                <div class="yui-u first">
+                    <@formLib.renderField field=form.fields["assoc_cggh_collaborationDoc"] />
+                </div>
+                <div class="yui-u">
+                    <@formLib.renderField field=form.fields["prop_cggh_legacyID"] />
+                </div>
+            </div>
+        </div>                
         <div class="yui-gc">
             <div class="yui-u first">
                 <@formLib.renderField field=form.fields["prop_cggh_sampleCountry"] />
@@ -75,32 +88,24 @@
         <div class="yui-gd">
             <div class="yui-u first">
                 <@formLib.renderField field=form.fields["prop_cggh_firstSample"] />
+                <@formLib.renderField field=form.fields["prop_cggh_lastSample"] />
             </div>
             <div class="yui-g">
                 <div class="yui-u first">
-                    <@formLib.renderField field=form.fields["prop_cggh_lastSample"] />
+                    <@formLib.renderField field=form.fields["prop_cggh_samplesExpected"] />
                 </div>
                 <div class="yui-u">
-                    <@formLib.renderField field=form.fields["prop_cggh_samplesExpected"] />
                     <@formLib.renderField field=form.fields["prop_cggh_samplesProcessed"] />
+                    <@formLib.renderField field=form.fields["prop_cggh_samplesSequenced"] />
                 </div>
             </div>
         </div>
         <div class="yui-gd">
-            <div class="yui-u first">
-                <@formLib.renderField field=form.fields["assoc_cggh_projectsdl"] />
-            </div>
-            <div class="yui-gd">
-                <div class="yui-u first">
-                <@formLib.renderField field=form.fields["assoc_cggh_collaborationDoc"] />
-                    <@formLib.renderField field=form.fields["prop_cggh_legacyID"] />
-                </div>
-                <div class="yui-u">
+           <div class="yui-u">
                     <@formLib.renderField field=form.fields["prop_cggh_strategicNature"] />
-                </div>
-            </div>
+           </div>
         </div>
-        <div class="yui-g">
+        <div class="yui-gd">
             <div class="yui-u first">
                 <@formLib.renderField field=form.fields["prop_cggh_internalDescription"] />
             </div>

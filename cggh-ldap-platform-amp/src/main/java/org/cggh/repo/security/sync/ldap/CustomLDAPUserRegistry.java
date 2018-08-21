@@ -138,20 +138,21 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
         userSearchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
         String searchField = this.userIdAttributeName;
-        
-        if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
-        	searchField = this.lookupAttributeName;
-        }
-        
+               
         // Although we don't actually need any attributes, we ask for the UID for compatibility with Sun Directory Server. See ALF-3868
         userSearchCtls.setReturningAttributes(new String[]
         {
-            this.userIdAttributeName,
-            searchField
+        		searchField
         });
         
-
+        String ldapQuery = "(&" + this.personQuery + "(" + searchField + "={0}))";
+        // Execute the user query with an additional condition that ensures only the user with the required ID is
+        // returned. Force RFC 2254 escaping of the user ID in the filter to avoid any manipulation            
+        if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
+        	ldapQuery = "(&" + this.personQuery + "(|(" + searchField + "={0})(" + lookupAttributeName + "={0})))";
+        } 
         
+        //Just for logging
         String query = this.userSearchBase + "(&" + this.personQuery
         + "(" + searchField + "= userId))";
 
@@ -164,11 +165,9 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
         {
             ctx = this.ldapInitialContextFactory.getDefaultIntialDirContext(diagnostic);
 
-            // Execute the user query with an additional condition that ensures only the user with the required ID is
-            // returned. Force RFC 2254 escaping of the user ID in the filter to avoid any manipulation            
+
             
-             searchResults = ctx.search(this.userSearchBase, "(&" + this.personQuery
-                    + "(" + searchField + "={0}))", new Object[]
+             searchResults = ctx.search(this.userSearchBase, ldapQuery, new Object[]
             {
                 userId
             }, userSearchCtls);

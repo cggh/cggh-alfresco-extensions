@@ -42,6 +42,12 @@
                     <prop key="mimetype">text/xml</prop>
                 	<prop key="redeploy">${ssr.deploy.tasks}</prop>
                 </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${project.artifactId}/workflow/documentCheck.bpmn</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${ssr.deploy.tasks}</prop>
+                </props>
             </list>
         </property>
         <property name="models">

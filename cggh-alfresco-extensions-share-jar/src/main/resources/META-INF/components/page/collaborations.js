@@ -178,8 +178,7 @@
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), resizeable: true, sortable: true, formatter: this.bind(this.renderCellRagStatus) },
             { key: "ethicsExpiry", label: this.msg("cggh.metadata.ethicsExpiry"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEthicsExpiry},formatter: this.bind(this.renderCellEthicsExpiry) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
-            ];
-      
+            ];      
          // DataTable definition
          this.widgets.dataTable = new YAHOO.widget.ScrollingDataTable(this.id + "-collaborations", columnDefinitions, this.widgets.dataSource,
          {

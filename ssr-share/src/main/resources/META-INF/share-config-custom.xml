@@ -222,4 +222,39 @@
 		</forms>
 	</config>
 
+    <config evaluator="task-type" condition="ssrwf:activitiCollabDocReview">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="bpm:workflowDescription" />
+                    <show id="packageItems" />
+                    <show id="ssrwf:reviewOutcome" />
+                    <show id="transitions" />
+                    <show id="bpm:startDate" />
+                </field-visibility>
+                <appearance>
+                    <set id="" appearance="title" label-id="workflow.set.general" />
+                    <set id="info" appearance=""
+                        template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="assignee" appearance="title" label-id="workflow.set.assignee" />
+                    <set id="items" appearance="title" label-id="workflow.set.items" />
+                    <set id="collab" appearance="title" label-id="ssrwf_collaborationValues" />
+                    <set id="response" appearance="title" label-id="workflow.set.response" />
+
+                    <field id="bpm:workflowDescription" label-id="workflow.field.message">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="style">width: 95%</control-param>
+                        </control>
+                    </field>
+                    <field id="bpm:startDate" label-id="ssrwf_reportRun">
+                        <control template="/org/alfresco/components/form/controls/info.ftl" />
+                    </field>
+                    
+                    <field id="packageItems" set="items" />
+                    <field id="ssrwf:reviewOutcome" label-id="ssrwf_reviewOutcome" set="response" />
+                    <field id="transitions" set="response" />
+                </appearance>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
