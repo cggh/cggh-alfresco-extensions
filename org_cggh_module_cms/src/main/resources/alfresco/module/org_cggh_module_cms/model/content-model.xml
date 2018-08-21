@@ -523,6 +523,11 @@
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="cggh:ethicsExpiry">
+					<title>Date ethics approval expires</title>
+					<type>d:date</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 

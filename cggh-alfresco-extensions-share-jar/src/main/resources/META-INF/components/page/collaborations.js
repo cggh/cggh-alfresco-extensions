@@ -1,23 +1,4 @@
 /**
- * Copyright (C) 2005-2010 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
- * Alfresco is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Alfresco is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
  * Dashboard Collaborations component.
  *
  * @namespace Cggh.dashlet
@@ -57,7 +38,6 @@
    var PREFERENCES_COLLABORATIONS = "org.cggh.share.collaborations",
       PREFERENCES_COLLABORATIONS_DASHLET_FILTER_FAV = PREFERENCES_COLLABORATIONS + ".dashlet.filter.fav",
       PREFERENCES_COLLABORATIONS_DASHLET_FILTER_STATUS = PREFERENCES_COLLABORATIONS + ".dashlet.filter.sstatus",
-      PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY = PREFERENCES_COLLABORATIONS + ".dashlet.filter.estatus",
       PREFERENCES_COLLABORATIONS_DASHLET_FILTER_SPECIES = PREFERENCES_COLLABORATIONS + ".dashlet.filter.species",
       PREFERENCES_COLLABORATIONS_DASHLET_FILTER_RAG = PREFERENCES_COLLABORATIONS + ".dashlet.filter.rstatus";
 
@@ -168,13 +148,6 @@
             lazyloadmenu: false
          });
 
-         this.widgets.enquiry = Alfresco.util.createYUIButton(this, "enquiry", this.onEnquiryFilterChanged,
-                 {
-                    type: "menu",
-                    menu: "enquiry-menu",
-                    lazyloadmenu: false
-                 });
-
          this.widgets.species = Alfresco.util.createYUIButton(this, "species", this.onSpeciesFilterChanged,
                  {
                     type: "menu",
@@ -201,25 +174,10 @@
             { key: "species", label: this.msg("cggh.metadata.species"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSpecies) },
             { key: "title", label: this.msg("cggh.label.title"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellTitle) },
             { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
-            { key: "enqStatus", label: this.msg("cggh.metadata.enquiryStatus"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEnquiryStatus},formatter: this.bind(this.renderCellEnquiryStatus) },
             { key: "notes", label: this.msg("cggh.metadata.notes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellNotes) },
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), resizeable: true, sortable: true, formatter: this.bind(this.renderCellRagStatus) },
-            { key: "nextReview", label: this.msg("cggh.metadata.nextReview"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortReview},formatter: this.bind(this.renderCellReview) },
-            { key: "liaision", label: this.msg("cggh.metadata.liaison"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortLiaison},formatter: this.bind(this.renderCellLiaison) },
+            { key: "ethicsExpiry", label: this.msg("cggh.metadata.ethicsExpiry"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEthicsExpiry},formatter: this.bind(this.renderCellEthicsExpiry) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
-            { key: "numSamples", label: this.msg("cggh.metadata.samplesExpected"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSamplesExpected) },
-            { key: "samplesProcessed", label: this.msg("cggh.metadata.samplesProcessed"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSamplesProcessed) },
-            { key: "firstSample", label: this.msg("cggh.metadata.firstSample"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortFirstSampleExpected},formatter: this.bind(this.renderCellFirstSampleExpected) },
-            { key: "lastSample", label: this.msg("cggh.metadata.lastSample"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortLastSampleExpected},formatter: this.bind(this.renderCellLastSampleExpected) },
-            { key: "collaborationDoc", label: this.msg("cggh.metadata.collabDoc"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellCollaborationDoc) },
-            { key: "projectsdl", label: this.msg("cggh.metadata.projects"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellProjects) },
-            /*
-            { key: "detail", label: this.msg("cggh.label.description"), sortable: false, formatter: this.bind(this.renderCellDetail) },
-            { key: "intDescrip", label: this.msg("cggh.metadata.intDescrip"), sortable: false, formatter: this.bind(this.renderCellIntDescrip) },
-            { key: "strategicNature", label: this.msg("cggh.metadata.strategicNature"), sortable: false, formatter: this.bind(this.renderCellStrategicNature) },
-            { key: "contacts", label: this.msg("cggh.metadata.contacts"), sortable: true, sortOptions:{sortFunction:this.sortContacts},formatter: this.bind(this.renderCellContact) },
-            { key: "country", label: this.msg("cggh.metadata.sampleCountry"), sortable: false, formatter: this.bind(this.renderCellCountries), width: 100 },
-            */
             ];
       
          // DataTable definition
@@ -322,27 +280,7 @@
             });
          }
       },
-      
-      onEnquiryFilterChanged: function Collaborations_onEnquiryFilterChanged(p_sType, p_aArgs)
-      {
-         var menuItem = p_aArgs[1];
-         if (menuItem)
-         {
-            this.widgets.enquiry.set("label", menuItem.cfg.getProperty("text"));
-            this.widgets.enquiry.value = menuItem.value;
-
-         // Save preferences and load collaborations afterwards
-            this.services.preferences.set(PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY, menuItem.value,
-            {
-               successCallback:
-               {
-                  fn: this.loadCollaborations,
-                  scope: this
-               }
-            });
-         }
-      },
-      
+            
       onSpeciesFilterChanged: function Collaborations_onSpeciesFilterChanged(p_sType, p_aArgs)
       {
          var menuItem = p_aArgs[1];
@@ -465,10 +403,6 @@
          filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_STATUS, "all");
          this.widgets.status.set("label", this.msg("filter.status." + filter.replace(/ /g, '')));
          this.widgets.status.value = filter;
-
-         filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_ENQUIRY, "all");
-         this.widgets.enquiry.set("label", this.msg("filter.enquiry." + filter.replace(/ /g, '')));
-         this.widgets.enquiry.value = filter;
          
          filter = Alfresco.util.findValueByDotNotation(p_response.json, PREFERENCES_COLLABORATIONS_DASHLET_FILTER_SPECIES, "all");
          this.widgets.species.set("label", this.msg("filter.species." + filter.replace(/ /g, '')));
@@ -496,7 +430,7 @@
          {
             var collaboration = YAHOO.lang.merge({}, p_items[i]);
 
-            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.enquiry.value, this.widgets.species.value, this.widgets.rag.value,
+            if (this.filterAccept(this.widgets.type.value, this.widgets.status.value, this.widgets.species.value, this.widgets.rag.value,
             		collaboration))
             {
                this.collaborations[ii] = collaboration;
@@ -532,7 +466,7 @@
        * @param collaboration {object} Collaboration object literal
        * @return {boolean}
        */
-      filterAccept: function Collaborations_filterAccept(filter, statusFilter, enquiryFilter, speciesFilter, ragFilter, collaboration)
+      filterAccept: function Collaborations_filterAccept(filter, statusFilter, speciesFilter, ragFilter, collaboration)
       {
     	  var ret = false;
          switch (filter)
@@ -551,15 +485,6 @@
                break;
             default:
                ret = ret && (collaboration.collaborationStatus === statusFilter);
-               break;
-         }
-         switch (enquiryFilter)
-         {
-            case "all":
-              //leave unchanged
-               break;
-            default:
-               ret = ret && (collaboration.enquiryStatus === enquiryFilter);
                break;
          }
          switch (ragFilter)
@@ -762,40 +687,6 @@
       /**
        * Actions custom datacell formatter
        *
-       * @method renderCellEnquiryStatus
-       * @param elCell {object}
-       * @param oRecord {object}
-       * @param oColumn {object}
-       * @param oData {object|string}
-       */
-      renderCellEnquiryStatus: function Collaborations_renderCellEnquiryStatus(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         var out = ''; 
-         if (collaboration.enquiryStatus) {
-        	 this.msg("filter.enquiry." + collaboration.enquiryStatus.replace(/ /g, ''));
-         }
-         elCell.innerHTML = out; 
-      },
-
-      sortEnquiryStatus: function Collaborations_sortEnquiryStatus(rec1, rec2, desc) {
-    	  var a = rec1.getData();
-    	  var b = rec2.getData();
-    	  var name1 = a.collaborationStatus + a.enquiryStatus ? a.enquiryStatus : '',
-                  name2 = b.collaborationStatus + b.enquiryStatus ? b.enquiryStatus : '';
-    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
-    	  if (ret == 0) {
-    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
-    	  }
-    	  return (ret);
-      },
-      /**
-       * Actions custom datacell formatter
-       *
        * @method renderCellPI
        * @param elCell {object}
        * @param oRecord {object}
@@ -838,93 +729,6 @@
     	  var ret = YAHOO.util.Sort.compare(fname1, fname2, desc);
     	  if (ret == 0) {
     		  ret = YAHOO.util.Sort.compare(lname1, lname2, desc);
-    	  }
-    	  return (ret);
-      },
-      /**
-       * Actions custom datacell formatter
-       *
-       * @method renderCellContact
-       * @param elCell {object}
-       * @param oRecord {object}
-       * @param oColumn {object}
-       * @param oData {object|string}
-       */
-      renderCellContact: function Collaborations_renderCellContact(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         var output = [];
-         
-         if (collaboration.groupContact) {
-            for(i = 0, j = collaboration.groupContact.length;i < j; i++) {
-                var person = collaboration.groupContact[i];
-                output.push(person.firstName + ' ' + person.lastName);
-            }
-         }
-        
-         elCell.innerHTML = output.join(', ');
-      },
-      
-      sortContacts: function Collaborations_sortContacts(rec1, rec2, desc) {
-          var a = rec1.getData();
-          var b = rec2.getData();
-          var fname1 = '', fname2 = '';
-          var lname1 = '', lname2 = '';
-          if (a.groupContact && a.groupContact.length > 0) {
-              fname1 = a.groupContact[0].firstName;
-              lname1 = a.groupContact[0].lastName;
-          }
-          if (b.groupContact && b.groupContact.length > 0) {
-              fname2 = b.groupContact[0].firstName;
-              lname2 = b.groupContact[0].lastName;
-          }
-          
-          var ret = YAHOO.util.Sort.compare(fname1, fname2, desc);
-          if (ret == 0) {
-              ret = YAHOO.util.Sort.compare(lname1, lname2, desc);
-          }
-          return (ret);
-      },
-      /**
-       * Actions custom datacell formatter
-       *
-       * @method renderCellLiaison
-       * @param elCell {object}
-       * @param oRecord {object}
-       * @param oColumn {object}
-       * @param oData {object|string}
-       */
-      renderCellLiaison: function Collaborations_renderCellLiaison(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         if (collaboration.liaison) {
-        	 var liaison = collaboration.liaison.firstName + " " + collaboration.liaison.lastName;
-        
-        	 elCell.innerHTML = liaison;
-         }
-      },
-      sortLiaison: function Collaborations_sortLiaison(rec1, rec2, desc) {
-    	  var a = rec1.getData();
-    	  var b = rec2.getData();
-    	  var name1 = '', name2 = '';
-    	  if (a.liaison) {
-    		  name1 = a.liaison.lastName;
-    	  }
-    	  if (b.liaison) {
-    		  name2 = b.liaison.lastName;
-    	  }
-    	  
-    	  var ret = YAHOO.util.Sort.compare(name1, name2, desc);
-    	  if (ret == 0) {
-    		  ret = YAHOO.util.Sort.compare(a.name, b.name, desc);
     	  }
     	  return (ret);
       },
@@ -985,72 +789,6 @@
         
          elCell.innerHTML = collaboration.notes;
       },
-      renderCellSamplesExpected: function Collaborations_renderCellSamplesExpected(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-         var render = '';
-         if (collaboration.samplesExpected) {
-        	 render = collaboration.samplesExpected;
-         }
-         elCell.innerHTML = render;
-      },
-      renderCellSamplesProcessed: function Collaborations_renderCellSamplesProcessed(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-         var render = '';
-         if (collaboration.samplesProcessed) {
-        	 render = collaboration.samplesProcessed;
-         }
-         elCell.innerHTML = render;
-      },
-      renderCellStrategicNature: function Collaborations_renderCellStrategicNature(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-         var render = '';
-         if (collaboration.strategicNature) {
-        	 render = collaboration.strategicNature;
-         }
-         elCell.innerHTML = render;
-      },
-      renderCellIntDescrip: function Collaborations_renderCellIntDescrip(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         var render = '';
-         if (collaboration.intDescrip) {
-        	 render = collaboration.intDescrip;
-         }
-         elCell.innerHTML = render;
-      },
-      renderCellProjects: function Collaborations_renderCellProjects(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         if (collaboration.projects) {
-        	 var output = [];
-        	 for(i = 0, j = collaboration.projects.length;i < j; i++) {
-        		 var proj = collaboration.projects[i];
-        		 output.push(proj.name);
-        		 
-        	 }
-        	 elCell.innerHTML = output;
-         }
-      },
       renderCellRagStatus: function Collaborations_renderCellRagStatus(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
@@ -1074,21 +812,16 @@
          }
         
       },
-      renderCellCollaborationDoc: function Collaborations_renderCellCollaborationDoc(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+      
+      dateFromString: function Collaborations_dateFromString(date1s) {
+          var date1Parts = date1s.split("-");
 
-         var collaboration = oRecord.getData();
-         var output = [];
-         
-         if (collaboration.collaborationDoc) {
-        	 for(i = 0, j = collaboration.collaborationDoc.length;i < j; i++) {
-        		 var cdoc = collaboration.collaborationDoc[i];
-        		 output.push('<a href="' + Alfresco.constants.URL_PAGECONTEXT + 'document-details?nodeRef=' + cdoc.nodeRef + '">' + cdoc.name + '</a>');
-        	 }
-         }
-         elCell.innerHTML = output;
+          if (date1Parts.length == 2) {
+              date1Parts.unshift("1");
+          }
+          var date1 = new Date(date1Parts[2], (date1Parts[1] - 1), date1Parts[0]);
+    	  
+          return date1;
       },
       
       dateCompare: function Collaborations_dateCompare(date1s, date2s, desc) {
@@ -1113,20 +846,9 @@
               return (ret);
               
           }
-          var date1Parts = date2s.split("-");
 
-          if (date1Parts.length == 2) {
-              date1Parts.unshift("1");
-          }
-          var date1 = new Date(date1Parts[2], (date1Parts[1] - 1), date1Parts[0]);
-
-          var date2Parts = date1s.split("-");
-
-          if (date2Parts.length == 2) {
-              date2Parts.unshift("1");
-          }
-          
-          var date2 = new Date(date2Parts[2], (date2Parts[1] - 1), date2Parts[0]);
+          var date1 = this.dateFromString(date2s);
+          var date2 = this.dateFromString(date1s);
           
           var t1 = date1.getTime();
           var t2 = date2.getTime();
@@ -1144,70 +866,73 @@
           }
           return (ret);
       },
-      renderCellReview: function Collaborations_renderCellReviewed(elCell, oRecord, oColumn, oData)
+      getMonthsBetween: function Collaborations_getMonthsBetween(date1,date2,roundUpFractionalMonths)
+      {
+          //Months will be calculated between start and end dates.
+          //Make sure start date is less than end date.
+          //But remember if the difference should be negative.
+          var startDate=date1;
+          var endDate=date2;
+          var inverse=false;
+          if(date1>date2)
+          {
+              startDate=date2;
+              endDate=date1;
+              inverse=true;
+          }
+
+          //Calculate the differences between the start and end dates
+          var yearsDifference=endDate.getUTCFullYear()-startDate.getUTCFullYear();
+          var monthsDifference=endDate.getMonth()-startDate.getMonth();
+          var daysDifference=endDate.getDate()-startDate.getDate();
+
+          var monthCorrection=0;
+          //If roundUpFractionalMonths is true, check if an extra month needs to be added from rounding up.
+          //The difference is done by ceiling (round up), e.g. 3 months and 1 day will be 4 months.
+          if(roundUpFractionalMonths===true && daysDifference>0)
+          {
+              monthCorrection=1;
+          }
+          //If the day difference between the 2 months is negative, the last month is not a whole month.
+          else if(roundUpFractionalMonths!==true && daysDifference<0)
+          {
+              monthCorrection=-1;
+          }
+
+          return (inverse?-1:1)*(yearsDifference*12+monthsDifference+monthCorrection);
+      },
+      renderCellEthicsExpiry: function Collaborations_renderCellEthicsExpiry(elCell, oRecord, oColumn, oData)
       {
          Dom.setStyle(elCell, "width", oColumn.width + "px");
          Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
          var collaboration = oRecord.getData();
 
-         if (collaboration.nextReview) {
-             elCell.innerHTML = collaboration.nextReview;
+         if (collaboration.ethicsExpiry) {
+        	 var out = '';
+        	 
+        	 var date1 = this.dateFromString(collaboration.ethicsExpiry);
+        	 var date2 = new Date(Date.now());
+        	 var monthsBetween = this.getMonthsBetween(date1, date2, false);
+        	 
+        	 if (date2 >= date1) {
+        	     out = '<font color="#FF0000"><strong>' + collaboration.ethicsExpiry + '</strong></font>';
+        	 } else if (monthsBetween >= -2) {
+        	     out = '<font color="#FF9900"><strong>' + collaboration.ethicsExpiry + '</strong></font>';
+        	 } else {
+        	     out = '<font color="#339966"><strong>' + collaboration.ethicsExpiry + '</strong></font>';
+        	 }
+        	 elCell.innerHTML = out;
+
          }
          
       },
 
-      sortReview: function Collaborations_sortReview(rec1, rec2, desc) {
+      sortEthicsExpiry: function Collaborations_sortEthicsExpiry(rec1, rec2, desc) {
           var a = rec1.getData();
           var b = rec2.getData();
-          var date1s = a.nextReview;
-          var date2s = b.nextReview;
-          
-          ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
-          
-          return (ret);
-      },
-      renderCellFirstSampleExpected: function Collaborations_renderCellFirstSampleExpected(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-         if (collaboration.firstSampleDate) {
-             elCell.innerHTML = collaboration.firstSampleDate;
-         }
-      },
-
-      sortFirstSampleExpected: function Collaborations_sortFirstSampleExpected(rec1, rec2, desc) {
-          var a = rec1.getData();
-          var b = rec2.getData();
-          var date1s = a.firstSampleDate;
-          var date2s = b.firstSampleDate;
- 
-          ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
-          
-          return (ret);
-      },
-      renderCellLastSampleExpected: function Collaborations_renderCellLastSampleExpected(elCell, oRecord, oColumn, oData)
-      {
-         Dom.setStyle(elCell, "width", oColumn.width + "px");
-         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
-
-         var collaboration = oRecord.getData();
-
-        
-         if (collaboration.lastSampleDate) {
-             elCell.innerHTML = collaboration.lastSampleDate;
-         }
-      },
-
-      sortLastSampleExpected: function Collaborations_sortLastSampleExpected(rec1, rec2, desc) {
-          var a = rec1.getData();
-          var b = rec2.getData();
-        
-          var date1s = a.lastSampleDate;
-          var date2s = b.lastSampleDate;
+          var date1s = a.ethicsExpiry;
+          var date2s = b.ethicsExpiry;
           
           ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
           
