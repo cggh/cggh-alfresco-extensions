@@ -51,9 +51,7 @@ if (folder != null && folder.children != null) {
 
 			var monthsBetween = (inverse?-1:1)*(yearsDifference*12+monthsDifference+monthCorrection);
 
-			logger.log(monthsBetween);
-
-			if (monthsBetween < -1) {
+			if (monthsBetween < -1 || monthsBetween > 0) {
 				// create mail action
 				var mail = actions.create("mail");
 				mail.parameters.to = "ian.wright@well.ox.ac.uk";
@@ -69,10 +67,11 @@ if (folder != null && folder.children != null) {
 
 				mail.parameters.subject = "Ethics approval about to expire for " + node.properties["cm:name"];
 
-				mail.parameters.body = "Ethics approval about to expire for " + node.properties["cm:name"] + " on " + node.properties["cggh:ethicsExpiry"];
+				mail.parameters.text = "Ethics approval about to expire for " + node.properties["cm:name"] + " on " + node.properties["cggh:ethicsExpiry"];
 
 				// execute action against a document
 				mail.execute(node);
+
 			}
 		}
 	}
