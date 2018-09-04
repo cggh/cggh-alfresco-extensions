@@ -523,11 +523,14 @@
                 </configuration>
             </plugin>
 
-            <!-- mvn jgitflow:release-start mvn jgitflow:release-finish -->
+            <!-- 
+            mvn gitflow:release-start
+            mvn gitflow:release-finish
+             -->
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-jgitflow-plugin</artifactId>
-                <version>1.0-alpha20</version>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.9.0</version>
                 <configuration>
                     <!-- Enable this to push to origin using SSH keys -->
                     <enableSshAgent>true</enableSshAgent>
@@ -546,11 +549,11 @@
                     <!-- Prevents deployments from dev workstations so that they can be 
                         done by a CI server -->
                     <noDeploy>true</noDeploy>
-                    <flowInitContext>
+                    <gitFlowConfig>
                         <!-- You can customize your development branch name. Why? Because it's 
                             faster to type 'git push origin dvlp' than 'git push origin develop' ;-) -->
-                        <developBranchName>dvlp</developBranchName>
-                    </flowInitContext>
+                        <developmentBranch>dvlp</developmentBranch>
+                    </gitFlowConfig>
                 </configuration>
             </plugin>
 
