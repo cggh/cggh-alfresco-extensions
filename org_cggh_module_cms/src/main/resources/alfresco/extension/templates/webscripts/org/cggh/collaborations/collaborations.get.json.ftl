@@ -190,6 +190,9 @@
 <#if collab.properties["cggh:nextReview"]??>
 "nextReview": "${jsonUtils.encodeJSONString(collab.properties["cggh:nextReview"]?string("dd-MM-yyyy"))!''}",
 </#if>
+<#if collab.properties["cggh:ethicsExpiry"]??>
+"ethicsExpiry": "${jsonUtils.encodeJSONString(collab.properties["cggh:ethicsExpiry"]?string("dd-MM-yyyy"))!''}",
+</#if>
 "modified": "${jsonUtils.encodeJSONString(collab.properties["cm:modified"]?string("dd-MM-yyyy HH:mm:ss"))!''}"
 }<#if collab_has_next>,</#if>
 </#list>

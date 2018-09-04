@@ -13,7 +13,7 @@
         </property>
     </bean>
        
-    <bean id="runScriptAction" class="org.alfresco.repo.action.scheduled.SimpleTemplateActionDefinition">
+    <bean id="runEthicsScriptAction" class="org.alfresco.repo.action.scheduled.SimpleTemplateActionDefinition">
         <property name="actionName">
             <value>script</value>
         </property>
@@ -24,7 +24,7 @@
                         <value>script-ref</value>
                     </key>
                     <!-- Note that as of Alfresco 4.0, due to a  Spring upgrade, the FreeMarker ${foo} entries must be escaped --> 
-                    <value>\$\{selectSingleNode('workspace://SpacesStore', 'lucene', 'PATH:"/app:company_home/app:dictionary/app:scripts/cm:auth/cm:cron-ldap-manage-user.js"' )\}</value>
+                    <value>\$\{selectSingleNode('workspace://SpacesStore', 'lucene', 'PATH:"/app:company_home/app:dictionary/app:scripts/cm:cggh/cm:cron-check-ethics-expiry.js"' )\}</value>
                 </entry>
             </map>
         </property>
@@ -41,8 +41,8 @@
             <ref bean="TemplateService"/>
         </property>
     </bean>
-   
-    <bean id="manageLdapUserEveryThirtyMinutes" class="org.alfresco.repo.action.scheduled.CronScheduledQueryBasedTemplateActionDefinition">
+    
+    <bean id="checkEthicsExpiry" class="org.alfresco.repo.action.scheduled.CronScheduledQueryBasedTemplateActionDefinition">
         <property name="transactionMode">
             <value>UNTIL_FIRST_FAILURE</value>
         </property>
@@ -64,19 +64,19 @@
             </list>
         </property>
         <property name="queryTemplate">
-            <value>PATH:"/sys:system/sys:people"</value>
+            <value>PATH:"/app:company_home/st:sites/cm:sequencing/cm:documentLibrary/cm:Collaborations"</value>
         </property>
         <property name="cronExpression">
-            <value>0 0/30 * * * ?</value>
+            <value>${org.cggh.cron.ethics.cronexpression}</value>
         </property>
         <property name="jobName">
-            <value>manageLdapGroup</value>
+            <value>checkEthicsExpiry</value>
         </property>
         <property name="jobGroup">
             <value>cgghGroup</value>
         </property>
         <property name="triggerName">
-            <value>triggerB</value>
+            <value>triggerC</value>
         </property>
         <property name="triggerGroup">
             <value>triggerGroup</value>
@@ -91,7 +91,7 @@
             <ref bean="templateActionModelFactory"/>
         </property>
         <property name="templateActionDefinition">
-            <ref bean="runScriptAction"/>
+            <ref bean="runEthicsScriptAction"/>
         </property>
         <property name="transactionService">
             <ref bean="TransactionService"/>
@@ -99,6 +99,6 @@
         <property name="runAsUser">
             <value>System</value>
         </property>
-    </bean>
-
+    </bean> 
+    
 </beans>

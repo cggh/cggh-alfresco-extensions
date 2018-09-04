@@ -255,6 +255,7 @@
 					<show id="cggh:samplesSequenced" />
 					<show id="cggh:firstSample" />
 					<show id="cggh:lastSample" />
+					<show id="cggh:ethicsExpiry" />
 					<show id="cggh:nextReview" />
 					<show id="cggh:strategicNature" />
 					<show id="cggh:internalDescription" />
@@ -413,6 +414,8 @@
 					<field id="cggh:lastSample" label-id="cggh.metadata.lastSample"
 						set="cgghMetadata" />
 					<field id="cggh:nextReview" label-id="cggh.metadata.nextReview"
+						set="cgghMetadata" />
+					<field id="cggh:ethicsExpiry" label-id="cggh.metadata.ethicsExpiry"
 						set="cgghMetadata" />
 					<field id="cggh:strategicNature" label-id="cggh.metadata.strategicNature"
 						set="cgghMetadata" />

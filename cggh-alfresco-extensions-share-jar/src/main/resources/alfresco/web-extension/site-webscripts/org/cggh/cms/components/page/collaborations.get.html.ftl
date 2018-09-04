@@ -38,23 +38,6 @@
             <option value="aborted">${msg("filter.status.aborted")}</option>
             <option value="closed">${msg("filter.status.closed")}</option>
          </select>
-         <span class="align-left yui-button yui-menu-button" id="${id}-enquiry">
-            <span class="first-child">
-               <button type="button" tabindex="2">${msg("filter.all")}</button>
-            </span>
-         </span>
-         <select id="${id}-enquiry-menu" multiple="multiple">
-          	<option value="all" selected="selected">${msg("filter.enquiry.all")}</option>
-            <option value="enquiry email received">${msg("filter.enquiry.enquiryemailreceived")}</option>
-            <option value="dialogue open">${msg("filter.enquiry.dialogueopen")}</option>
-            <option value="awaiting funding">${msg("filter.enquiry.awaitingfunding")}</option>
-            <option value="application form sent">${msg("filter.enquiry.applicationformsent")}</option>
-            <option value="application to be presented to SG">${msg("filter.enquiry.applicationtobepresentedtoSG")}</option>
-            <option value="under consideration by DK">${msg("filter.enquiry.underconsiderationbyDK")}</option>
-            <option value="collaboration agreement being drawn">${msg("filter.enquiry.collaborationagreementbeingdrawn")}</option>
-            <option value="collaboration agreement sent">${msg("filter.enquiry.collaborationagreementsent")}</option>
-            <option value="collaboration active">${msg("filter.enquiry.collaborationactive")}</option>
-         </select>
          <span class="align-left yui-button yui-menu-button" id="${id}-species">
             <span class="first-child">
                <button type="button" tabindex="3">${msg("filter.all")}</button>
