@@ -72,6 +72,8 @@
       // Services
       this.services.preferences = new Alfresco.service.Preferences();
 
+      this.loading = false;
+      
       return this;
    };
 
@@ -328,11 +330,16 @@
        */
       loadCollaborations: function Collaborations_loadCollaborations()
       {
+    	  
+    	  if (this.loading) {
+    		  return;
+    	  }
+    	  this.loading = true;
          // Load collaborations
          Alfresco.util.Ajax.request(
          {
             //url: Alfresco.constants.PROXY_URI + "api/people/" + encodeURIComponent(Alfresco.constants.USERNAME) + "/sites?roles=user&size=" + this.options.listSize,
-        	 url: Alfresco.constants.PROXY_URI +  "cggh/collaborations",
+        	 url: Alfresco.constants.PROXY_URI +  "cggh/collaborations?list=min",
             successCallback:
             {
                fn: this.onCollaborationsLoaded,
@@ -351,6 +358,8 @@
       {
 	      var items = null;
 	      
+	      this.loading = false;
+
 	      if (p_response.json) {
 	    	  items = p_response.json.collaborationNodes;
 	      

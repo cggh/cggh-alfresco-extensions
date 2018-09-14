@@ -18,5 +18,6 @@ if (folder != null && folder.children != null) {
     }
 }
 model.searchTerm = collab
+model.responseType = args.list
 model.collabNodes = collabNodes;
 
