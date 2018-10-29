@@ -72,6 +72,8 @@
       // Services
       this.services.preferences = new Alfresco.service.Preferences();
 
+      this.loading = false;
+      
       return this;
    };
 
@@ -177,6 +179,7 @@
             { key: "notes", label: this.msg("cggh.metadata.notes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellNotes) },
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), resizeable: true, sortable: true, formatter: this.bind(this.renderCellRagStatus) },
             { key: "ethicsExpiry", label: this.msg("cggh.metadata.ethicsExpiry"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEthicsExpiry},formatter: this.bind(this.renderCellEthicsExpiry) },
+            { key: "sampleTypesdl", label: this.msg("cggh.metadata.sampleTypes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSampleTypes) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
             ];      
          // DataTable definition
@@ -328,11 +331,16 @@
        */
       loadCollaborations: function Collaborations_loadCollaborations()
       {
+    	  
+    	  if (this.loading) {
+    		  return;
+    	  }
+    	  this.loading = true;
          // Load collaborations
          Alfresco.util.Ajax.request(
          {
             //url: Alfresco.constants.PROXY_URI + "api/people/" + encodeURIComponent(Alfresco.constants.USERNAME) + "/sites?roles=user&size=" + this.options.listSize,
-        	 url: Alfresco.constants.PROXY_URI +  "cggh/collaborations",
+        	 url: Alfresco.constants.PROXY_URI +  "cggh/collaborations?list=min",
             successCallback:
             {
                fn: this.onCollaborationsLoaded,
@@ -351,6 +359,8 @@
       {
 	      var items = null;
 	      
+	      this.loading = false;
+
 	      if (p_response.json) {
 	    	  items = p_response.json.collaborationNodes;
 	      
@@ -811,7 +821,21 @@
          }
         
       },
-      
+      renderCellSampleTypes: function Collaborations_renderCellSampleTypes(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+          var collaboration = oRecord.getData();
+          if (collaboration.sampleTypes) {
+        	 var output = [];
+        	 for(i = 0, j = collaboration.sampleTypes.length;i < j; i++) {
+        		 var proj = collaboration.sampleTypes[i];
+        		 output.push(proj.name);
+        		 
+        	 }
+        	 elCell.innerHTML = output;
+         }
+      },
       dateFromString: function Collaborations_dateFromString(date1s) {
           var date1Parts = date1s.split("-");
 

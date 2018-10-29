@@ -11,38 +11,28 @@
 "legacyID": "${jsonUtils.encodeJSONString(collab.properties["cggh:legacyID"])!''}",
 "webTitle": "${jsonUtils.encodeJSONString(collab.properties["cggh:webTitle"])!''}",
 "description": "${jsonUtils.encodeJSONString(collab.properties["cm:description"])!''}",
-<#if collab.properties["cggh:webTitleApproved"]??>
-"webTitleApproved": "${collab.properties["cggh:webTitleApproved"]?string}",
-<#else>
-"webTitleApproved": "false",
-</#if>
-<#if collab.properties["cggh:descriptionApproved"]??>
-"descriptionApproved": "${collab.properties["cggh:descriptionApproved"]?string}",
-<#else>
-"descriptionApproved": "false",
-</#if>
 "type": "${collab.type}",
 "collaborationStatus": "${collab.properties["cggh:collaborationStatus"]!''}",
 "enquiryStatus": "${collab.properties["cggh:enquiryStatus"]!''}",
 "ragStatus": "${collab.properties["cggh:ragStatus"]!''}",
+"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
 "species": [
 <#list collab.properties["cggh:species"]![] as species>
  "${species}"
 <#if species_has_next>,</#if>
 </#list>],
-"countries": [
-<#list collab.properties["cggh:sampleCountry"]![] as country>
- "${country}"
-<#if country_has_next>,</#if>
-</#list>],
-"collaborationDoc": [
-<#list collab.assocs["cggh:collaborationDoc"]![] as collaborationDoc>
- {
- 	"nodeRef": "${jsonUtils.encodeJSONString(collaborationDoc.nodeRef)!''}",
-    "name": "${jsonUtils.encodeJSONString(collaborationDoc.name)!''}"
+<#if collab.properties["cggh:ethicsExpiry"]??>
+"ethicsExpiry": "${jsonUtils.encodeJSONString(collab.properties["cggh:ethicsExpiry"]?string("dd-MM-yyyy"))!''}",
+</#if>
+"sampleTypes": [
+<#if collab.assocs["cggh:sampleTypesdl"]??>
+<#list collab.assocs["cggh:sampleTypesdl"]![] as sampleType>
+{
+    "name": "${jsonUtils.encodeJSONString(sampleType.name)}"
 }
-<#if collaborationDoc_has_next>,</#if>
-</#list>],
+<#if sampleType_has_next>,</#if>
+</#list>
+</#if>],
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>
@@ -56,6 +46,33 @@
 <#if myPerson_has_next>,</#if>
 </#if>
 </#list>
+</#list>]
+<#if responseType?has_content && responseType == "min">
+<#else>
+,
+<#if collab.properties["cggh:webTitleApproved"]??>
+"webTitleApproved": "${collab.properties["cggh:webTitleApproved"]?string}",
+<#else>
+"webTitleApproved": "false",
+</#if>
+<#if collab.properties["cggh:descriptionApproved"]??>
+"descriptionApproved": "${collab.properties["cggh:descriptionApproved"]?string}",
+<#else>
+"descriptionApproved": "false",
+</#if>
+
+"countries": [
+<#list collab.properties["cggh:sampleCountry"]![] as country>
+ "${country}"
+<#if country_has_next>,</#if>
+</#list>],
+"collaborationDoc": [
+<#list collab.assocs["cggh:collaborationDoc"]![] as collaborationDoc>
+ {
+ 	"nodeRef": "${jsonUtils.encodeJSONString(collaborationDoc.nodeRef)!''}",
+    "name": "${jsonUtils.encodeJSONString(collaborationDoc.name)!''}"
+}
+<#if collaborationDoc_has_next>,</#if>
 </#list>],
 
 "groupData": [
@@ -172,7 +189,7 @@
 <#if lia_has_next>,</#if>
 </#list>,
 </#if>
-"notes": "${jsonUtils.encodeJSONString(collab.properties["cggh:collaborationNotes"])!''}",
+
 "samplesExpected": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesExpected"])!''}",
 "samplesSubmitted": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesProcessed"])!''}",
 "samplesSequenced": "${jsonUtils.encodeJSONString(collab.properties["cggh:samplesSequenced"])!''}",
@@ -190,11 +207,11 @@
 <#if collab.properties["cggh:nextReview"]??>
 "nextReview": "${jsonUtils.encodeJSONString(collab.properties["cggh:nextReview"]?string("dd-MM-yyyy"))!''}",
 </#if>
-<#if collab.properties["cggh:ethicsExpiry"]??>
-"ethicsExpiry": "${jsonUtils.encodeJSONString(collab.properties["cggh:ethicsExpiry"]?string("dd-MM-yyyy"))!''}",
-</#if>
+
 "modified": "${jsonUtils.encodeJSONString(collab.properties["cm:modified"]?string("dd-MM-yyyy HH:mm:ss"))!''}"
+</#if>
 }<#if collab_has_next>,</#if>
+
 </#list>
 ]
 }

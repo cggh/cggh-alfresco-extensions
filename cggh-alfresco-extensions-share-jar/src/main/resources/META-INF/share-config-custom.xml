@@ -265,6 +265,7 @@
 					<show id="cggh:descriptionApproved" />
 					<show id="cggh:legacyID" />
 					<show id="cggh:projectsdl" />
+					<show id="cggh:sampleTypesdl" />
 					<show id="cggh:webStudy" />
 					<show id="cggh:publications" />
 					<show id="cggh:collaborationDoc" />
@@ -370,6 +371,12 @@
 							<control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:dataLists/cm:sequencingProjects</control-param>
 						</control>
 					</field>
+					<field id="cggh:sampleTypesdl" label-id="cggh.metadata.sampleTypes"
+                        set="cgghMetadata">
+                        <control template="/org/alfresco/components/form/controls/association.ftl">
+                            <control-param name="startLocation">/app:company_home/st:sites/cm:sequencing/cm:dataLists/cm:sampleTypes</control-param>
+                        </control>
+                    </field>
 					<!-- Linking to sites doesn't work brilliantly because not all projects 
 						have a site and not all people have permission on all sites <field id="cggh:projects" 
 						label-id="cggh.metadata.projects" set="cgghMetadata"> <control template="/org/alfresco/components/form/controls/association.ftl"> 
@@ -526,6 +533,19 @@
 		</forms>
 	</config>
 
+    <config evaluator="model-type" condition="cggh:sampleType">
+        <forms>
+            <!-- Data List pop-up edit form -->
+            <form>
+                <field-visibility>
+                    <show id="cm:name" />
+                </field-visibility>
+                <edit-form template="../data-lists/forms/dataitem.ftl" />
+                <appearance>
+                </appearance>
+            </form>
+        </forms>
+    </config>
 <!-- 
 	<config evaluator="node-type" condition="st:site">
 		<forms>

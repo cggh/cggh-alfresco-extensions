@@ -4,6 +4,7 @@
         <@formLib.renderField field=form.fields["prop_cggh_enquiryStatus"] />
         <@formLib.renderField field=form.fields["prop_cggh_nextReview"] />
         <@formLib.renderField field=form.fields["prop_cggh_ethicsExpiry"] />
+        <@formLib.renderField field=form.fields["assoc_cggh_sampleTypesdl"] />
         <@formLib.renderField field=form.fields["prop_cggh_ragStatus"] />
         <@formLib.renderField field=form.fields["assoc_cggh_liaison"] />
         <@formLib.renderField field=form.fields["prop_cggh_sampleCountry"] />
@@ -31,10 +32,17 @@
                     <@formLib.renderField field=form.fields["prop_cggh_enquiryStatus"] />
                 </div>
                 <div class="yui-u">
-                    <@formLib.renderField field=form.fields["prop_cggh_ethicsExpiry"] />
-                </div>
-                <div class="yui-u">
                     <@formLib.renderField field=form.fields["prop_cggh_nextReview"] />
+                </div>
+            </div>
+        </div>
+                <div class="yui-gd">
+            <div class="yui-u first">
+                <@formLib.renderField field=form.fields["assoc_cggh_sampleTypesdl"] />
+            </div>
+            <div class="yui-g">
+                <div class="yui-u">
+                    <@formLib.renderField field=form.fields["prop_cggh_ethicsExpiry"] />
                 </div>
             </div>
         </div>

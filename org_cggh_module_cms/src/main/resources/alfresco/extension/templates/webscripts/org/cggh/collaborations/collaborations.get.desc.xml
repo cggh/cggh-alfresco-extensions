@@ -3,7 +3,7 @@
   <description>Returns collaboration details
   To test: curl -v -u admin:admin http://localhost:8080/alfresco/service/cggh/collaborations
   </description>
-  <url>/cggh/collaborations?nodeRef={nodeRef}</url>
+  <url>/cggh/collaborations?list={list}&amp;nodeRef={nodeRef}</url>
   <format default="json"/>
   <authentication>user</authentication>
   <transaction>required</transaction>
