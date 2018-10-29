@@ -24,6 +24,15 @@
 <#if collab.properties["cggh:ethicsExpiry"]??>
 "ethicsExpiry": "${jsonUtils.encodeJSONString(collab.properties["cggh:ethicsExpiry"]?string("dd-MM-yyyy"))!''}",
 </#if>
+"sampleTypes": [
+<#if collab.assocs["cggh:sampleTypesdl"]??>
+<#list collab.assocs["cggh:sampleTypesdl"]![] as sampleType>
+{
+    "name": "${jsonUtils.encodeJSONString(sampleType.name)}"
+}
+<#if sampleType_has_next>,</#if>
+</#list>
+</#if>],
 "groupPI": [
 <#list collab.assocs["cggh:groupPI"]![] as pi>
 <#list pi.children as myPerson>

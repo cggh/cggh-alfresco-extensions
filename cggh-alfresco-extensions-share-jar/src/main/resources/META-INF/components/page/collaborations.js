@@ -179,6 +179,7 @@
             { key: "notes", label: this.msg("cggh.metadata.notes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellNotes) },
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), resizeable: true, sortable: true, formatter: this.bind(this.renderCellRagStatus) },
             { key: "ethicsExpiry", label: this.msg("cggh.metadata.ethicsExpiry"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEthicsExpiry},formatter: this.bind(this.renderCellEthicsExpiry) },
+            { key: "sampleTypesdl", label: this.msg("cggh.metadata.sampleTypes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSampleTypes) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
             ];      
          // DataTable definition
@@ -820,7 +821,21 @@
          }
         
       },
-      
+      renderCellSampleTypes: function Collaborations_renderCellSampleTypes(elCell, oRecord, oColumn, oData)
+      {
+         Dom.setStyle(elCell, "width", oColumn.width + "px");
+         Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+          var collaboration = oRecord.getData();
+          if (collaboration.sampleTypes) {
+        	 var output = [];
+        	 for(i = 0, j = collaboration.sampleTypes.length;i < j; i++) {
+        		 var proj = collaboration.sampleTypes[i];
+        		 output.push(proj.name);
+        		 
+        	 }
+        	 elCell.innerHTML = output;
+         }
+      },
       dateFromString: function Collaborations_dateFromString(date1s) {
           var date1Parts = date1s.split("-");
 
