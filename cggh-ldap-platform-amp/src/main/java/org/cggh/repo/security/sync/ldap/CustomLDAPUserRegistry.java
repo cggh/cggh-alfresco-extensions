@@ -27,6 +27,7 @@ import org.alfresco.util.TempFileProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+//Note is a local copy to enable private -> protected
 public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLDAPNameResolver {
 
 	/** The logger. */
@@ -64,6 +65,8 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 			String attributeName = attributeMapping.get(key);
 			if (attributeName != null) {
 				Attribute attribute = ldapAttributes.get(attributeName);
+                String defaultAttribute = attributeDefaults.get(key);
+
 				if (attribute != null) {
 					Object value = attribute.get(0);
 					if (value != null) {
@@ -78,11 +81,14 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 							}
 						}
 					}
-				} else {
-					String defaultValue = attributeDefaults.get(key);
-					if (defaultValue != null) {
-						properties.put(keyQName, defaultValue);
-					}
+				} else if (defaultAttribute != null)
+                {
+						properties.put(keyQName, defaultAttribute);
+                }
+                else
+                {
+                    // Make sure that a 2nd sync, updates deleted ldap attributes(MNT-14026)
+                    properties.put(keyQName, null);          
 				}
 			} else {
 				String defaultValue = attributeDefaults.get(key);
