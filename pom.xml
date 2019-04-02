@@ -13,40 +13,41 @@
         <java.cas.client.config.location>/etc/java-cas-client.properties</java.cas.client.config.location>
 
         <!-- Alfresco Maven Plugin version to use -->
-        <alfresco.sdk.version>3.0.0-beta-5</alfresco.sdk.version>
+        <alfresco.sdk.version>3.1.0</alfresco.sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Alfresco Data directory, which will contain: Content Store (i.e. the 
-            files we upload) Database (i.e. the metadata for the uploaded files) Search 
-            index (i.e. the indexed content and metadata) Configured in alfresco-global.properties 
-            with the 'dir.root' property. -->
+        <!-- Alfresco Data directory, which will contain:
+              Content Store (i.e. the files we upload)
+              Database (i.e. the metadata for the uploaded files)
+              Search index (i.e. the indexed content and metadata)
+             Configured in alfresco-global.properties with the 'dir.root' property.
+              -->
         <alfresco.data.location>${session.executionRootDirectory}/alf_data_dev</alfresco.data.location>
 
-        <!-- Duplicated with alfresco.solrHome in the plugin, we need them out 
-            here to do filtering -->
+        <!-- Duplicated with alfresco.solrHome in the plugin, we need them out here to do filtering -->
         <solr.home>${alfresco.data.location}/solr</solr.home>
         <solr.model.dir>${solr.home}/alfrescoModels</solr.model.dir>
         <solr.content.dir>${solr.home}/index</solr.content.dir>
 
-        <!-- Properties used in dependency declarations, you don't need to change 
-            these -->
+        <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
         <alfresco.share.war.artifactId>share</alfresco.share.war.artifactId>
         <!-- Platform WAR artifact, change to 'alfresco-enterprise' if using Enterprise 
             Edition -->
         <alfresco.platform.war.artifactId>alfresco-platform</alfresco.platform.war.artifactId>
 
-        <!-- Alfresco Platform and Share webapp versions, these are the original 
-            Alfresco webapps that will be customized and then deployed and run by the 
-            tomcat maven plugin when executing for example $ mvn clean install alfresco:run -->
-        <alfresco.platform.version>5.1.g</alfresco.platform.version>
-        <alfresco.share.version>5.1.g</alfresco.share.version>
+        <!-- Alfresco Platform and Share webapp versions, these are the original Alfresco webapps that will be
+             customized and then deployed and run by the tomcat maven plugin when
+             executing for example $ mvn clean install alfresco:run -->
+        <alfresco.platform.version>5.2.f</alfresco.platform.version>
+        <alfresco.share.version>5.2.e</alfresco.share.version>
 
-        <!-- Alfresco Surf version, if you change Share version you might need 
-            to change Surf version -->
-        <alfresco.surf.version>6.5</alfresco.surf.version>
+        <!-- Default is to run with a Community edition, change to 'enterprise' if using Enterprise edition -->
+        <maven.alfresco.edition>community</maven.alfresco.edition>
 
+        <!-- Alfresco Surf version, if you change Share version you might need to change Surf version -->
+        <alfresco.surf.version>6.11</alfresco.surf.version>
         <!-- Aikau framework version, it is released separately, so it can be useful 
             to be able to bring in newer versions with bug fixes etc -->
         <aikau.version>1.0.67</aikau.version>
@@ -54,13 +55,13 @@
         <!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
         <jrebel.version>1.1.6</jrebel.version>
 
-        <!-- Environment to use, Alfresco Maven Plugin will copy alfresco-global-*.properties 
-            files from this directory, such as src/test/properties/local -->
+        <!-- Environment to use, Alfresco Maven Plugin will
+             copy alfresco-global-*.properties files from this directory, such as src/test/properties/local -->
         <env>local</env>
 
         <!-- Compile with Java 7, default is 5 -->
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <alfresco.aos-module.version>1.1.4</alfresco.aos-module.version>
         <google.docs.version>3.0.3</google.docs.version>
@@ -89,16 +90,17 @@
         <maven.alfresco.verbose>true</maven.alfresco.verbose>
         
         <module.log.level>warn</module.log.level>
-        <org.orderofthebee.support-tools.version>0.0.1.0</org.orderofthebee.support-tools.version>
+        <org.orderofthebee.support-tools.version>1.0.0.0</org.orderofthebee.support-tools.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- This will import the dependencyManagement for all artifacts in the 
-                selected Alfresco platform. NOTE: You still need to define dependencies in 
-                your POM, but you can omit version as it's enforced by this dependencyManagement. 
-                NOTE: It defaults to the latest version this SDK pom has been tested with, 
-                but alfresco version can/should be overridden in your project's pom -->
+            <!-- This will import the dependencyManagement for all artifacts in the selected Alfresco platform.
+                 NOTE: You still need to define dependencies in your POM, but you can omit version as
+                       it's enforced by this dependencyManagement.
+                 NOTE: It defaults to the latest version this SDK pom has been tested with,
+                       but alfresco version can/should be overridden in your project's pom
+            -->
             <dependency>
                 <groupId>${alfresco.groupId}</groupId>
                 <artifactId>alfresco-platform-distribution</artifactId>
@@ -110,14 +112,14 @@
                 version numbers than platform. They are defined in alfresco-platform-distribution... -->
             <dependency>
                 <groupId>${alfresco.groupId}</groupId>
-                <artifactId>${alfresco.share.war.artifactId}</artifactId>
+                <artifactId>share</artifactId>
                 <version>${alfresco.share.version}</version>
                 <type>war</type>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>${alfresco.groupId}</groupId>
-                <artifactId>${alfresco.share.war.artifactId}</artifactId>
+                <artifactId>share</artifactId>
                 <version>${alfresco.share.version}</version>
                 <classifier>classes</classifier>
                 <scope>provided</scope>
@@ -130,8 +132,8 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- Redefine the following surf dependencies as they have no resolvable 
-                version in the alfresco-platform-distribution artifact -->
+            <!-- Redefine the following surf dependencies as they have no resolvable version in the
+                 alfresco-platform-distribution artifact -->
             <dependency>
                 <groupId>org.alfresco.surf</groupId>
                 <artifactId>spring-surf</artifactId>
@@ -150,7 +152,13 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- Build an AMP if 3rd party libs are needed by the extensions -->
+                <!--
+                    Build an AMP if 3rd party libs are needed by the extensions
+                    JARs are the default artifact produced in your modules, if you want to build an amp for each module
+                    you have to enable this plugin and inspect the src/main/assembly.xml file if you want to customize
+                    the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
+                    module.
+                -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -223,13 +231,14 @@
             </resource>
         </resources>
 
+
         <plugins>
-            <!-- Filter the test resource files in the AIO parent project, and do 
-                property substitutions. We need this config so this is done before the Alfresco 
-                Maven Plugin 'run' is executed. -->
+            <!-- Filter the test resource files in the AIO parent project, and do property substitutions.
+                 We need this config so this is done before the Alfresco Maven Plugin 'run' is executed. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
                 <inherited>false</inherited>
                 <!-- Run only for the AIO parent Project -->
                 <executions>
@@ -252,16 +261,15 @@
                 </executions>
             </plugin>
 
-            <!-- The Alfresco Maven Plugin contains all the logic to run the extension 
-                in an embedded Tomcat with the H2 database. -->
+            <!--
+                The Alfresco Maven Plugin contains all the logic to run the extension
+                in an embedded Tomcat with the H2 database.
+            -->
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
                 <artifactId>alfresco-maven-plugin</artifactId>
                 <version>${alfresco.sdk.version}</version>
                 <configuration>
-                    <!-- Default is to run with a Community edition, change to 'enterprise' 
-                        if using Enterprise edition -->
-                    <alfrescoEdition>community</alfrescoEdition>
 
                     <!-- We need the flat file H2 database to run the Repo -->
                     <enableH2>true</enableH2>
@@ -277,14 +285,14 @@
                     <enableApiExplorer>true</enableApiExplorer>
 
                     <tomcatSystemProperties>
-                        <javaagent>${settings.localRepository}/org/aspectj/aspectjweaver/1.6.11/aspectjweaver-1.6.11.jar,${settings.localRepository}/org/springframework/spring-instrument/3.2.14.RELEASE/spring-instrument-3.2.14.RELEASE.jar</javaagent>
+                        <javaagent>${settings.localRepository}/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar,${settings.localRepository}/org/springframework/spring-instrument/3.2.14.RELEASE/spring-instrument-3.2.14.RELEASE.jar</javaagent>
                     </tomcatSystemProperties>
 
                     <tomcatDependencies>
                         <dependency>
                             <groupId>org.aspectj</groupId>
                             <artifactId>aspectjweaver</artifactId>
-                            <version>1.6.11</version>
+                            <version>1.9.2</version>
                         </dependency>
                         <!-- All these seem to do is to make sure that the jars are available -->
                         <dependency>
@@ -302,6 +310,7 @@
                     <!-- JARs and AMPs that should be overlayed/applied to the Platform/Repository 
                         WAR (i.e. alfresco.war) -->
                     <platformModules>
+                        <!-- Share Services will be ignored if you are on Platform earlier than 5.1 -->
                         <moduleDependency>
                             <groupId>${alfresco.groupId}</groupId>
                             <artifactId>alfresco-share-services</artifactId>
@@ -504,8 +513,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- For more information about how to configure JRebel plugin see: 
-                        http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
+                    <!-- For more information about how to configure JRebel plugin see:
+                         http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
                     <classpath>
                         <fallback>all</fallback>
                         <resources>
