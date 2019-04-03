@@ -22,37 +22,6 @@
              -->
 		<connector.package>alfresco</connector.package>
 		
-		<!-- Alfresco Maven Plugin version to use -->
-		<alfresco.sdk.version>3.0.0-beta-5</alfresco.sdk.version>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- Properties used in dependency declarations, you don't need to change 
-			these -->
-		<alfresco.groupId>org.alfresco</alfresco.groupId>
-		<alfresco.share.war.artifactId>share</alfresco.share.war.artifactId>
-
-		<!-- Alfresco Share webapp version, this is the original Alfresco webapp 
-			that will be customized and then deployed and run by the tomcat maven plugin 
-			when executing for example $ mvn clean install alfresco:run -->
-		<alfresco.share.version>5.1.g</alfresco.share.version>
-
-		<!-- Alfresco Surf version, if you change Share version you might need 
-			to change Surf version -->
-		<alfresco.surf.version>6.5</alfresco.surf.version>
-
-		<!-- Aikau framework version, it is released separately, so it can be useful 
-			to be able to bring in newer versions with bug fixes etc -->
-		<aikau.version>1.0.82</aikau.version>
-
-		<!-- Since alfresco.war (i.e. the Platform/Repository) is already running 
-			on port 8080, we run Share.WAR on port 8081. If Alfresco Platform is not 
-			running, then generate a platform-jar-module and start it up. -->
-		<maven.tomcat.port>8081</maven.tomcat.port>
-
-		<!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
-		<jrebel.version>1.1.6</jrebel.version>
-
 	</properties>
 
 	<dependencies>
@@ -70,7 +39,14 @@
 			<artifactId>spring-surf-api</artifactId>
 			<version>${alfresco.surf.version}</version>
 			<scope>provided</scope>
-		</dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
 		<!-- Placed in the amp instead <dependency> <groupId>org.jasig.cas.client</groupId> 
 			<artifactId>cas-client-core</artifactId> <version>${cas.client.version}</version> 
 			</dependency> -->
@@ -145,36 +121,6 @@
 				</dependencies>
 			</plugin>
 
-			<!-- Hot reloading with JRebel -->
-			<plugin>
-				<groupId>org.zeroturnaround</groupId>
-				<artifactId>jrebel-maven-plugin</artifactId>
-				<version>${jrebel.version}</version>
-				<executions>
-					<execution>
-						<id>generate-rebel-xml</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- For more information about how to configure JRebel plugin see: 
-						http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
-					<classpath>
-						<fallback>all</fallback>
-						<resources>
-							<resource />
-						</resources>
-					</classpath>
-
-					<!-- alwaysGenerate - default is false If 'false' - rebel.xml is generated 
-						if timestamps of pom.xml and the current rebel.xml file are not equal. If 
-						'true' - rebel.xml will always be generated -->
-					<alwaysGenerate>true</alwaysGenerate>
-				</configuration>
-			</plugin>
 		</plugins>
 
 		<resources>
