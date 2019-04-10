@@ -218,6 +218,9 @@ public class AvatarServiceImpl extends TransactionListenerAdapter implements Ava
 		boolean changed = false;
 		if (nodeService.exists(nodeRef)) {
 			String nodeHashType = hashType;
+            if (avatarFile == null) {
+                return true;
+            }
 			ContentReader reader = serviceRegistry.getContentService().getReader(nodeRef, ContentModel.PROP_CONTENT);
 
 			String oldHash = computeHash(reader.getContentInputStream(), nodeHashType);
