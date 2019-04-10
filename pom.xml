@@ -64,7 +64,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <alfresco.aos-module.version>1.1.4</alfresco.aos-module.version>
-        <google.docs.version>3.0.3</google.docs.version>
+        <google.docs.version>3.0.4.3</google.docs.version>
         <!-- -->
         <discussions.version>0.0.5</discussions.version>
 
