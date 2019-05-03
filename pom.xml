@@ -406,7 +406,7 @@
 						<moduleDependency>
 							<groupId>net.bull.javamelody</groupId>
 							<artifactId>alfresco-javamelody-addon</artifactId>
-							<version>1.63.0</version>
+							<version>1.77.0</version>
                             <type>amp</type>
 						</moduleDependency>
                     </platformModules>
