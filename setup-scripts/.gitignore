@@ -1,4 +1,3 @@
-config/platform/var/lib/tomcat/shared/classes/alfresco-global.properties
 config/share/etc/ssl/private/
 config/share/etc/ssl/certs/
 config_params
