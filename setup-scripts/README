@@ -1,0 +1,13 @@
+#alfinstall.sh based on alfresco-ubuntu-install for 5.2
+
+git clone git@github.com:loftuxab/alfresco-ubuntu-install.git
+cd alfresco-ubuntu-install/
+git checkout 2d5f69d69b
+
+To run a local copy of LDAP use:
+
+Don't forget to include a copy of the LDAP data in malariagen-cas/util/ldap/bootstrap/custom
+
+malariagen-cas/util/provision/docker/run-local.sh
+
+
