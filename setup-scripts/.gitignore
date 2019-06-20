@@ -3,3 +3,4 @@ config/share/etc/ssl/certs/
 config_params
 config_params.test
 config_params.prod
+jars/
