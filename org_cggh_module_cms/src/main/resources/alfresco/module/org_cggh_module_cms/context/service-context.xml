@@ -12,7 +12,8 @@
 	language governing permissions and limitations under the License. -->
 <beans>
 
-	<bean id="${project.artifactId}_actionResourceBundles" parent="actionResourceBundles">
+	<bean id="${project.artifactId}_actionResourceBundles"
+		parent="actionResourceBundles">
 		<property name="resourceBundles">
 			<list>
 				<value>alfresco.module.${project.artifactId}.messages.actions</value>
@@ -48,5 +49,19 @@
 		<property name="policyComponent">
 			<ref bean="policyComponent" />
 		</property>
+	</bean>
+
+	<bean id="cggh-process-incoming-mail"
+		class="org.cggh.alfresco.collaboration.action.ProcessIncomingMail"
+		parent="action-executer">
+		<property name="fileFolderService">
+			<ref bean="FileFolderService" />
+		</property>
+		<property name="nodeService">
+			<ref bean="NodeService" />
+		</property>
+		        <property name="searchService">
+            <ref bean="SearchService" />
+        </property>
 	</bean>
 </beans>
