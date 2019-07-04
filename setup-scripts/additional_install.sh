@@ -2,10 +2,15 @@
 
 IP=$(curl http://169.254.169.254/2009-04-04/meta-data/public-ipv4)
 INTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-NAME=alfresco-dev.malariagen.net
+NAME=alfresco52.malariagen.net
 DNS_IP=$(dig +short ${NAME})
-REPO=localhost
-SOLR=localhost
+REPO=alfresco52.malariagen.net
+REPO_IP=172.10.98.216
+DNS_IP_REPO=$(dig +short ${REPO})
+SHARE=alfresco52.malariagen.net
+DNS_IP_SHARE=$(dig +short ${SHARE})
+SOLR=172.30.81.100
+DNS_IP_SOLR=$(dig +short ${SOLR})
 
 if [ ${DNS_IP} != ${IP} ]
 then
@@ -20,7 +25,7 @@ export ALF_HOME=/opt/alfresco
 
 ${ALF_HOME}/alfresco-service.sh stop
 
-if [ ${REPO} = 'localhost' -o ${REPO} = ${INTERNAL_IP} ]
+if [ ${REPO} = 'localhost' -o ${REPO} = ${INTERNAL_IP} -o ${IP} = ${DNS_IP_REPO} ]
 then
 	for i in addons/apply.sh alfresco-service.sh scripts/libreoffice.sh
 	do
@@ -34,6 +39,11 @@ then
 	do
 		rm modules/platform/amps/${i}*
 	done
+	if [ ! -f config_params ]
+	then
+		echo "You must create a config_params file"
+		exit 1
+	fi
 	cp --backup config/platform/var/lib/tomcat/shared/classes/alfresco-global.properties /opt/alfresco/tomcat/shared/classes/
 	set -o allexport
 	source config_params
@@ -58,15 +68,16 @@ then
 	cp jars/platform/* /opt/alfresco/tomcat/webapps/alfresco/WEB-INF/lib/
 fi
 
-if [ ${SOLR} = 'localhost' -o ${SOLR} = ${INTERNAL_IP} ]
+if [ ${SOLR} = 'localhost' -o "${DNS_IP_SOLR}" = ${INTERNAL_IP} -o ${SOLR} = ${INTERNAL_IP} -o ${SOLR} = ${IP} ]
 then
 	echo "Solr install"
-	sed -i.bak -e "s#\(SOLR_ALFRESCO_HOST=\).*#\1${REPO}#" /opt/alfresco/solr6/solr.in.sh
+	sed -i.bak -e "s#\(SOLR_ALFRESCO_HOST=\).*#\1${REPO_IP}#" /opt/alfresco/solr6/solr.in.sh
+	sed -i.bak -e "s#\(alfresco.host=\).*#\1${REPO_IP}#" /opt/alfresco/alf_data/solr6/solrhome/alfresco/conf/solrcore.properties /opt/alfresco/alf_data/solr6/solrhome/archive/conf/solrcore.properties
 	cp --backup /opt/alfresco/solr6/logs/log4j.properties /opt/alfresco/logs/solr6/log4j.properties
 	systemctl start alfresco-search.service
 fi
 
-if [ ${DNS_IP} = ${IP} ]
+if [ ${DNS_IP} = ${DNS_IP_SHARE} ]
 then
 	#Share config
 	for i in alfresco-googledocs-share
