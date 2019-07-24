@@ -9,7 +9,7 @@ REPO_IP=172.10.98.216
 DNS_IP_REPO=$(dig +short ${REPO})
 SHARE=alfresco52.malariagen.net
 DNS_IP_SHARE=$(dig +short ${SHARE})
-SOLR=172.30.81.100
+SOLR=172.10.122.198
 DNS_IP_SOLR=$(dig +short ${SOLR})
 
 if [ ${DNS_IP} != ${IP} ]
@@ -53,6 +53,8 @@ then
 		-e "s#\(db.password=\).*#\1${MYSQL_PASSWORD}#" \
 		-e "s#\(db.name=\).*#\1${MYSQL_DATABASE}#" \
 		-e "s#\(db.host=\).*#\1${MYSQL_HOST}#" \
+		-e "s#\(alfresco.host=\).*#\1${REPO}#" \
+		-e "s#\(share.host=\).*#\1${SHARE}#" \
 		-e "s#\(mail.port=\).*#\1${MAIL_PORT}#" \
 		-e "s#\(mail.host=\).*#\1${MAIL_HOST}#" \
 		-e "s#\(ldap.authentication.java.naming.provider.url=\).*#\1${LDAP_SERVER}#" \
@@ -120,7 +122,7 @@ then
 	cp config/share/var/lib/tomcat/shared/classes/share-global.properties /opt/alfresco/tomcat/shared/classes/
 	cp --backup /opt/alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml /opt/alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml.orig
 	cp config/share/var/lib/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml /opt/alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
-	sed -i -e "s#\(<endpoint-url>http://\)[^:]*#\1${REPO}#" /opt/alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
+	sed -i -e "s#\(<endpoint-url>http://\)[^:]*#\1${REPO_IP}#" /opt/alfresco/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
 
 	cp --backup /opt/alfresco/tomcat/conf/server.xml /opt/alfresco/tomcat/conf/server.xml.orig
 	cp config/share/etc/tomcat/server.xml /opt/alfresco/tomcat/conf/server.xml
@@ -128,7 +130,7 @@ then
 
 	cp --backup /etc/libapache2-mod-jk/workers.properties /etc/libapache2-mod-jk/workers.properties.orig
 	cp config/share/etc/libapache2-mod-jk/workers.properties /etc/libapache2-mod-jk/workers.properties
-	sed -i -e "s/\(worker.alfresco-worker.host=\).*/\1${REPO}/" /etc/libapache2-mod-jk/workers.properties
+	sed -i -e "s/\(worker.alfresco-worker.host=\).*/\1${REPO_IP}/" /etc/libapache2-mod-jk/workers.properties
 
     cp --backup config/share/etc/postfix/transport /etc/postfix/transport
     sed -i -e "s/\[.[^]]*/\[${REPO}/" /etc/postfix/transport
