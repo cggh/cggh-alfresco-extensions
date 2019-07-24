@@ -1,41 +1,55 @@
-var folder = companyhome.childByNamePath('/Sites/sequencing/documentLibrary/Collaborations');
-//logger.log(noderef);
-for each (var node in folder.children) {
+var folder = null;
 
-    if (node.typeShort == "cggh:collaborationFolder") {
-        
-        var assocToRemove = ["cggh:primaryContactList",
-        "cggh:contactList",
-        "cggh:associates",
-        "cggh:groupPI",
-        "cggh:groupData",
-        "cggh:groupMail",
-        "cggh:groupContact",
-        "cggh:groupPublic",
-        "cggh:groupNotPublic"];
+folder = companyhome.childByNamePath('/Sites/sequencing/documentLibrary/Collaborations');
 
-        var assocToCreate = ["PI", "Contact", "Mail", "Data", "Public", "NotPublic"];
-        
-        var nodeid = node.name.substr(0,4);
-        logger.log(node.name + " (" + node.typeShort + "): " + node.nodeRef);
-        logger.log(nodeid);
-      
-        var assoc_action = actions.create("cggh-associate-group");
-        for each (create in assocToCreate) {
-            assoc_action.parameters.association_name = "group" + create;
-          if (node.assocs["cggh:" + assoc_action.parameters.association_name] == null) {
-            assoc_action.parameters.group = "GROUP_" + nodeid + "_" + create.toLowerCase().substr(0, 2) + create.substr(2);
-            logger.log("Adding " + assoc_action.parameters.association_name + " " + assoc_action.parameters.group);
-          
-            try{
-                assoc_action.execute(node);
-            } catch(excep) {
-                //Despite catching it - if there is an exception the whole thing won't work...
-                logger.log(node);
-                logger.log(excep);
+var allNodesInFolder = folder.children;
+for each (node in allNodesInFolder) {
+    if (node.isSubType("cggh:collaborationFolder")) {
+        var myName = node.name;
+        var nodeid = myName.substr(0,4);
+
+        var groupsToCreate = ["PI", "Contact", "Mail", "Data", "Public", "NotPublic"];
+
+        for each (group in groupsToCreate) {
+            var ldapName = group.toLowerCase();
+            if (ldapName == "notpublic") {
+                ldapName = "notPublic";
             }
-          }
+            var assocName = "group" + group;
+
+            var assoc = node.assocs['{http://alfresco.cggh.org/model/custom/1.0}'+assocName];
+
+            if (assoc == null) {
+                logger.log("Missing assoc:" + myName + ":" + ldapName);
+
+
+                var assoc_action = actions.create("cggh-associate-group");
+                assoc_action.parameters.association_name = assocName;
+                assoc_action.parameters.group = "GROUP_" + nodeid + "_" + ldapName;
+
+                try{
+                    assoc_action.execute(node);
+                } catch(excep) {
+                    //Despite catching it - if there is an exception the whole thing won't work...
+                    logger.log(document);
+                    logger.log(excep);
+                }
+
+            } else {
+                var id = "GROUP_" + nodeid + "_" + ldapName;
+                for (var i=0;i < assoc.length; i++) {
+
+                    if(assoc[i].properties['cm:authorityName'] != id) {
+                        logger.log(id);
+                        logger.log(assoc[i].id);
+                        node.removeAssociation(assoc[i], '{http://alfresco.cggh.org/model/custom/1.0}'+assocName);
+                    }
+                }
+            }
         }
     }
-
 }
+
+
+
+

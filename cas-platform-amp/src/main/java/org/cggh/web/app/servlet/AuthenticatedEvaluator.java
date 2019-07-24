@@ -22,6 +22,8 @@ import org.cggh.repo.web.filter.beans.IgnoreFlagFilter;
 
 public class AuthenticatedEvaluator extends BaseSSOAuthenticationFilter implements ConditionalFilterEvaluator {
 
+	private static final String TICKET_URL_PARAM = "alf_ticket";
+	
 	// Debug logging
 	private static Log logger = LogFactory.getLog(AuthenticatedEvaluator.class);
 
@@ -47,6 +49,10 @@ public class AuthenticatedEvaluator extends BaseSSOAuthenticationFilter implemen
 		}
 
 		if (request.getAttribute(IgnoreFlagFilter.IGNORE_ATTRIBUTE) != null) {
+			return false;
+		}
+
+		if (request.getParameter(TICKET_URL_PARAM) != null) {
 			return false;
 		}
 

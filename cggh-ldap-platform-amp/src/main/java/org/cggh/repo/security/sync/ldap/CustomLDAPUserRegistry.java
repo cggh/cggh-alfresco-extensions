@@ -27,6 +27,7 @@ import org.alfresco.util.TempFileProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+//Note is a local copy to enable private -> protected
 public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLDAPNameResolver {
 
 	/** The logger. */
@@ -64,6 +65,8 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 			String attributeName = attributeMapping.get(key);
 			if (attributeName != null) {
 				Attribute attribute = ldapAttributes.get(attributeName);
+                String defaultAttribute = attributeDefaults.get(key);
+
 				if (attribute != null) {
 					Object value = attribute.get(0);
 					if (value != null) {
@@ -78,11 +81,14 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 							}
 						}
 					}
-				} else {
-					String defaultValue = attributeDefaults.get(key);
-					if (defaultValue != null) {
-						properties.put(keyQName, defaultValue);
-					}
+				} else if (defaultAttribute != null)
+                {
+						properties.put(keyQName, defaultAttribute);
+                }
+                else
+                {
+                    // Make sure that a 2nd sync, updates deleted ldap attributes(MNT-14026)
+                    properties.put(keyQName, null);          
 				}
 			} else {
 				String defaultValue = attributeDefaults.get(key);
@@ -132,30 +138,37 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
 		
         if(logger.isDebugEnabled())
         {
-            logger.debug("resolveDistinguishedName userId:" + userId);
+            logger.debug("resolveDistinguishedName userId:" + userId + " using " + this.lookupAttributeName);
         }
         SearchControls userSearchCtls = new SearchControls();
         userSearchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
         String searchField = this.userIdAttributeName;
                
-        // Although we don't actually need any attributes, we ask for the UID for compatibility with Sun Directory Server. See ALF-3868
-        userSearchCtls.setReturningAttributes(new String[]
-        {
-        		searchField
-        });
+		String[] responseFields = new String[] { searchField };
+        
         
         String ldapQuery = "(&" + this.personQuery + "(" + searchField + "={0}))";
-        // Execute the user query with an additional condition that ensures only the user with the required ID is
-        // returned. Force RFC 2254 escaping of the user ID in the filter to avoid any manipulation            
-        if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
-        	ldapQuery = "(&" + this.personQuery + "(|(" + searchField + "={0})(" + lookupAttributeName + "={0})))";
-        } 
-        
+		// Execute the user query with an additional condition that ensures only
+		// the user with the required ID is
+		// returned. Force RFC 2254 escaping of the user ID in the filter to
+		// avoid any manipulation
+		if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
+			ldapQuery = "(&" + this.personQuery + "(|(" + searchField + "={0})(" + lookupAttributeName + "={0})))";
+			responseFields = new String[] { searchField, lookupAttributeName };
+		}
+
+        // Although we don't actually need any attributes, we ask for the UID for compatibility with Sun Directory Server. See ALF-3868
+        userSearchCtls.setReturningAttributes(responseFields);
+
         //Just for logging
         String query = this.userSearchBase + "(&" + this.personQuery
         + "(" + searchField + "= userId))";
 
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("ldap query:" + ldapQuery);
+        }
 
         NamingEnumeration<SearchResult> searchResults = null;
         SearchResult result = null;
@@ -172,12 +185,38 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
                 userId
             }, userSearchCtls);
 
+             if(logger.isDebugEnabled())
+             {
+                 logger.debug("searchResults:" + searchResults);
+             }
+
             if (searchResults.hasMore())
             {
                 result = searchResults.next();
+                if(logger.isDebugEnabled())
+                {
+                    logger.debug("searchResults:" + result);
+                }
                 Attributes attributes = result.getAttributes();
                 Attribute searchAttribute = attributes.get(searchField);
                 Attribute uidAttribute = attributes.get(this.userIdAttributeName);
+                Attribute lookupNameAttribute = null;
+
+                if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
+                	lookupNameAttribute = attributes.get(this.lookupAttributeName);
+                }
+                if(logger.isDebugEnabled())
+                {
+                    logger.debug("searchResults userId:" + userId + " searchAttribute:" + searchAttribute.get(0) + " uidAttribute:" + uidAttribute.get(0));
+                    if (lookupNameAttribute != null) {
+                    	logger.debug("Lookup name:" + lookupNameAttribute.get(0));
+                    } else {
+                        if (this.lookupAttributeName != null && this.lookupAttributeName.length() > 0) {
+                        	logger.debug("Lookup name is set but attribtute not returned");
+                        }
+                    }
+                    
+                }
                 if (uidAttribute == null)
                 {
                     if (this.errorOnMissingUID)
@@ -195,7 +234,8 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
                 }
                 // MNT:2597 We don't trust the LDAP server's treatment of whitespace, accented characters etc. We will
                 // only resolve this user if the user ID matches
-                else if (userId.equalsIgnoreCase((String) searchAttribute.get(0)))
+                else if (userId.equalsIgnoreCase((String) searchAttribute.get(0)) || 
+                		(lookupNameAttribute != null && userId.equalsIgnoreCase((String) lookupNameAttribute.get(0))))
                 {
                     String name = result.getNameInNamespace();
 
@@ -208,6 +248,10 @@ public class CustomLDAPUserRegistry extends LDAPUserRegistry implements CustomLD
                     result = null;
                     resolvedUser.setUserName((String) uidAttribute.get(0));
                     resolvedUser.setDn(name);
+                    if(logger.isDebugEnabled())
+                    {
+                        logger.debug("resolved DistinguishedName userId:" + resolvedUser.getUserName());
+                    }
                     return resolvedUser;
                 }
 

@@ -66,6 +66,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.authentication.AuthenticatorDeletedEvent;
 import org.alfresco.repo.security.authority.UnknownAuthorityException;
+import org.cggh.repo.security.sync.ldap.CustomLDAPUserRegistry;
 import org.alfresco.repo.security.sync.ChainingUserRegistrySynchronizerStatus;
 import org.alfresco.repo.security.sync.NodeDescription;
 import org.alfresco.repo.security.sync.SyncStatus;
@@ -226,6 +227,10 @@ public class CustomChainingUserRegistrySynchronizer extends AbstractLifecycleBea
     private NameChecker nameChecker;
 
     private SysAdminParams sysAdminParams;
+
+    private String externalUserControl = "";
+
+    private String externalUserControlSubsystemName = "";
     
     public void init()
     {
@@ -237,6 +242,16 @@ public class CustomChainingUserRegistrySynchronizer extends AbstractLifecycleBea
         PropertyCheck.mandatory(this, "jobLockService", jobLockService);
         PropertyCheck.mandatory(this, "applicationEventPublisher", applicationEventPublisher);
         PropertyCheck.mandatory(this, "sysAdminParams", sysAdminParams);
+    }
+
+    public void setExternalUserControl(String externalUserControl)
+    {
+        this.externalUserControl = externalUserControl;
+    }
+
+    public void setExternalUserControlSubsystemName(String externalUserControlSubsystemName)
+    {
+        this.externalUserControlSubsystemName = externalUserControlSubsystemName;
     }
 
     /**

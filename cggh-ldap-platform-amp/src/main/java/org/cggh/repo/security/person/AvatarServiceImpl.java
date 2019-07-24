@@ -148,6 +148,11 @@ public class AvatarServiceImpl extends TransactionListenerAdapter implements Ava
 		if (logger.isDebugEnabled()) {
 			logger.debug("Creating/updating avatar for " + nodeName);
 		}
+        if (avatarFile == null) {
+            logger.debug("Avatar file is null removing any existing and returning");
+			removeAssociations(person, ContentModel.ASSOC_PREFERENCE_IMAGE);
+            return;
+        }
 		InputStream is = new FileInputStream(avatarFile);
 		// Although the LDAP element is called jpegPhoto it might have a png or
 		// ...
@@ -213,6 +218,9 @@ public class AvatarServiceImpl extends TransactionListenerAdapter implements Ava
 		boolean changed = false;
 		if (nodeService.exists(nodeRef)) {
 			String nodeHashType = hashType;
+            if (avatarFile == null) {
+                return true;
+            }
 			ContentReader reader = serviceRegistry.getContentService().getReader(nodeRef, ContentModel.PROP_CONTENT);
 
 			String oldHash = computeHash(reader.getContentInputStream(), nodeHashType);

@@ -102,7 +102,7 @@ public class SampleStatusReportReader extends ActionExecuterAbstractBase {
 	private boolean transform;
 	private String nameCheckTask;
 	private String nameCheckGroup;
-	private String collabReportName = "SampleStatusReport";
+	private String collabReportName = "SampleStatusReport.xls";
 	private DictionaryService dictionaryService;
 	private String countCheckTask;
 	private boolean autoUpdateCountries = false;

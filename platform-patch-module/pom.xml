@@ -4,7 +4,7 @@
     <parent>
         <artifactId>cggh-alfresco-extensions</artifactId>
         <groupId>org.cggh</groupId>
-        <version>1.6.6</version>
+        <version>1.6.7</version>
     </parent>
     <artifactId>platform-patch-module</artifactId>
     <name>CGGH platform-patch-module</name>

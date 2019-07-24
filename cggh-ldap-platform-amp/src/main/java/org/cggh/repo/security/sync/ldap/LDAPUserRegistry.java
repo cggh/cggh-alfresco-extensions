@@ -1,20 +1,27 @@
 /*
- * Copyright (C) 2005-2014 Alfresco Software Limited.
- *
- * This file is part of Alfresco
- *
+ * #%L
+ * Alfresco Repository
+ * %%
+ * Copyright (C) 2005 - 2016 Alfresco Software Limited
+ * %%
+ * This file is part of the Alfresco software. 
+ * If the software was purchased under a paid Alfresco license, the terms of 
+ * the paid license agreement will prevail.  Otherwise, the software is 
+ * provided under the following open source license terms:
+ * 
  * Alfresco is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * Alfresco is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ * #L%
  */
 package org.cggh.repo.security.sync.ldap;
 
@@ -67,6 +74,7 @@ import org.alfresco.repo.security.authentication.AuthenticationException;
 import org.alfresco.repo.security.authentication.ldap.LDAPInitialDirContextFactory;
 import org.alfresco.repo.security.sync.NodeDescription;
 import org.alfresco.repo.security.sync.UserRegistry;
+import org.alfresco.repo.security.sync.ldap.AbstractDirectoryServiceUserAccountStatusInterpreter;
 import org.alfresco.repo.security.sync.ldap.LDAPNameResolver;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -184,6 +192,9 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
 
     /** The LDAP generalized time format. */
     protected DateFormat timestampFormat;
+
+    /** The LDAP User Account Status Property Interpreter */
+    private AbstractDirectoryServiceUserAccountStatusInterpreter userAccountStatusInterpreter;
 
     /**
      * Instantiates a new lDAP user registry.
@@ -497,6 +508,16 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
     public void setAttributeBatchSize(int attributeBatchSize)
     {
         this.attributeBatchSize = attributeBatchSize;
+    }
+
+    public void setUserAccountStatusInterpreter(AbstractDirectoryServiceUserAccountStatusInterpreter userAccountStatusInterpreter)
+    {
+        this.userAccountStatusInterpreter = userAccountStatusInterpreter;
+    }
+
+    public AbstractDirectoryServiceUserAccountStatusInterpreter getUserAccountStatusInterpreter()
+    {
+        return userAccountStatusInterpreter;
     }
 
     /*
@@ -1132,6 +1153,8 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
             if (attributeName != null)
             {
                 Attribute attribute = ldapAttributes.get(attributeName);
+                String defaultAttribute = attributeDefaults.get(key);
+                
                 if (attribute != null)
                 {
                     String value = (String) attribute.get(0);
@@ -1140,13 +1163,14 @@ public class LDAPUserRegistry implements UserRegistry, LDAPNameResolver, Initial
                         properties.put(keyQName, value);
                     }
                 }
+                else if (defaultAttribute != null)
+                {
+                    properties.put(keyQName, defaultAttribute);
+                }
                 else
                 {
-                    String defaultValue = attributeDefaults.get(key);
-                    if (defaultValue != null)
-                    {
-                        properties.put(keyQName, defaultValue);
-                    }
+                    // Make sure that a 2nd sync, updates deleted ldap attributes(MNT-14026)
+                    properties.put(keyQName, null);
                 }
             }
             else
