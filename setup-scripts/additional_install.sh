@@ -1,11 +1,17 @@
+#!/bin/bash
 
+if [ ${UID} -ne 0 ]
+then
+    echo "Must be run as root"
+    exit 1
+fi
 
 IP=$(curl http://169.254.169.254/2009-04-04/meta-data/public-ipv4)
 INTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 NAME=alfresco52.malariagen.net
 DNS_IP=$(dig +short ${NAME})
 REPO=alfresco52.malariagen.net
-REPO_IP=172.10.98.216
+REPO_IP=172.10.181.127
 DNS_IP_REPO=$(dig +short ${REPO})
 SHARE=alfresco52.malariagen.net
 DNS_IP_SHARE=$(dig +short ${SHARE})
@@ -65,6 +71,7 @@ then
 	${ALF_HOME}/addons/apply.sh all
 
 	${ALF_HOME}/alfresco-service.sh stop
+	sed -i.bak -e 's/-Xmx2G/-Xmx6G/' ${ALF_HOME}/alfresco-service.sh
 	${ALF_HOME}/alfresco-service.sh start
 	${ALF_HOME}/scripts/libreoffice.sh start
 	cp jars/platform/* /opt/alfresco/tomcat/webapps/alfresco/WEB-INF/lib/
@@ -88,6 +95,7 @@ then
 	done
 	cp modules/share/amps/* ${ALF_HOME}/addons/share
 	${ALF_HOME}/alfresco-service.sh stop
+	sed -i.bak -e 's/-Xmx2G/-Xmx6G/' ${ALF_HOME}/alfresco-service.sh
 	${ALF_HOME}/addons/apply.sh all
 	${ALF_HOME}/alfresco-service.sh start
 

@@ -1,0 +1,9 @@
+/opt/alfresco/tomcat/logs/catalina.out {
+  copytruncate
+  weekly
+  rotate 52
+  compress
+  missingok
+  create 640 tomcat7 adm
+}
+

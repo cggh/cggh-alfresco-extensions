@@ -1,0 +1,10 @@
+/opt/alfresco/tomcat/logs/access*.log {
+	rotate 5
+	size 100M
+	compress
+	notifempty
+	missingok
+	copytruncate
+	daily
+	su alfresco alfresco
+}
