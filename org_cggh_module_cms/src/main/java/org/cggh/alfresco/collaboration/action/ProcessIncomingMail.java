@@ -20,94 +20,98 @@ import org.cggh.alfresco.collaboration.util.CollaborationUtil;
 
 public class ProcessIncomingMail extends ActionExecuterAbstractBase {
 
-	private static Log logger = LogFactory.getLog(ProcessIncomingMail.class);
+    private static Log logger = LogFactory.getLog(ProcessIncomingMail.class);
 
-	private NodeService nodeService;
-	private FileFolderService fileFolderService;
+    private NodeService nodeService;
+    private FileFolderService fileFolderService;
 
-	public NodeService getNodeService() {
-		return nodeService;
-	}
+    public NodeService getNodeService() {
+        return nodeService;
+    }
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
-	public FileFolderService getFileFolderService() {
-		return fileFolderService;
-	}
+    public FileFolderService getFileFolderService() {
+        return fileFolderService;
+    }
 
-	public void setFileFolderService(FileFolderService fileFolderService) {
-		this.fileFolderService = fileFolderService;
-	}
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
 
-	public SearchService getSearchService() {
-		return searchService;
-	}
+    public SearchService getSearchService() {
+        return searchService;
+    }
 
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
-	private SearchService searchService;
+    private SearchService searchService;
 
-	private static final String PARAM_STUDY_ID_ATTR = "studyId";
-	private static final String PARAM_DEST_NAME_ATTR = "dest";
+    private static final String PARAM_STUDY_ID_ATTR = "studyId";
+    private static final String PARAM_DEST_NAME_ATTR = "dest";
 
-	@Override
-	protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
-		
-		String studyId = (String) action.getParameterValue(PARAM_STUDY_ID_ATTR);
-		
-		if (studyId == null || studyId.length() == 0) {
-			logger.info("No studyId parameter supplied");
-			return;
-		}
+    @Override
+    protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
 
-		
-		String subFolderName = (String) action.getParameterValue(PARAM_DEST_NAME_ATTR);
+        String studyId = (String) action.getParameterValue(PARAM_STUDY_ID_ATTR);
 
-		if (subFolderName == null || subFolderName.length() == 0) {
-			subFolderName = "Emails";
-		}
+        if (studyId == null || studyId.length() == 0) {
+            logger.info("No studyId parameter supplied");
+            return;
+        }
 
-		AuthenticationUtil.pushAuthentication();
-		try {
-			AuthenticationUtil.setRunAsUserSystem();
-			try {
-				NodeRef studyFolderNodeRef = CollaborationUtil.getCollaboration(searchService, nodeService, studyId,
-						true);
-				NodeRef destinationParent = nodeService.getChildByName(studyFolderNodeRef, ContentModel.ASSOC_CONTAINS,
-						subFolderName);
-				if (destinationParent != null) {
-					fileFolderService.move(actionedUponNodeRef, destinationParent, null);
-				} else {
-					logger.info("No destination folder:" + subFolderName + " found for study:" + studyId);
-				}
-			} catch (FileNotFoundException e) {
-				// Do nothing
-			}
-		} finally {
-			AuthenticationUtil.popAuthentication();
-		}
-	}
 
-	@Override
-	protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
-		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-				// definition to add to the
-				// list
-				PARAM_STUDY_ID_ATTR, // The name used to identify the parameter
-				DataTypeDefinition.TEXT, // The parameter value type
-				true, // Indicates whether the parameter is mandatory
-				getParamDisplayLabel(PARAM_STUDY_ID_ATTR))); // The parameters
-		paramList.add(new ParameterDefinitionImpl( // Create a new parameter
-				// definition to add to the
-				// list
-				PARAM_DEST_NAME_ATTR, // The name used to identify the parameter
-				DataTypeDefinition.TEXT, // The parameter value type
-				false, // Indicates whether the parameter is mandatory
-				getParamDisplayLabel(PARAM_DEST_NAME_ATTR))); // The parameters
-	}
+        String subFolderName = (String) action.getParameterValue(PARAM_DEST_NAME_ATTR);
+
+        if (subFolderName == null || subFolderName.length() == 0) {
+            subFolderName = "Emails";
+        }
+
+        AuthenticationUtil.pushAuthentication();
+        try {
+            AuthenticationUtil.setRunAsUserSystem();
+            try {
+                NodeRef studyFolderNodeRef = CollaborationUtil.getCollaboration(searchService, nodeService, studyId,
+                        true);
+                if (studyFolderNodeRef != null) {
+                    NodeRef destinationParent = nodeService.getChildByName(studyFolderNodeRef, ContentModel.ASSOC_CONTAINS,
+                            subFolderName);
+                    if (destinationParent != null) {
+                        fileFolderService.move(actionedUponNodeRef, destinationParent, null);
+                    } else {
+                        logger.error("No destination folder:" + subFolderName + " found for study:" + studyId);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                logger.error("FNF Error moving to:" + subFolderName + " for study:" + studyId);
+            } catch (Exception e) {
+                logger.error("Error moving to:" + subFolderName + " for study:" + studyId);
+            }
+        } finally {
+            AuthenticationUtil.popAuthentication();
+        }
+    }
+
+    @Override
+    protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
+        paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+                    // definition to add to the
+                    // list
+                    PARAM_STUDY_ID_ATTR, // The name used to identify the parameter
+                    DataTypeDefinition.TEXT, // The parameter value type
+                    true, // Indicates whether the parameter is mandatory
+                    getParamDisplayLabel(PARAM_STUDY_ID_ATTR))); // The parameters
+        paramList.add(new ParameterDefinitionImpl( // Create a new parameter
+                    // definition to add to the
+                    // list
+                    PARAM_DEST_NAME_ATTR, // The name used to identify the parameter
+                    DataTypeDefinition.TEXT, // The parameter value type
+                    false, // Indicates whether the parameter is mandatory
+                    getParamDisplayLabel(PARAM_DEST_NAME_ATTR))); // The parameters
+    }
 
 }
