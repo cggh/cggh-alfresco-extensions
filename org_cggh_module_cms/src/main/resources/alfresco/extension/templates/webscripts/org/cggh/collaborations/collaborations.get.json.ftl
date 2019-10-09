@@ -24,6 +24,7 @@
 <#if collab.properties["cggh:ethicsExpiry"]??>
 "ethicsExpiry": "${jsonUtils.encodeJSONString(collab.properties["cggh:ethicsExpiry"]?string("dd-MM-yyyy"))!''}",
 </#if>
+"studyEthics": "${jsonUtils.encodeJSONString(collab.properties["cggh:studyEthics"])!''}",
 "sampleTypes": [
 <#if collab.assocs["cggh:sampleTypesdl"]??>
 <#list collab.assocs["cggh:sampleTypesdl"]![] as sampleType>

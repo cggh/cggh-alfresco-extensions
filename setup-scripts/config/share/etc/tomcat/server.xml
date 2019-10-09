@@ -167,10 +167,12 @@
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
 -->
 <!-- Changed according to: https://github.com/miguel-rodriguez/alfresco-monitoring -->
+<!-- Can get very large with solr requests
 <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
-                prefix="access-" suffix=".log"
+                prefix="access" suffix=".log"
                 pattern='%a %l %u %t "%r" %s %b "%{Referer}i" "%{User-agent}i" %D "%I"'
                 resolveHosts="false"/>
+-->
 
       </Host>
     </Engine>

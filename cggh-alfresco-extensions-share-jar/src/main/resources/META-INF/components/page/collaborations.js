@@ -178,6 +178,7 @@
             { key: "projStatus", label: this.msg("cggh.metadata.collaborationStatus"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortCollaborationStatus}, formatter: this.bind(this.renderCellProjectStatus) },
             { key: "notes", label: this.msg("cggh.metadata.notes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellNotes) },
             { key: "ragStatus", label: this.msg("cggh.metadata.ragStatus"), resizeable: true, sortable: true, formatter: this.bind(this.renderCellRagStatus) },
+            { key: "studyEthics", label: this.msg("cggh.metadata.studyEthics"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellStudyEthics) },
             { key: "ethicsExpiry", label: this.msg("cggh.metadata.ethicsExpiry"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortEthicsExpiry},formatter: this.bind(this.renderCellEthicsExpiry) },
             { key: "sampleTypesdl", label: this.msg("cggh.metadata.sampleTypes"), resizeable: true, sortable: false, formatter: this.bind(this.renderCellSampleTypes) },
             { key: "mainContact", label: this.msg("cggh.metadata.pi"), resizeable: true, sortable: true, sortOptions:{sortFunction:this.sortPI},formatter: this.bind(this.renderCellPI) },
@@ -960,6 +961,30 @@
           ret = this.Cggh.dashlet.Collaborations.prototype.dateCompare(date1s, date2s, desc);
           
           return (ret);
+      },
+      
+      /**
+       * Name & description custom datacell formatter
+       *
+       * @method renderCellDetail
+       * @param elCell {object}
+       * @param oRecord {object}
+       * @param oColumn {object}
+       * @param oData {object|string}
+       */
+      renderCellStudyEthics: function Collaborations_renderCellStudyEthics(elCell, oRecord, oColumn, oData)
+      {
+         var collaboration = oRecord.getData();
+            
+         var desc = "";
+
+         if (collaboration.studyEthics)
+         {
+           
+            desc += '<span>' + collaboration.studyEthics + '</span>';
+         }
+
+         elCell.innerHTML = desc;
       },
       /**
        * Adds an event handler that adds or removes the collaboration as favourite collaboration

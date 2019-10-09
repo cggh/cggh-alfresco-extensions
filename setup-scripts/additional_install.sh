@@ -1,11 +1,17 @@
+#!/bin/bash
 
+if [ ${UID} -ne 0 ]
+then
+    echo "Must be run as root"
+    exit 1
+fi
 
 IP=$(curl http://169.254.169.254/2009-04-04/meta-data/public-ipv4)
 INTERNAL_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 NAME=alfresco52.malariagen.net
 DNS_IP=$(dig +short ${NAME})
 REPO=alfresco52.malariagen.net
-REPO_IP=172.10.98.216
+REPO_IP=172.10.181.127
 DNS_IP_REPO=$(dig +short ${REPO})
 SHARE=alfresco52.malariagen.net
 DNS_IP_SHARE=$(dig +short ${SHARE})
@@ -65,9 +71,29 @@ then
 	${ALF_HOME}/addons/apply.sh all
 
 	${ALF_HOME}/alfresco-service.sh stop
+	sed -i.bak -e 's/-Xmx2G/-Xmx6G/' ${ALF_HOME}/alfresco-service.sh
 	${ALF_HOME}/alfresco-service.sh start
 	${ALF_HOME}/scripts/libreoffice.sh start
 	cp jars/platform/* /opt/alfresco/tomcat/webapps/alfresco/WEB-INF/lib/
+    #Set up forwarding via SES
+    postconf -e smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+    postconf -e smtp_tls_note_starttls_offer = yes
+    postconf -e smtp_tls_security_level = encrypt
+    postconf -e smtp_use_tls = yes
+    postconf -e relayhost = email-smtp.us-east-1.amazonaws.com
+    postconf -e smtp_sasl_auth_enable = yes
+    postconf -e smtp_sasl_security_options = noanonymous
+    postconf -e smtp_sasl_password_maps = hash:/etc/postfix/sasl_password
+    postconf -e smtp_tls_policy_maps = hash:/etc/postfix/tls_policy
+    grep amazonaws /etc/postfix/tls_policy || echo "email-smtp.us-east-1.amazonaws.com	secure" >> /etc/postfix/tls_policy
+    postmap /etc/postfix/tls_policy
+
+    postconf -e virtual_maps=hash:/etc/postfix/virtual
+    grep root /etc/postfix/virtual || echo "root sysadmin@malariagen.net" >> /etc/postfix/virtual
+    grep alfresco /etc/postfix/virtual || echo "alfresco sysadmin@malariagen.net" >> /etc/postfix/virtual
+    postmap /etc/postfix/virtual
+
+    postfix reload
 fi
 
 if [ ${SOLR} = 'localhost' -o "${DNS_IP_SOLR}" = ${INTERNAL_IP} -o ${SOLR} = ${INTERNAL_IP} -o ${SOLR} = ${IP} ]
@@ -88,6 +114,7 @@ then
 	done
 	cp modules/share/amps/* ${ALF_HOME}/addons/share
 	${ALF_HOME}/alfresco-service.sh stop
+	sed -i.bak -e 's/-Xmx2G/-Xmx6G/' ${ALF_HOME}/alfresco-service.sh
 	${ALF_HOME}/addons/apply.sh all
 	${ALF_HOME}/alfresco-service.sh start
 
@@ -109,6 +136,19 @@ then
     postconf -e smtpd_tls_ciphers=high
     postconf -e smtpd_use_tls=yes
     postconf -e "smtpd_relay_restrictions=permit_sasl_authenticated,permit_mynetworks,reject_unauth_destination,reject_rbl_client sbl.spamhaus.org,reject_unauth_destination,reject_invalid_helo_hostname,reject_unknown_recipient_domain"
+
+    postconf -e local_recipient_maps=
+    postconf -e local_transport=error: local mail delivery is disabled
+
+    postconf -e smtp_tls_policy_maps = hash:/etc/postfix/tls_policy
+    egrep ^localhost /etc/postfix/tls_policy || echo "localhost	none" >> /etc/postfix/tls_policy
+    grep 8025 /etc/postfix/tls_policy || echo "[localhost]:8025	none" >> /etc/postfix/tls_policy
+    postmap /etc/postfix/tls_policy
+
+    postconf -e virtual_maps=hash:/etc/postfix/virtual
+    grep root /etc/postfix/virtual || echo "root sysadmin@malariagen.net" >> /etc/postfix/virtual
+    grep alfresco /etc/postfix/virtual || echo "alfresco sysadmin@malariagen.net" >> /etc/postfix/virtual
+    postmap /etc/postfix/virtual
 
 
 	cp config/share/etc/apache2/sites-available/* /etc/apache2/sites-available

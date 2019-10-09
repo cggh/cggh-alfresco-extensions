@@ -269,6 +269,7 @@
 					<show id="cggh:webStudy" />
 					<show id="cggh:publications" />
 					<show id="cggh:collaborationDoc" />
+					<show id="cggh:studyEthics" />
 				</field-visibility>
 				<appearance>
 					<!-- Field sets -->
@@ -310,6 +311,12 @@
 								menubar: false,
 								resize: "both"
 							</control-param>
+						</control>
+					</field>
+					<field id="cggh:studyEthics" label-id="cggh.metadata.studyEthics"
+						set="cgghMetadata">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							
 						</control>
 					</field>
 					<field id="cm:taggable">
