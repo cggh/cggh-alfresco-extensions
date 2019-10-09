@@ -543,6 +543,11 @@
 					<type>d:date</type>
 					<mandatory>false</mandatory>
 				</property>
+				<property name="cggh:studyEthics">
+					<title>Study ethics description</title>
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+				</property>
 			</properties>
 			<associations>
 
